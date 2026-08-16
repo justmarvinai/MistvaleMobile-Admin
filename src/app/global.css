@@ -1,0 +1,35 @@
+/* Suite-wide overrides. Everything else is Mantine's theme (src/app/theme.ts). */
+
+:root {
+  color-scheme: dark;
+  --mv-bg: #0b0e14;
+  --mv-surface: #10141d;
+  --mv-border: #232b3b;
+  --mv-accent: #7fd4c1;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--mv-bg);
+  /* Belt and braces on the no-serif rule: nothing may fall back to a serif face. */
+  font-family:
+    'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, 'Noto Sans', system-ui, sans-serif;
+}
+
+/* Dense tabular data reads better with lining figures of even width. */
+.mv-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* JSON and diff values: monospace, wrapping, never a horizontal scrollbar on the page. */
+.mv-code {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
