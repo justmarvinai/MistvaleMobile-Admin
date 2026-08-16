@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out the Admin Suite
+        uses: actions/checkout@v4
+        with:
+          path: MistvaleMobile-Admin
+
+      # The API types are generated from the game repo's OpenAPI artifact, so the drift
+      # check needs that repo checked out beside this one — the same layout a developer
+      # has locally.
+      - name: Check out the game repo
+        uses: actions/checkout@v4
+        with:
+          repository: justmarvinai/MistvaleMobile
+          ref: ${{ github.ref_name }}
+          path: MistvaleMobile
+          # A branch that only exists here falls back to the default branch below.
+          fetch-depth: 1
+        continue-on-error: true
+
+      - name: Fall back to the game repo's default branch
+        run: |
+          if [ ! -f MistvaleMobile/docs/openapi/admin-api.json ]; then
+            echo "No matching branch in the game repo — using its default branch."
+            rm -rf MistvaleMobile
+            git clone --depth 1 \
+              "https://github.com/justmarvinai/MistvaleMobile.git" MistvaleMobile
+          fi
+          test -f MistvaleMobile/docs/openapi/admin-api.json
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: MistvaleMobile-Admin/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: MistvaleMobile-Admin
+        run: pnpm install --frozen-lockfile
+
+      - name: Format
+        working-directory: MistvaleMobile-Admin
+        run: pnpm format:check
+
+      - name: Lint
+        working-directory: MistvaleMobile-Admin
+        run: pnpm lint
+
+      # A stale schema means this suite is typed against an API the server no longer
+      # serves. That must fail here rather than at runtime in front of an operator.
+      - name: Check generated API types are current
+        working-directory: MistvaleMobile-Admin
+        run: pnpm sync-api --check
+
+      - name: Typecheck
+        working-directory: MistvaleMobile-Admin
+        run: pnpm typecheck
+
+      - name: Test
+        working-directory: MistvaleMobile-Admin
+        run: pnpm test
+
+      - name: Build
+        working-directory: MistvaleMobile-Admin
+        run: pnpm build

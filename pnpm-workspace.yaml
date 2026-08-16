@@ -1,0 +1,4 @@
+# Single-package repo; the workspace file exists purely to allow the one dependency
+# that legitimately needs its install script (esbuild fetches its platform binary).
+onlyBuiltDependencies:
+  - esbuild
