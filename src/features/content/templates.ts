@@ -193,6 +193,19 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       unlock: {},
     },
 
+    // Rates that already sum to 1, so a new pool is publishable the moment its champion
+    // list is filled in rather than failing validation on the first save.
+    summonPool: {
+      key,
+      sortOrder: 0,
+      name: 'New summon pool',
+      description: '',
+      sigilKey: '',
+      rates: { rare: 0.915, epic: 0.08, legendary: 0.005 },
+      pity: {},
+      entries: [],
+    },
+
     shop: {
       key,
       sortOrder: 0,

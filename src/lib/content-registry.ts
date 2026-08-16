@@ -107,6 +107,14 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['campaignChapter', 'enemy'],
     blurb: 'Waves, energy cost, rewards and star rules.',
   },
+  summonPool: {
+    type: 'summonPool',
+    label: 'Summon pools',
+    path: 'summon-pools',
+    references: ['item', 'champion'],
+    blurb:
+      'Rates, mercy and the champion table per sigil. Rates must sum to 1, and every rarity advertised needs a champion to deliver it — publish refuses otherwise.',
+  },
   shop: {
     type: 'shop',
     label: 'Shops',

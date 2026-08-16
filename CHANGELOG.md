@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — summon pools
+
+The game repo's Phase P5 added the Mistgate; the type sync brought its content type across as a compile error rather than a runtime surprise.
+
+- **Summon pools** (`summon-pools`) — rates, mercy rules and the weighted champion table per sigil, plus the ×10 floor. The new-pool template starts with rates that already sum to 1, because publish refuses a table that does not, and refuses a pool advertising a rarity it holds no champion for.
+
 ### Added — the relic economy's content types
 
 The game repo's Phase P4 added two content families and a new field on stages; the type sync surfaced them as compile errors here rather than as runtime surprises, which is the contract working.
@@ -12,7 +18,6 @@ The game repo's Phase P4 added two content families and a new field on stages; t
 - **Relic stats** (`gear-stats`) — what each rollable stat is worth per rank, main and sub. Eleven entries that are the entire numeric surface of the relic economy.
 - **Shops** (`shops`) — rotating stock: slots, offers, prices, bands and restock timing. Editable end to end, so re-pricing the Bazaar or adding an offer needs no deploy.
 - Stage rewards now carry a **drop band** (relic chance, rank and rarity weights, slot restriction, item rolls), reflected in the new-stage template.
-
 
 ### Changed
 
