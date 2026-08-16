@@ -101,7 +101,7 @@ Upload frame strips/PNGs (drag-drop) → server packs & registers; preview playe
 
 ### 2.14 Player management
 - Search by account/profile name; player page: profile & resources, roster (with gear detail drill-in), items, progress (campaign stars, dungeon floors, arena state, quests), summon history with pity counters, economy log tail, battle history (open in Battle inspector), sessions.
-- Actions (all audited, all confirm-guarded): **Grant** (champion / gear roll / items / currency — via RewardService with a mail-attachment option "send as gift mail"), **Reset password** (generates temp password + force-change flag — the EA-0.1 support path), **Ban/unban** (reason required), **Rename profile**, session revoke.
+- Actions (all audited, all confirm-guarded): **Grant** (champion / gear roll / items / currency — via RewardService with a mail-attachment option "send as gift mail"), **Reset password** (generates temp password + force-change flag — the EA-0.1 support path), **Set rank** (Player / GameMaster / Admin — typed confirmation, self-demotion blocked), **Ban/unban** (reason required), **Rename profile** (the no-profanity-filter support path), session revoke.
 - Bulk: select-all-filtered → mail composer.
 
 ### 2.15 Bot manager
@@ -123,8 +123,8 @@ Paste battle id / open from player page: metadata (mode, stage, seed, content re
 ### 2.19 Jobs & health
 Job list (daily reset, shop refresh, event rotation, bot refresh, backup trigger status) with last-run/next-run/result and a guarded "Run now". Health page = dashboard strip expanded + log-error tail.
 
-## 3. Roles & access (EA)
-`owner` (everything incl. publishes, player deletion, config) and `editor` (content drafts, no publish, no player money actions) — schema supports more roles later. Admin accounts created via CLI script on the VPS (no self-serve signup); optional IP allowlist at nginx level; every session listed/revocable.
+## 3. Access model (EA — owner decision)
+One account system with ranks **Player / GameMaster / Admin**; **only Admin-rank accounts can log into the suite** — full access to everything documented here. GameMaster is a reserved moderation rank (badge + future in-game moderation tools; no suite access at EA). Rank management lives in Player management (§2.14): admin-only, audited, self-demotion blocked; first admin + lockout recovery via the game repo's `SET_RANK.sh` on the VPS. No self-serve admin signup; optional IP allowlist on `/admin` at nginx level; every session listed/revocable.
 
 ## 4. UX standards for the suite
 Dense-but-clean dark utilitarian theme (Mantine component system, no serif fonts, Mistvale accent colors); every destructive action = typed confirmation; every form = dirty-state guard; every table = keyboard navigable; optimistic UI nowhere (server truth only, same philosophy as the game); toasts carry request-ids for error reports.

@@ -16,4 +16,4 @@ The operator cockpit for **Mistvale** — a 2D pixel-art, turn-based champion-co
 Game-side context (architecture, data model, Admin API): see `MistvaleMobile/docs/`.
 
 ## Shape (planned)
-React 18 + Vite + TypeScript SPA (Mantine, TanStack Query/Router) → static hosting via nginx at `admin.<domain>` → talks to the game server's `/admin/api` (typed client generated from the game repo's OpenAPI artifact). No separate backend, no direct DB access.
+React 18 + Vite + TypeScript SPA (Mantine, TanStack Query/Router) → static hosting via nginx at **`play.pathlands.cc/admin`** → talks to the game server's `/admin/api` (typed client generated from the game repo's OpenAPI artifact; login restricted to Admin-rank accounts). No separate backend, no direct DB access.

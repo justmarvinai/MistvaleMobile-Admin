@@ -4,7 +4,7 @@
 
 ## 1. Core decision: SPA over the game server's Admin API
 
-The Admin Suite is a **pure frontend SPA** (this repo) served as static files by nginx at `admin.<domain>`, talking to the **Admin API hosted inside the game server process** (`/admin/api/*`).
+The Admin Suite is a **pure frontend SPA** (this repo) served as static files by nginx at **`play.pathlands.cc/admin`** (path-based on the game's single domain — owner decision; Vite `base: '/admin/'`), talking to the **Admin API hosted inside the game server process** (`/admin/api/*`).
 
 Why this shape (vs. a separate admin backend):
 1. **One source of truth** for schema, validation, and game logic — the Zod content schemas, RewardService, and engine registry live once, in the game repo. A second backend would duplicate or import them across repos.
@@ -53,13 +53,14 @@ src/
 - Draft state is server-side (draft rows), so the SPA stays stateless-ish: no local persistence beyond auth + UI prefs.
 
 ## 5. Auth & security (suite side)
-- Session cookie from `/admin/api/auth/login`; guard redirects; role flags (`owner`/`editor`) gate routes and action buttons (server enforces regardless — UI gating is UX, not security).
-- All requests same-origin (`admin.<domain>/admin/api` proxied by nginx to the game server) → no CORS surface.
+- **Rank-based access (owner decision):** the game has one account system with ranks `player` / `gamemaster` / `admin`. The suite logs in via `/admin/api/auth/login`, which succeeds **only for `admin`-rank accounts** (GameMaster is a reserved moderation rank with no suite access at EA; the server re-checks rank on every request — UI gating is UX, not security).
+- Session cookie; auth guard redirects to login; the logged-in admin's name shows in the top bar with a session-revoke shortcut.
+- All requests same-origin (`play.pathlands.cc/admin/api` proxied by nginx to the game server) → no CORS surface.
 - Idle logout (30 min) with dirty-form warning; every destructive mutation double-confirmed (typed phrase for player deletion / content revert).
 
 ## 6. Dev & deploy
 - Dev: `pnpm dev` with Vite proxy `/admin/api → http://localhost:3001` (game server run from the game repo; `SEED.sh` provides content). A `.env.development` points at a locally running game stack — documented one-command bring-up in the game repo.
-- Deploy: built by the game repo's `UPDATE.sh` (clones/pulls this repo, `pnpm build`, output to `/srv/mistvale/admin`, symlink-swap). No separate service, no runtime env — the SPA reads its API base from same-origin.
+- Deploy: built by the game repo's `UPDATE.sh` (clones/pulls this repo, `pnpm build` with `base: '/admin/'`, output to `/srv/mistvale/admin`, symlink-swap; nginx serves it under `location /admin` with SPA fallback). No separate service, no runtime env — the SPA reads its API base from same-origin. First admin account is bootstrapped on the VPS by the game repo's `DEPLOY.sh`/`SET_RANK.sh`.
 - Versioning: suite shows its git short-sha + the server's content rev in the footer; mismatch warnings if the API schema hash differs from the generated client (belt-and-suspenders on top of CI).
 
 ## 7. Phase alignment
