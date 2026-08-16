@@ -32,7 +32,7 @@ Operator cockpit (Admin Suite) for **Mistvale**, a 2D pixel-art turn-based champ
 - Feature folders under `src/features/<editor>/` (see ADMIN_ARCHITECTURE §4); shared primitives in `src/components/`.
 - Commits: `feat(admin/<area>): …`, `fix:`, `docs:`, `chore:`; update `CHANGELOG.md` under `[Unreleased]` with every user-visible change.
 - Testing: Vitest + RTL for editor logic (skill composer, publish diff are priority), Playwright smoke for login→edit→validate→publish.
-- Branch discipline: never commit to `main` directly; current work branch: `claude/mistvale-raid-planning-1k4axz`.
+- Branches: **work on `main` and push there directly** (owner's standing instruction — no feature branch). Every push must leave `pnpm verify` green, since nothing sits in front of `main`.
 
 ## Workflow with the owner
 
