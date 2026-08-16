@@ -210,9 +210,11 @@ export const CONTENT_TYPES = [
   'enemy',
   'gearSet',
   'gearSlot',
+  'gearStat',
   'item',
   'campaignChapter',
   'stage',
+  'shop',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 

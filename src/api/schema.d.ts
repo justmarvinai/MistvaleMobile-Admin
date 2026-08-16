@@ -455,9 +455,11 @@ export interface components {
             factions: components["schemas"]["FactionDef"][];
             gearSets: components["schemas"]["GearSetDef"][];
             gearSlots: components["schemas"]["GearSlotDef"][];
+            gearStats: components["schemas"]["GearStatDef"][];
             items: components["schemas"]["ItemDef"][];
             publishedAt: string | null;
             rev: number;
+            shops: components["schemas"]["ShopDef"][];
             skills: components["schemas"]["SkillDef"][];
             stages: components["schemas"]["StageDef"][];
             statuses: components["schemas"]["StatusDef"][];
@@ -512,7 +514,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -526,7 +528,7 @@ export interface components {
         };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -535,7 +537,7 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             discarded: boolean;
             key: string;
         };
@@ -655,9 +657,27 @@ export interface components {
             /** @default 0 */
             sortOrder: number;
         };
+        GearStatDef: {
+            /** @default true */
+            canBeMain: boolean;
+            /** @default true */
+            canBeSub: boolean;
+            key: string;
+            mainBase: number[];
+            mainMax: number[];
+            name: string;
+            /** @default false */
+            percent: boolean;
+            /** @default 0 */
+            sortOrder: number;
+            /** @enum {string} */
+            stat: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+            subMax: number[];
+            subMin: number[];
+        };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -691,7 +711,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -729,9 +749,60 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "stage" | "shop" | "gameConfig";
             key: string;
             saved: boolean;
+        };
+        ShopDef: {
+            /** @default 4 */
+            baseSlots: number;
+            /** @default 150 */
+            crystalSlotCost: number;
+            /** @default 4 */
+            crystalSlots: number;
+            /** @default  */
+            description: string;
+            key: string;
+            name: string;
+            offers: {
+                /**
+                 * @default silver
+                 * @enum {string}
+                 */
+                currency: "silver" | "crystals";
+                /** @default 0 */
+                dailyLimit: number;
+                gear?: {
+                    rankMax: number;
+                    rankMin: number;
+                    rarityWeights: {
+                        [key: string]: number;
+                    };
+                    /** @default [] */
+                    setKeys: string[];
+                };
+                key: string;
+                /** @enum {string} */
+                kind: "item" | "gear" | "champion" | "currency";
+                /** @default 1 */
+                minAccountLevel: number;
+                name: string;
+                price: number;
+                /** @default 0 */
+                pricePerRank: number;
+                /** @default 1 */
+                quantity: number;
+                /** @default  */
+                refKey: string;
+                /** @default 10 */
+                weight: number;
+            }[];
+            /** @default 50 */
+            refreshCost: number;
+            /** @default 60 */
+            restockMinutes: number;
+            /** @default 0 */
+            sortOrder: number;
         };
         SkillDef: {
             /** @default {} */
@@ -1098,6 +1169,29 @@ export interface components {
             parentKey: string;
             rewards: {
                 championXp: number;
+                drops: {
+                    /** @default 0 */
+                    gearChance: number;
+                    /** @default 2 */
+                    gearRankMax: number;
+                    /** @default 1 */
+                    gearRankMin: number;
+                    /** @default {} */
+                    gearRarityWeights: {
+                        [key: string]: number;
+                    };
+                    /** @default [] */
+                    gearSlots: ("weapon" | "helm" | "shield" | "gauntlets" | "cuirass" | "boots" | "ring" | "amulet" | "banner")[];
+                    /** @default [] */
+                    items: {
+                        chance: number;
+                        itemKey: string;
+                        /** @default 1 */
+                        max: number;
+                        /** @default 1 */
+                        min: number;
+                    }[];
+                };
                 dropTableKey?: string;
                 playerXp: number;
                 silverMax: number;
@@ -1449,7 +1543,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "stages" | "shops" | "config";
             };
             cookie?: never;
         };
@@ -1535,7 +1629,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "stages" | "shops" | "config";
             };
             cookie?: never;
         };
@@ -1621,7 +1715,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "stages" | "shops" | "config";
             };
             cookie?: never;
         };
@@ -1725,7 +1819,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "stages" | "shops" | "config";
             };
             cookie?: never;
         };
@@ -1811,7 +1905,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "stages" | "shops" | "config";
             };
             cookie?: never;
         };

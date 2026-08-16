@@ -79,6 +79,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'Which main stats may roll in each slot.',
   },
+  gearStat: {
+    type: 'gearStat',
+    label: 'Relic stats',
+    path: 'gear-stats',
+    references: [],
+    blurb: 'What each rollable stat is worth, per rank — the relic economy in eleven rows.',
+  },
   item: {
     type: 'item',
     label: 'Items',
@@ -99,6 +106,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     path: 'stages',
     references: ['campaignChapter', 'enemy'],
     blurb: 'Waves, energy cost, rewards and star rules.',
+  },
+  shop: {
+    type: 'shop',
+    label: 'Shops',
+    path: 'shops',
+    references: ['item', 'gearSet', 'champion'],
+    blurb: 'Rotating stock: slots, offers, prices and restock timing.',
   },
   gameConfig: {
     type: 'gameConfig',

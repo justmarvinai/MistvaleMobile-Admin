@@ -127,6 +127,22 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       ascensionRequired: 0,
     },
 
+    // Eleven ranks of nothing: a new relic stat starts flat so an operator fills in the
+    // curve deliberately rather than editing away someone else's numbers.
+    gearStat: {
+      key,
+      sortOrder: 0,
+      name: 'New relic stat',
+      stat: 'atk',
+      percent: false,
+      canBeMain: true,
+      canBeSub: true,
+      mainBase: [0, 0, 0, 0, 0, 0],
+      mainMax: [0, 0, 0, 0, 0, 0],
+      subMin: [0, 0, 0, 0, 0, 0],
+      subMax: [0, 0, 0, 0, 0, 0],
+    },
+
     item: {
       key,
       sortOrder: 0,
@@ -158,10 +174,52 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       difficulty: 'normal',
       energyCost: 4,
       waves: [[]],
-      rewards: { silverMin: 500, silverMax: 800, playerXp: 20, championXp: 200 },
+      rewards: {
+        silverMin: 500,
+        silverMax: 800,
+        playerXp: 20,
+        championXp: 200,
+        drops: {
+          gearChance: 0,
+          gearRankMin: 1,
+          gearRankMax: 2,
+          gearRarityWeights: {},
+          gearSlots: [],
+          items: [],
+        },
+      },
       starRules: { noDeaths: true, maxTurns: 12 },
       firstClearRewards: {},
       unlock: {},
+    },
+
+    shop: {
+      key,
+      sortOrder: 0,
+      name: 'New shop',
+      description: '',
+      restockMinutes: 60,
+      baseSlots: 4,
+      crystalSlots: 4,
+      crystalSlotCost: 150,
+      refreshCost: 50,
+      // One placeholder offer: the schema needs at least one, and an empty shop would
+      // fail validation on the first save rather than at publish.
+      offers: [
+        {
+          key: 'new_offer',
+          kind: 'item',
+          name: 'New offer',
+          weight: 10,
+          currency: 'silver',
+          price: 1000,
+          pricePerRank: 0,
+          refKey: '',
+          quantity: 1,
+          dailyLimit: 0,
+          minAccountLevel: 1,
+        },
+      ],
     },
 
     gameConfig: {
