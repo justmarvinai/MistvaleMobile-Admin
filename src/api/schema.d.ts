@@ -540,6 +540,8 @@ export interface components {
             key: string;
         };
         EnemyDef: {
+            /** @default 60 */
+            anchorLevel: number;
             archetype: string;
             assetKey: string;
             baseStats: {

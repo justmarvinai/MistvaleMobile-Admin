@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed
+
+- Regenerated API types for the game repo's `anchorLevel` field on enemies. The drift check caught the stale schema before anything was built against it, which is what it is for.
+
 ### Added
 
 - **Phase A0 — foundation.** Vite 6 + React 18 + TypeScript strict scaffold (`base: '/admin/'`, dev proxy to the game server), ESLint/Prettier matching the game repo, Vitest + RTL.
