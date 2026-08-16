@@ -165,6 +165,24 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       starRewards: [],
     },
 
+    // A keep with no rotation and no level gate: open to everyone, every day, until an
+    // operator decides otherwise. Floors are `stage` rows whose `parentKey` names this.
+    dungeon: {
+      key,
+      sortOrder: 0,
+      name: 'New dungeon',
+      kind: 'relic',
+      lore: '',
+      region: '',
+      backgroundAsset: '',
+      tagline: '',
+      floors: 15,
+      setKeys: [],
+      itemKeys: [],
+      openDays: [],
+      unlockLevel: 1,
+    },
+
     stage: {
       key,
       sortOrder: 0,
@@ -185,6 +203,7 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
           gearRankMax: 2,
           gearRarityWeights: {},
           gearSlots: [],
+          gearSetKeys: [],
           items: [],
         },
       },

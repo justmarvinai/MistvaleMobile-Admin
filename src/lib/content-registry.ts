@@ -100,12 +100,19 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['gearSet'],
     blurb: 'Chapters, their regions and star-chest tiers.',
   },
+  dungeon: {
+    type: 'dungeon',
+    label: 'Dungeons',
+    path: 'dungeons',
+    references: ['gearSet', 'item', 'enemy'],
+    blurb: 'The Depths: floors, rotation days, unlock level and what each keep drops.',
+  },
   stage: {
     type: 'stage',
     label: 'Stages',
     path: 'stages',
-    references: ['campaignChapter', 'enemy'],
-    blurb: 'Waves, energy cost, rewards and star rules.',
+    references: ['campaignChapter', 'dungeon', 'enemy', 'gearSet'],
+    blurb: 'Campaign stages and dungeon floors: waves, energy cost, rewards and star rules.',
   },
   summonPool: {
     type: 'summonPool',

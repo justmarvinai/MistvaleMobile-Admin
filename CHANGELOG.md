@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — dungeons
+
+The game repo's Phase P6 opened the Depths; the type sync brought the new content family across as a compile error rather than a runtime surprise.
+
+- **Dungeons** (`dungeons`) — a keep's floors, its kind (relic, proving grounds or spring), which relic sets and items it drops, the account level it opens at, and the weekdays it runs on. The rotation is what turns the Essence Springs from a queue into a week, and it lives here so that moving Mist off Sunday is an edit and a publish rather than a deploy. The new-dungeon template starts open to everyone, every day, at fifteen floors.
+- **Stages** now reference dungeons as well as chapters, and carry their own `gearSetKeys` — a campaign stage inherits its chapter's single set, while a dungeon floor names the four its keep is known for.
+
 ### Added — summon pools
 
 The game repo's Phase P5 added the Mistgate; the type sync brought its content type across as a compile error rather than a runtime surprise.

@@ -11,7 +11,7 @@ Operator cockpit (Admin Suite) for **Mistvale**, a 2D pixel-art turn-based champ
 
 ## Project state
 
-**Phases A0–A1 complete → next is A2 (world authoring)** — see `ROADMAP.md`. The scaffold, typed API layer, rank-gated auth, app shell, dashboard, publish center, the generic entity browser (all 12 content types) and the Game config / Champion / Skills editors exist and are tested. Campaign, drop-table, balance-sandbox and battle-inspector editors do not yet.
+**Phases A0–A1 complete → next is A2 (world authoring)** — see `ROADMAP.md`. The scaffold, typed API layer, rank-gated auth, app shell, dashboard, publish center, the generic entity browser (all 16 content types, dungeons included) and the Game config / Champion / Skills editors exist and are tested. Campaign, drop-table, balance-sandbox and battle-inspector editors do not yet.
 
 **Working on the code:** `pnpm install`, then `pnpm dev` (Vite on `:5174`, serving `/admin/`, proxying `/admin/api` and `/api` to the game server on `127.0.0.1:3001`). Run the game server from the sibling repo first. `pnpm verify` runs the whole gate (format, lint, typecheck, test, build).
 

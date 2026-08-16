@@ -213,6 +213,7 @@ export const CONTENT_TYPES = [
   'gearStat',
   'item',
   'campaignChapter',
+  'dungeon',
   'stage',
   'summonPool',
   'shop',
