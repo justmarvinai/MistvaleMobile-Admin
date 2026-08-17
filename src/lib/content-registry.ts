@@ -157,6 +157,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'Timed events: when they run, what earns points, and the milestone ladder.',
   },
+  loginTrack: {
+    type: 'loginTrack',
+    label: 'Login tracks',
+    path: 'login-tracks',
+    references: ['champion', 'gearSet'],
+    blurb: 'The daily calendar and the welcome strip: one entity per track, a row per day.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

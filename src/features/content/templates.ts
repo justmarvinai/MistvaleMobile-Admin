@@ -281,6 +281,27 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: true,
     },
 
+    // A seven-day welcome strip. Days must run 1…n with no gaps — the Nth claim pays the
+    // day numbered N — so the template ships all seven rather than one to copy, which is
+    // the shape an operator edits rather than assembles.
+    //
+    // Inactive on purpose: only one track of each kind may be active, so a new one created
+    // beside the shipped calendar would fail validation the moment it was saved. Turning it
+    // on is the deliberate step of swapping which track is live.
+    loginTrack: {
+      key,
+      sortOrder: 0,
+      name: 'New track',
+      description: '',
+      track: 'welcome',
+      days: Array.from({ length: 7 }, (_unused, index) => ({
+        day: index + 1,
+        rewards: { silver: 1000 },
+        grants: { champions: [], choices: [], relics: [] },
+      })),
+      active: false,
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {

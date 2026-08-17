@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — login tracks are authorable
+
+`loginTrack` is the game repo's twenty-first content type, and re-cutting next month's calendar is now a draft to review rather than a deploy.
+
+**One entity is a whole track**, not a day — thirty rows of days inside a single entry — because a track is only ever read whole and thirty entities would make "re-cut August" thirty reviews. Two rules the editor enforces at publish: **days must run 1…n with no gaps or duplicates** (the Nth claim pays the day numbered N, so a gap is a claim that quietly pays nothing), and **only one track of each kind may be active** (two live calendars is a coin toss over which one a player walks). Champions granted or offered, reward items, and relic sets are all reference-checked like everything else.
+
+The template is a seven-day welcome strip with all seven days present, and it ships **inactive** — a second active track of a kind would fail validation the moment it was saved, so turning it on is the deliberate step of swapping which track is live. A purpose-built calendar editor — a month grid, per-day reward pickers, a diff that shows which days moved — stays at A4.
+
 ### Added — events are authorable and schedulable
 
 `event` is the game repo's twentieth content type, and scheduling one is now an operator job rather than a deploy — which is the whole point of the framework.
