@@ -458,6 +458,7 @@ export interface components {
             gearSlots: components["schemas"]["GearSlotDef"][];
             gearStats: components["schemas"]["GearStatDef"][];
             items: components["schemas"]["ItemDef"][];
+            masteries: components["schemas"]["MasteryDef"][];
             publishedAt: string | null;
             rev: number;
             shops: components["schemas"]["ShopDef"][];
@@ -516,7 +517,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -530,7 +531,7 @@ export interface components {
         };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -539,7 +540,7 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             discarded: boolean;
             key: string;
         };
@@ -705,7 +706,7 @@ export interface components {
         };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -739,7 +740,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -754,6 +755,297 @@ export interface components {
         LoginRequest: {
             accountName: string;
             password: string;
+        };
+        MasteryDef: {
+            /** @default  */
+            description: string;
+            effects: ({
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                /** @default 0 */
+                flat: number;
+                /** @default 0 */
+                pct: number;
+                /** @enum {string} */
+                stat: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                /** @constant */
+                type: "stat";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "damageDealt";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "damageTaken";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "lifesteal";
+            } | {
+                /** @default 0 */
+                flat: number;
+                /** @default 1 */
+                maxStacks: number;
+                /** @default 0 */
+                shieldPctMaxHp: number;
+                /** @enum {string} */
+                stat?: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                /** @constant */
+                type: "onKill";
+            } | {
+                pctMaxHp: number;
+                /** @default 2 */
+                turns: number;
+                /** @constant */
+                type: "battleStartShield";
+            } | {
+                chance: number;
+                /** @default 0 */
+                minDamagePctMaxHp: number;
+                /** @constant */
+                type: "cooldownProc";
+            } | {
+                /** @enum {string} */
+                mode: "dealt" | "received" | "shieldReceived";
+                pct: number;
+                /** @constant */
+                type: "healing";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "redirect";
+            } | {
+                chance: number;
+                /** @default 25 */
+                hpLostPct: number;
+                /** @enum {string} */
+                trigger: "heavyHit" | "allyCrowdControlled";
+                /** @constant */
+                type: "counterProc";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "counterDamage";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "protectionBonus";
+            } | {
+                chance: number;
+                /** @default 1 */
+                count: number;
+                /** @constant */
+                type: "cleanseProc";
+            } | {
+                /** @default 1 */
+                chance: number;
+                pct: number;
+                /**
+                 * @default self
+                 * @enum {string}
+                 */
+                target: "self" | "team";
+                /** @default 1 */
+                threshold: number;
+                /** @enum {string} */
+                trigger: "ownBuffExpired" | "ownDebuffExpired" | "allyDied" | "debuffsLandedInTurn";
+                /** @constant */
+                type: "turnMeterProc";
+            } | {
+                /** @default false */
+                hardCcOnly: boolean;
+                pct: number;
+                /** @constant */
+                type: "debuffChance";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "setBonusAmplify";
+            } | {
+                maxPct: number;
+                pctPerUse: number;
+                /** @constant */
+                type: "a1Ramp";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "firstStrike";
+            } | {
+                chance: number;
+                /** @default false */
+                excludeHardCc: boolean;
+                /** @enum {string} */
+                mode: "ownDebuffs" | "allyBuffs";
+                /** @default 1 */
+                turns: number;
+                /** @constant */
+                type: "statusDuration";
+            } | {
+                bossPct: number;
+                chance: number;
+                pct: number;
+                /** @constant */
+                type: "bonusDamageMaxHp";
+            } | {
+                /** @constant */
+                type: "lastStand";
+            })[];
+            /** @default  */
+            icon: string;
+            key: string;
+            name: string;
+            /** @default 0 */
+            sortOrder: number;
+            tier: number;
+            /** @enum {string} */
+            tree: "onslaught" | "bulwark" | "insight";
         };
         PublishContentRequest: {
             /** @default  */
@@ -777,7 +1069,7 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             key: string;
             saved: boolean;
         };
@@ -1603,7 +1895,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1689,7 +1981,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1775,7 +2067,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1879,7 +2171,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1965,7 +2257,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };

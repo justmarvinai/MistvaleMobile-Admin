@@ -212,6 +212,19 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       unlock: {},
     },
 
+    // A Tier-1 stat node: the simplest thing that is both valid and useful, so an
+    // operator edits a real mastery rather than fighting a validation wall.
+    mastery: {
+      key,
+      sortOrder: 0,
+      name: 'New mastery',
+      description: '',
+      tree: 'onslaught',
+      tier: 1,
+      icon: '',
+      effects: [{ type: 'stat', stat: 'atk', flat: 50, pct: 0 }],
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {

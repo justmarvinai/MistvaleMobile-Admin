@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — masteries
+
+The game repo's P6 shipped the three mastery trees; the type sync brought the content family across as a compile error rather than a runtime surprise.
+
+- **Masteries** (`masteries`) — a node's tree, tier, description and the typed effects the engine runs for it. The effect vocabulary is fixed and engine-known, so publish refuses a node promising a behaviour nothing implements, and refuses a tree with a hole in its ladder. Node *costs* are deliberately not here: they are per tier, in the `economy.masteryCosts` game-config row, because a tier is the unit an operator actually reprices.
+- The new-mastery template is a Tier-1 stat node — the simplest thing that is both valid and useful.
+
 ### Added — dungeons
 
 The game repo's Phase P6 opened the Depths; the type sync brought the new content family across as a compile error rather than a runtime surprise.

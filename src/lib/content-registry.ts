@@ -129,6 +129,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['item', 'gearSet', 'champion'],
     blurb: 'Rotating stock: slots, offers, prices and restock timing.',
   },
+  mastery: {
+    type: 'mastery',
+    label: 'Masteries',
+    path: 'masteries',
+    references: [],
+    blurb: 'The three trees: a node’s tier, and the typed effects the engine runs for it.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',
