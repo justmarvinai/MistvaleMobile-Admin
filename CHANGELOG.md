@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the Arena bot manager (A5, with the game repo's P7)
+
+The game repo's Arena ships seeded with sixty bots so a new account finds somebody to fight on its first evening. A ladder that ships without an operator view of it is a ladder nobody can fix on a Sunday, so the manager came with it.
+
+- **A ladder view by band** — what each should hold against what it does, its rating window, and a fill bar that makes a short band visible rather than a number to compare. Counted by where each bot actually _stands_ rather than the window it was created in, so this page and the in-game leaderboard cannot disagree.
+- **Two actions, both audited.** _Fill to strength_ is idempotent — it creates only the difference, and sheds an over-full band from the top so the entry-level opponents a new account meets are the ones that survive. _Rebuild now_ runs the nightly job on demand, which is what you want immediately after a balance publish rather than at 04:00.
+- **Deliberately no third control.** Everything tunable about a band — its size, rating window, the champions and relics its bots are synthesised from, the two name pools — is `arena.botBands` and friends in the Game config editor, because it is content and content is data. The page links there instead of mirroring it: a second place to change a band's size is a second place for it to be wrong.
+- **No per-bot editor either.** A bot is an ordinary `players` row with `is_bot` set, so it is inspected, renamed or removed through Players with "Include bots" switched on — which is the point of not giving bots their own table.
+- **Tests** — 6 RTL cases over the screen: that it reports a short band as short, says so when the ladder has never been built, hits the right endpoint for each button, surfaces a failed run rather than swallowing it, and offers no band settings of its own.
+
 ### Added — Player management (A5, pulled forward)
 
 Mistvale has no e-mail addresses. That is a deliberate simplification with one binding consequence — **an operator is the only password reset there is** — and until now there was no screen for it, so the support path was hand-writing a password hash into the database. That breaks the no-direct-DB rule this suite exists to uphold, which is why this jumped ahead of A2.

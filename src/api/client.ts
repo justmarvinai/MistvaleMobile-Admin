@@ -53,6 +53,17 @@ export const ADMIN_ROUTES = {
     grant: (id: string) => `/players/${encodeURIComponent(id)}/grant`,
     sessions: (id: string) => `/players/${encodeURIComponent(id)}/sessions`,
   },
+  /**
+   * The Arena's bot ladder — see the game repo's `ADMIN_ROUTES.bots`.
+   *
+   * Ladder-level only. An individual bot is an ordinary player and is managed through
+   * `players` like anybody else, which is the point of not giving bots their own table.
+   */
+  bots: {
+    census: '/arena/bots',
+    seed: '/arena/bots/seed',
+    refresh: '/arena/bots/refresh',
+  },
 } as const;
 
 /**

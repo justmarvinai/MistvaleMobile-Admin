@@ -10,6 +10,8 @@ import { invalidateContent, queryKeys } from './query-client';
 import type {
   AccountRank,
   AdminAccountState,
+  ArenaBotCensus,
+  ArenaLadderResult,
   AdminGrantRequest,
   AdminGrantResult,
   AdminPlayerDetail,
@@ -354,4 +356,44 @@ export function useRevokeSessions(
       request<{ revoked: number }>(ADMIN_ROUTES.players.sessions(id), { method: 'DELETE' }),
     onSuccess: invalidatePlayer(client, id),
   });
+}
+
+// ── The Arena's bot ladder ───────────────────────────────────────────────────
+
+/**
+ * The ladder, from the operator's side.
+ *
+ * Three calls and no fourth. What each band *is* — how many bots, at what rating,
+ * holding what — is `arena.botBands` in the game-config editor, because it is content
+ * and content is data. These only report and apply.
+ */
+export function useArenaBotCensus(): UseQueryResult<ArenaBotCensus, ApiError> {
+  return useQuery<ArenaBotCensus, ApiError>({
+    queryKey: queryKeys.arenaBots,
+    queryFn: () => request<ArenaBotCensus>(ADMIN_ROUTES.bots.census),
+  });
+}
+
+/** Both ladder actions answer identically and invalidate the same things. */
+function useLadderAction(path: string): UseMutationResult<ArenaLadderResult, ApiError, void> {
+  const client = useQueryClient();
+  return useMutation<ArenaLadderResult, ApiError, void>({
+    mutationFn: () => request<ArenaLadderResult>(path, { method: 'POST' }),
+    onSuccess: async () => {
+      await Promise.all([
+        client.invalidateQueries({ queryKey: queryKeys.arenaBots }),
+        // Creating or removing bots moves the account totals on the dashboard.
+        client.invalidateQueries({ queryKey: queryKeys.stats }),
+        client.invalidateQueries({ queryKey: ['players', 'search'] }),
+      ]);
+    },
+  });
+}
+
+export function useSeedArenaBots(): UseMutationResult<ArenaLadderResult, ApiError, void> {
+  return useLadderAction(ADMIN_ROUTES.bots.seed);
+}
+
+export function useRefreshArenaBots(): UseMutationResult<ArenaLadderResult, ApiError, void> {
+  return useLadderAction(ADMIN_ROUTES.bots.refresh);
 }

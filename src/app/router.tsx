@@ -16,6 +16,7 @@ import { ContentItemPage } from '@/features/content/ContentItemPage';
 import { PublishCenterPage } from '@/features/publish/PublishCenterPage';
 import { PlayerSearchPage } from '@/features/players/PlayerSearchPage';
 import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
+import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
 
 /**
@@ -142,6 +143,12 @@ const playerDetailRoute = createRoute({
   },
 });
 
+const arenaBotsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/arena/bots',
+  component: BotLadderPage,
+});
+
 const publishRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/publish',
@@ -156,6 +163,7 @@ const routeTree = rootRoute.addChildren([
     contentItemRoute,
     playersRoute,
     playerDetailRoute,
+    arenaBotsRoute,
     publishRoute,
   ]),
 ]);

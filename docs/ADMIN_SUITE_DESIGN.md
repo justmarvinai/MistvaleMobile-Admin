@@ -123,9 +123,15 @@ Upload frame strips/PNGs (drag-drop) → server packs & registers; preview playe
 - **Why this jumped the queue:** there is no e-mail address anywhere in Mistvale, so an operator is the _only_ password reset that exists. Without this the support path was hand-writing an argon2id hash into the database — a hard-rule violation, not a missing convenience.
 - **Still A5:** roster and gear drill-in (holdings are counts today), summon history with pity, battle history into the inspector, grants of champions/gear rolls, the gift-mail attachment option, and bulk actions.
 
-### 2.15 Bot manager
+### 2.15 Bot manager — **shipped**
 
-Ladder view by rating band; generate N bots (name generator + roster synthesis from live content at target power); edit individual bot teams (same team editor as defense teams); nightly refresh policy config; "bot density" health check vs real-player count per band.
+Ladder view by rating band: what each band should hold against what it does, its rating window, and a fill bar that makes a short band visible rather than a number to compare. Two actions — **Fill to strength** (idempotent; creates only the difference, and sheds an over-full band from the top so the entry-level opponents a new account meets survive) and **Rebuild now** (the nightly job on demand, for after a balance publish). Both audited; both answer with what they did and the ladder as it now stands.
+
+Deliberately no third control. Everything an operator might _tune_ — how many bots a band holds, its rating window, the champions and relics they are synthesised from, the two name pools — is `arena.botBands`, `arena.botGivenNames` and `arena.botEpithets` in the Game config editor, because it is content and content is data. A second place to change a band's size is a second place for it to be wrong, so the page links to the config editor instead of mirroring it.
+
+Individual bots need no editor either: a bot is an ordinary `players` row with `is_bot` set, so it is inspected, renamed or removed through §2.14 with "Include bots" switched on — which is the whole point of not giving bots their own table. Counts are read from where each bot actually _stands_ rather than the window it was created in, so the page and the leaderboard agree.
+
+**Still to come:** the "bot density vs real-player count" health check, which needs a real player population to be meaningful.
 
 ### 2.16 Mail composer
 

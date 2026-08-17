@@ -20,7 +20,9 @@
 
 ### Where the suite stands
 
-**A0–A1 complete, plus the player-management slice of A5. The game repo has finished P6**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+**A0–A1 complete, plus the player-management and bot-manager slices of A5. The game repo has finished P7**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+
+**The bot manager shipped with the game repo's P7** (§2.15): a ladder view by band, and the two actions a config edit cannot perform by itself — fill to strength, and rebuild now. Everything tunable about a band stays in the Game config editor rather than being mirrored here, and an individual bot is managed through Players like any other account, because a bot _is_ an ordinary player row. Only the "bot density vs real players" health check is deferred, since it needs a real population to mean anything.
 
 **Player management jumped the queue**, and the reason is worth recording: Mistvale has no e-mail addresses anywhere, so an operator is the _only_ password reset that exists — and there was no operator endpoint. That is a hard-rule violation rather than a missing convenience, so search, the account page and six audited actions (reset password, set rank, ban/unban, rename, grant, sign out everywhere) shipped ahead of A2. The rest of §2.14 — roster and gear drill-ins, summon history, gift-mail attachments, bulk actions — stays at A5 where it belongs, since all of it needs systems that do not exist yet.
 

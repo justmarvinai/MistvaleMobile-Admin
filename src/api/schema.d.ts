@@ -6,6 +6,66 @@
  */
 
 export interface paths {
+    "/admin/api/arena/bots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What each band of the bot ladder should hold, and what it does
+         * @description Counted by where each bot actually stands rather than by the window it was made in, so the numbers read as they look on the leaderboard.
+         */
+        get: operations["getArenaBotCensus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/arena/bots/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rebuild every bot now, as the nightly job would
+         * @description Re-synthesises each roster from live content and drifts each rating inside its band, then tops the ladder up. For use after a balance publish, so an operator does not have to wait until the reset hour to see the result.
+         */
+        post: operations["refreshArenaBots"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/arena/bots/seed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bring the bot ladder up to strength
+         * @description Idempotent: creates only the difference between what each band should hold and what it does, and sheds from the top of an over-full band so the entry-level opponents survive. What a band *is* comes from `arena.botBands` in the game config.
+         */
+        post: operations["seedArenaBots"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/auth/login": {
         parameters: {
             query?: never;
@@ -977,6 +1037,18 @@ export interface components {
             subMax: number[];
             subMin: number[];
         };
+        GetArenaBotCensusResponse: {
+            bands: {
+                /** @enum {string} */
+                band: "bronze" | "silver" | "gold" | "platinum";
+                present: number;
+                ratingMax: number;
+                ratingMin: number;
+                wanted: number;
+            }[];
+            refreshedAt: string | null;
+            total: number;
+        };
         GetContentEntryResponse: {
             /** @enum {string} */
             contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
@@ -1348,6 +1420,17 @@ export interface components {
             contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             key: string;
             saved: boolean;
+        };
+        SeedArenaBotsResponse: {
+            census: components["schemas"]["GetArenaBotCensusResponse"];
+            report: {
+                byBand: {
+                    [key: string]: number;
+                };
+                created: number;
+                refreshed: number;
+                removed: number;
+            };
         };
         ShopDef: {
             /** @default 4 */
@@ -1893,6 +1976,207 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getArenaBotCensus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["GetArenaBotCensusResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    refreshArenaBots: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SeedArenaBotsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    seedArenaBots: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SeedArenaBotsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
     adminLogin: {
         parameters: {
             query?: never;

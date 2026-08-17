@@ -111,6 +111,14 @@ export type AdminAccountState = S['AdminAccountState'];
 export type AdminResetPasswordResult = S['AdminResetPasswordResult'];
 export type AdminGrantRequest = S['AdminGrantRequest'];
 export type AdminGrantResult = S['AdminGrantResult'];
+
+// ── The Arena's bot ladder ───────────────────────────────────────────────────
+export type ArenaBotCensus = S['GetArenaBotCensusResponse'];
+export type ArenaBotCensusEntry = ArenaBotCensus['bands'][number];
+export type ArenaBand = ArenaBotCensusEntry['band'];
+/** Seeding and refreshing answer the same way: what happened, and the ladder now. */
+export type ArenaLadderResult = S['SeedArenaBotsResponse'];
+export type ArenaLadderReport = ArenaLadderResult['report'];
 export type AccountStatus = AdminAccountState['status'];
 
 // ── Content entities ────────────────────────────────────────────────────────
