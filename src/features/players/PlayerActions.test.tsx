@@ -79,6 +79,70 @@ function stubFetch() {
   return calls;
 }
 
+describe('the fresh-start reset', () => {
+  it('will not reset an account on a single click', async () => {
+    const calls = stubFetch();
+    const user = userEvent.setup();
+    renderWithProviders(<PlayerActions detail={detail} />);
+
+    await user.click(screen.getByRole('button', { name: /reset to a fresh start/i }));
+
+    // The dialog is open and nothing has been sent — this is the one action here that
+    // destroys something nothing can give back.
+    expect(await screen.findByText(/cannot be undone/i)).toBeInTheDocument();
+    expect(calls).toHaveLength(0);
+  });
+
+  it('demands the account name typed out, exactly', async () => {
+    const calls = stubFetch();
+    const user = userEvent.setup();
+    renderWithProviders(<PlayerActions detail={detail} />);
+
+    await user.click(screen.getByRole('button', { name: /reset to a fresh start/i }));
+    const dialog = await screen.findByRole('dialog');
+    const confirm = within(dialog).getByRole('button', { name: /reset everything/i });
+    expect(confirm).toBeDisabled();
+
+    const input = within(dialog).getByRole('textbox');
+    await user.type(input, 'rattle_');
+    expect(confirm).toBeDisabled();
+
+    await user.type(input, 'd');
+    await waitFor(() => expect(confirm).toBeEnabled());
+    expect(calls).toHaveLength(0);
+  });
+
+  it('tells the operator what they are about to destroy', async () => {
+    // "Reset" and "reset, and that was 143 relics" are different sentences, and only one
+    // of them stops somebody who has the wrong account open.
+    const user = userEvent.setup();
+    stubFetch();
+    renderWithProviders(<PlayerActions detail={detail} />);
+
+    await user.click(screen.getByRole('button', { name: /reset to a fresh start/i }));
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText(/22 champion/)).toBeInTheDocument();
+    expect(within(dialog).getByText(/143 relic/)).toBeInTheDocument();
+    expect(within(dialog).getByText(/84 cleared stage/)).toBeInTheDocument();
+  });
+
+  it('posts to the reset endpoint once confirmed', async () => {
+    const calls = stubFetch();
+    const user = userEvent.setup();
+    renderWithProviders(<PlayerActions detail={detail} />);
+
+    await user.click(screen.getByRole('button', { name: /reset to a fresh start/i }));
+    const dialog = await screen.findByRole('dialog');
+    await user.type(within(dialog).getByRole('textbox'), 'rattle_d');
+    await user.click(within(dialog).getByRole('button', { name: /reset everything/i }));
+
+    await waitFor(() => {
+      expect(calls.some((call) => call.url.endsWith('/players/player-1/reset'))).toBe(true);
+    });
+    expect(calls.find((call) => call.url.endsWith('/players/player-1/reset'))?.method).toBe('POST');
+  });
+});
+
 describe('player actions', () => {
   it('will not reset a password on a single click', async () => {
     const calls = stubFetch();

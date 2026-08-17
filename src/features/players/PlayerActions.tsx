@@ -20,6 +20,7 @@ import { IconCheck, IconCopy, IconKey } from '@tabler/icons-react';
 import {
   useGrant,
   useRenamePlayer,
+  useResetAccount,
   useResetPassword,
   useRevokeSessions,
   useSetBanned,
@@ -30,12 +31,16 @@ import { ConfirmTyped } from '@/components/ConfirmTyped';
 import { ACCOUNT_RANKS, type AdminPlayerDetail } from '@/api/types';
 
 /**
- * The six things an operator can do to an account (ADMIN_SUITE_DESIGN §2.14).
+ * The seven things an operator can do to an account (ADMIN_SUITE_DESIGN §2.14).
  *
- * All six confirm first, and the two that cannot be undone by clicking again — a password
- * reset and a ban — confirm by *typing* the account name. Safety rails are features
- * (CLAUDE.md), and the account name is the right phrase to demand: it is the one thing an
- * operator who has the wrong account open would get wrong.
+ * All seven confirm first, and the three that cannot be undone by clicking again — a
+ * password reset, a ban, and a full account reset — confirm by *typing* the account name.
+ * Safety rails are features (CLAUDE.md), and the account name is the right phrase to
+ * demand: it is the one thing an operator who has the wrong account open would get wrong.
+ *
+ * The account reset sits apart from the rest, under its own heading and in red, because it
+ * is the only one here that destroys something nothing can give back. A password can be
+ * reset again and a ban can be lifted; a roster cannot be un-deleted.
  *
  * The temporary password is shown once, here, with a copy button. It is deliberately not
  * re-readable: the server keeps only its hash, so a second look would mean storing a
@@ -46,13 +51,16 @@ export function PlayerActions({ detail }: { detail: AdminPlayerDetail }): ReactN
   const banned = detail.account.status === 'banned';
 
   const reset = useResetPassword(id);
+  const resetAccount = useResetAccount(id);
   const setRank = useSetRank(id);
   const setBanned = useSetBanned(id);
   const rename = useRenamePlayer(id);
   const grant = useGrant(id);
   const revoke = useRevokeSessions(id);
 
-  const [confirming, setConfirming] = useState<'reset' | 'ban' | 'unban' | 'revoke' | null>(null);
+  const [confirming, setConfirming] = useState<
+    'reset' | 'ban' | 'unban' | 'revoke' | 'wipe' | null
+  >(null);
   const [temporary, setTemporary] = useState<string | null>(null);
   const [banReason, setBanReason] = useState('');
   const [profileName, setProfileName] = useState(detail.player.profileName);
@@ -288,6 +296,57 @@ export function PlayerActions({ detail }: { detail: AdminPlayerDetail }): ReactN
           </Button>
         </Stack>
       </Card>
+
+      <Card withBorder padding="md" style={{ borderColor: 'var(--mantine-color-red-8)' }}>
+        <Title order={5} mb="xs" c="red">
+          Fresh start
+        </Title>
+        <Text size="sm" c="dimmed" mb="md">
+          Destroys everything <strong>{detail.account.accountName}</strong> has played —{' '}
+          {detail.holdings.champions} champion(s), {detail.holdings.gear} relic(s),{' '}
+          {detail.holdings.itemStacks} item stack(s), {detail.progress.stagesCleared} cleared
+          stage(s), their wallet, arena standing and Hall of Valor — and returns the account to
+          level 1 with the starter choice waiting. The login, password and rank are kept.
+        </Text>
+        <Text size="sm" c="dimmed" mb="md">
+          Settings are kept too: audio, battle speed and motion preferences are accessibility
+          choices, not progress. The economy ledger is kept and balanced, so the reset reads as a
+          line in the history rather than a hole in it.
+        </Text>
+        <Button color="red" loading={resetAccount.isPending} onClick={() => setConfirming('wipe')}>
+          Reset to a fresh start
+        </Button>
+      </Card>
+
+      <ConfirmTyped
+        opened={confirming === 'wipe'}
+        onClose={() => setConfirming(null)}
+        onConfirm={() =>
+          resetAccount.mutate(undefined, {
+            onSuccess: (result) => {
+              setConfirming(null);
+              report(
+                `Reset — ${result.champions} champion(s), ${result.gear} relic(s) and ${result.stagesCleared} cleared stage(s) destroyed.`,
+              )();
+            },
+            onError: (error) => {
+              setConfirming(null);
+              complain(error);
+            },
+          })
+        }
+        title="Reset this account to a fresh start?"
+        confirmLabel="Reset everything"
+        phrase={detail.account.accountName}
+        loading={resetAccount.isPending}
+      >
+        <Text size="sm">
+          This cannot be undone. <strong>{detail.account.accountName}</strong> loses{' '}
+          {detail.holdings.champions} champion(s), {detail.holdings.gear} relic(s) and{' '}
+          {detail.progress.stagesCleared} cleared stage(s), and is signed out everywhere. The
+          account keeps its name, password and rank.
+        </Text>
+      </ConfirmTyped>
 
       <ConfirmTyped
         opened={confirming === 'reset'}

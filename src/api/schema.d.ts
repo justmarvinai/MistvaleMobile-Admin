@@ -424,6 +424,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/players/{id}/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Return an account to a fresh start
+         * @description Destroys everything the account has played — champions, relics, items, campaign and Depths progress, the Chronicle, shop stock, summon history, battles, its arena standing and its Hall of Valor — and puts it back at level 1 with the starter chooser waiting. The account keeps its name, password and rank: this is a reset, not a deletion. Settings survive (accessibility choices are not progress), and the wallet is emptied through RewardService so `economy_log` still balances. Irreversible, and every session is signed out.
+         */
+        post: operations["resetPlayerAccount"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/players/{id}/reset-password": {
         parameters: {
             query?: never;
@@ -1400,6 +1420,18 @@ export interface components {
             rev: number;
             summary: components["schemas"]["ContentTotals"];
             validation: components["schemas"]["ContentValidationResult"];
+        };
+        ResetPlayerAccountResponse: {
+            battles: number;
+            champions: number;
+            gear: number;
+            itemStacks: number;
+            refunded: {
+                [key: string]: number;
+            };
+            sessionsRevoked: number;
+            stagesCleared: number;
+            summons: number;
         };
         RevertContentRequest: {
             rev: number;
@@ -3837,6 +3869,103 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["AdminAccountState"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    resetPlayerAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ResetPlayerAccountResponse"];
                         /** @constant */
                         ok: true;
                         rev: number;

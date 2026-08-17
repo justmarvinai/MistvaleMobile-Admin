@@ -111,6 +111,7 @@ export type AdminAccountState = S['AdminAccountState'];
 export type AdminResetPasswordResult = S['AdminResetPasswordResult'];
 export type AdminGrantRequest = S['AdminGrantRequest'];
 export type AdminGrantResult = S['AdminGrantResult'];
+export type AdminResetAccountResult = S['ResetPlayerAccountResponse'];
 
 // ── The Arena's bot ladder ───────────────────────────────────────────────────
 export type ArenaBotCensus = S['GetArenaBotCensusResponse'];

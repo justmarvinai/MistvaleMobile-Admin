@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — Fresh start
+
+A full account reset, in its own red danger zone on the account page. Returns an account to exactly the state registration leaves it in: champions, relics, items, campaign and Depths progress, the Chronicle, shop stock, summon history, battles, arena standing and Hall of Valor all destroyed, back to level 1 with the starter chooser waiting. The login, password and rank survive — a reset is not a deletion.
+
+- **Confirmed by typing the account name**, and the dialog counts what is about to go. "Reset" and "reset, and that was 143 relics" are different sentences, and only one of them stops an operator who has the wrong account open.
+- **Settings survive.** Audio, battle speed, reduced motion and colourblind glyphs are accessibility choices rather than progress; wiping somebody's motion sensitivity because they wanted a fresh roster would be actively unkind.
+- **The economy ledger survives, and still balances.** The wallet is emptied _through_ `RewardService` rather than by writing zeros, so the sum of a player's deltas still equals their balance and the reset reads as a line in the history instead of a hole in it. The faucet and sink figures it feeds were real; rewriting them would corrupt the dashboards.
+- **The audit trail records the whole before-state** — level, wallet, holdings and progress. This is the one action with nothing left to compare against afterwards, so the audit entry is the only remaining answer to "what did that account have?".
+- Arena bots are refused, with a pointer to the bot manager: rebuilding the ladder is what resetting a bot actually means.
+
 ### Added — the Arena bot manager (A5, with the game repo's P7)
 
 The game repo's Arena ships seeded with sixty bots so a new account finds somebody to fight on its first evening. A ladder that ships without an operator view of it is a ladder nobody can fix on a Sunday, so the manager came with it.

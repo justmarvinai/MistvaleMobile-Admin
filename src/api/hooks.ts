@@ -16,6 +16,7 @@ import type {
   AdminGrantResult,
   AdminPlayerDetail,
   AdminPlayerSearch,
+  AdminResetAccountResult,
   AdminResetPasswordResult,
   ContentDiff,
   ContentItemResponse,
@@ -343,6 +344,24 @@ export function useGrant(
   return useMutation<AdminGrantResult, ApiError, AdminGrantRequest>({
     mutationFn: (body) =>
       request<AdminGrantResult>(ADMIN_ROUTES.players.grant(id), { method: 'POST', body }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+/**
+ * Returns an account to a fresh start.
+ *
+ * Invalidates the whole player cache rather than the one account: a reset moves the
+ * wallet, the holdings, the progress *and* the sessions at once, and the search behind it
+ * shows a level that has just changed.
+ */
+export function useResetAccount(
+  id: string,
+): UseMutationResult<AdminResetAccountResult, ApiError, void> {
+  const client = useQueryClient();
+  return useMutation<AdminResetAccountResult, ApiError, void>({
+    mutationFn: () =>
+      request<AdminResetAccountResult>(ADMIN_ROUTES.players.reset(id), { method: 'POST' }),
     onSuccess: invalidatePlayer(client, id),
   });
 }
