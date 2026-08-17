@@ -41,6 +41,9 @@ export const queryKeys = {
   diff: ['content', 'diff'] as const,
   validation: ['content', 'validation'] as const,
   revisions: ['content', 'revisions'] as const,
+  playerSearch: (params: string) => ['players', 'search', params] as const,
+  player: (id: string) => ['players', 'detail', id] as const,
+  arenaBots: ['arena', 'bots'] as const,
 };
 
 /**

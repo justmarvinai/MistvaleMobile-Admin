@@ -114,15 +114,24 @@ Reusable tables: weighted entries (gear query: set/slot/rank/rarity-weights/leve
 
 Upload frame strips/PNGs (drag-drop) → server packs & registers; preview player (play tracks at set fps); assign to champions/enemies/vfx slots; usage list; orphan finder. Enforces ASSET_GUIDE conventions (size check, naming).
 
-### 2.14 Player management
+### 2.14 Player management — **search, inspect and the six actions shipped** (pulled forward from A5)
 
 - Search by account/profile name; player page: profile & resources, roster (with gear detail drill-in), items, progress (campaign stars, dungeon floors, arena state, quests), summon history with pity counters, economy log tail, battle history (open in Battle inspector), sessions.
 - Actions (all audited, all confirm-guarded): **Grant** (champion / gear roll / items / currency — via RewardService with a mail-attachment option "send as gift mail"), **Reset password** (generates temp password + force-change flag — the EA-0.1 support path), **Set rank** (Player / GameMaster / Admin — typed confirmation, self-demotion blocked), **Ban/unban** (reason required), **Rename profile** (the no-profanity-filter support path), session revoke.
-- Bulk: select-all-filtered → mail composer.
+- Bulk: select-all-filtered → mail composer. _(A5 — needs the mail composer.)_
+- **Shipped now:** search by either name (bots hidden by default), the account page (wallet, live energy, holdings as counts, progress and deepest floors, live sessions, economy tail), and **Reset password · Set rank · Ban/unban · Rename profile · Grant · Sign out everywhere** — every one audited with before/after, the two irreversible ones behind a typed confirmation of the account name. Two guards refuse the caller's own account: an admin cannot change their own rank or ban themselves.
+- **Why this jumped the queue:** there is no e-mail address anywhere in Mistvale, so an operator is the _only_ password reset that exists. Without this the support path was hand-writing an argon2id hash into the database — a hard-rule violation, not a missing convenience.
+- **Still A5:** roster and gear drill-in (holdings are counts today), summon history with pity, battle history into the inspector, grants of champions/gear rolls, the gift-mail attachment option, and bulk actions.
 
-### 2.15 Bot manager
+### 2.15 Bot manager — **shipped**
 
-Ladder view by rating band; generate N bots (name generator + roster synthesis from live content at target power); edit individual bot teams (same team editor as defense teams); nightly refresh policy config; "bot density" health check vs real-player count per band.
+Ladder view by rating band: what each band should hold against what it does, its rating window, and a fill bar that makes a short band visible rather than a number to compare. Two actions — **Fill to strength** (idempotent; creates only the difference, and sheds an over-full band from the top so the entry-level opponents a new account meets survive) and **Rebuild now** (the nightly job on demand, for after a balance publish). Both audited; both answer with what they did and the ladder as it now stands.
+
+Deliberately no third control. Everything an operator might _tune_ — how many bots a band holds, its rating window, the champions and relics they are synthesised from, the two name pools — is `arena.botBands`, `arena.botGivenNames` and `arena.botEpithets` in the Game config editor, because it is content and content is data. A second place to change a band's size is a second place for it to be wrong, so the page links to the config editor instead of mirroring it.
+
+Individual bots need no editor either: a bot is an ordinary `players` row with `is_bot` set, so it is inspected, renamed or removed through §2.14 with "Include bots" switched on — which is the whole point of not giving bots their own table. Counts are read from where each bot actually _stands_ rather than the window it was created in, so the page and the leaderboard agree.
+
+**Still to come:** the "bot density vs real-player count" health check, which needs a real player population to be meaningful.
 
 ### 2.16 Mail composer
 

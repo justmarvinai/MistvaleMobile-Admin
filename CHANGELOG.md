@@ -5,6 +5,63 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the Arena bot manager (A5, with the game repo's P7)
+
+The game repo's Arena ships seeded with sixty bots so a new account finds somebody to fight on its first evening. A ladder that ships without an operator view of it is a ladder nobody can fix on a Sunday, so the manager came with it.
+
+- **A ladder view by band** — what each should hold against what it does, its rating window, and a fill bar that makes a short band visible rather than a number to compare. Counted by where each bot actually _stands_ rather than the window it was created in, so this page and the in-game leaderboard cannot disagree.
+- **Two actions, both audited.** _Fill to strength_ is idempotent — it creates only the difference, and sheds an over-full band from the top so the entry-level opponents a new account meets are the ones that survive. _Rebuild now_ runs the nightly job on demand, which is what you want immediately after a balance publish rather than at 04:00.
+- **Deliberately no third control.** Everything tunable about a band — its size, rating window, the champions and relics its bots are synthesised from, the two name pools — is `arena.botBands` and friends in the Game config editor, because it is content and content is data. The page links there instead of mirroring it: a second place to change a band's size is a second place for it to be wrong.
+- **No per-bot editor either.** A bot is an ordinary `players` row with `is_bot` set, so it is inspected, renamed or removed through Players with "Include bots" switched on — which is the point of not giving bots their own table.
+- **Tests** — 6 RTL cases over the screen: that it reports a short band as short, says so when the ladder has never been built, hits the right endpoint for each button, surfaces a failed run rather than swallowing it, and offers no band settings of its own.
+
+### Added — Player management (A5, pulled forward)
+
+Mistvale has no e-mail addresses. That is a deliberate simplification with one binding consequence — **an operator is the only password reset there is** — and until now there was no screen for it, so the support path was hand-writing a password hash into the database. That breaks the no-direct-DB rule this suite exists to uphold, which is why this jumped ahead of A2.
+
+- **Search** by account _or_ profile name, because a support request rarely says which one it is quoting. Bots hidden by default, one switch away.
+- **The account page**: wallet, live energy, holdings as counts, progress and deepest floors, every live session with where it is signed in from, and the tail of the economy ledger with each line's deltas.
+- **Six actions.** Reset password (the temporary one is shown once, with a copy button — the server keeps only its hash, so there is nothing to show twice), set rank, ban/unban, rename profile, grant currencies, sign out everywhere.
+- **Safety rails.** The two that cannot be undone by clicking again — reset and ban — need the account name typed out, which is the one thing an operator with the wrong account open would get wrong. A ban cannot be sent without a reason. A grant cannot be sent without a note, because the note is what the audit trail will show a year later.
+- **The screen never guesses at server rules.** Rank is a plain select, and the server's refusal to let an admin change their own comes back as an error toast rather than being predicted here — one rule, enforced where it belongs.
+- 8 RTL cases over the refusals: no action fires on a single click, the typed confirmation unlocks only on an exact match, the temporary password is absent until the reset returns it, and a grant sends only the fields that were filled in.
+
+### Changed — the game repo finished P6
+
+No code change here; the type sync was already current. What changed is what the suite is now pointing at, recorded so A2 is planned against reality rather than against the planning docs.
+
+- **372 stages are published** — 252 campaign (12 chapters × 7 × 3 difficulties) plus 120 Depths floors across ten dungeons. Both sets are _generated_ in the game repo's seed from twelve and ten plan entries, which settles a design question for A2's campaign editor: its job is reviewing and retuning generated content — a stage grid per chapter and difficulty, a wave composer that makes a retune cheap — not offering to create 252 rows by hand.
+- The generic entity browser covers all **17** content types, so P6's two new families (`dungeon`, `mastery`) are fully editable today with no SQL-only fields. Their purpose-built editors — a floor-band view, a mastery tree canvas — remain scheduled at A4, and `ROADMAP.md` now says so plainly instead of leaving it to be inferred.
+- Two long-standing gaps that the game repo's `USER_QUESTIONS.md` had parked at "P2" are really **A2** work and are re-dated there: the shallow publish diff (top-level keys only, which a stage's nested `waves` array makes noticeably worse) and the missing balance-sim endpoint behind the champion Balance tab and stage Simulate.
+
+### Added — masteries
+
+The game repo's P6 shipped the three mastery trees; the type sync brought the content family across as a compile error rather than a runtime surprise.
+
+- **Masteries** (`masteries`) — a node's tree, tier, description and the typed effects the engine runs for it. The effect vocabulary is fixed and engine-known, so publish refuses a node promising a behaviour nothing implements, and refuses a tree with a hole in its ladder. Node _costs_ are deliberately not here: they are per tier, in the `economy.masteryCosts` game-config row, because a tier is the unit an operator actually reprices.
+- The new-mastery template is a Tier-1 stat node — the simplest thing that is both valid and useful.
+
+### Added — dungeons
+
+The game repo's Phase P6 opened the Depths; the type sync brought the new content family across as a compile error rather than a runtime surprise.
+
+- **Dungeons** (`dungeons`) — a keep's floors, its kind (relic, proving grounds or spring), which relic sets and items it drops, the account level it opens at, and the weekdays it runs on. The rotation is what turns the Essence Springs from a queue into a week, and it lives here so that moving Mist off Sunday is an edit and a publish rather than a deploy. The new-dungeon template starts open to everyone, every day, at fifteen floors.
+- **Stages** now reference dungeons as well as chapters, and carry their own `gearSetKeys` — a campaign stage inherits its chapter's single set, while a dungeon floor names the four its keep is known for.
+
+### Added — summon pools
+
+The game repo's Phase P5 added the Mistgate; the type sync brought its content type across as a compile error rather than a runtime surprise.
+
+- **Summon pools** (`summon-pools`) — rates, mercy rules and the weighted champion table per sigil, plus the ×10 floor. The new-pool template starts with rates that already sum to 1, because publish refuses a table that does not, and refuses a pool advertising a rarity it holds no champion for.
+
+### Added — the relic economy's content types
+
+The game repo's Phase P4 added two content families and a new field on stages; the type sync surfaced them as compile errors here rather than as runtime surprises, which is the contract working.
+
+- **Relic stats** (`gear-stats`) — what each rollable stat is worth per rank, main and sub. Eleven entries that are the entire numeric surface of the relic economy.
+- **Shops** (`shops`) — rotating stock: slots, offers, prices, bands and restock timing. Editable end to end, so re-pricing the Bazaar or adding an offer needs no deploy.
+- Stage rewards now carry a **drop band** (relic chance, rank and rarity weights, slot restriction, item rolls), reflected in the new-stage template.
+
 ### Changed
 
 - Regenerated API types for the game repo's `anchorLevel` field on enemies. The drift check caught the stale schema before anything was built against it, which is what it is for.

@@ -76,6 +76,26 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
         })}
       </Box>
 
+      <SectionLabel icon={<IconUsers size={12} />}>Live ops</SectionLabel>
+      <Box>
+        <NavLink
+          component={Link}
+          to="/players"
+          onClick={onNavigate}
+          active={pathname.startsWith('/players')}
+          label="Players"
+          leftSection={<IconUsers size={16} />}
+        />
+        <NavLink
+          component={Link}
+          to="/arena/bots"
+          onClick={onNavigate}
+          active={pathname.startsWith('/arena')}
+          label="Arena bots"
+          leftSection={<IconSwords size={16} />}
+        />
+      </Box>
+
       <SectionLabel icon={<IconRocket size={12} />}>System</SectionLabel>
       <Box>
         <NavLink
@@ -92,12 +112,6 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
               </Badge>
             ) : undefined
           }
-        />
-        <NavLink
-          label="Players"
-          leftSection={<IconUsers size={16} />}
-          disabled
-          description="Ships in Admin phase A5"
         />
       </Box>
     </Stack>

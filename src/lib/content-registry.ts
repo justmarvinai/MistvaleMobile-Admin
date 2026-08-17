@@ -79,6 +79,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'Which main stats may roll in each slot.',
   },
+  gearStat: {
+    type: 'gearStat',
+    label: 'Relic stats',
+    path: 'gear-stats',
+    references: [],
+    blurb: 'What each rollable stat is worth, per rank — the relic economy in eleven rows.',
+  },
   item: {
     type: 'item',
     label: 'Items',
@@ -93,12 +100,41 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['gearSet'],
     blurb: 'Chapters, their regions and star-chest tiers.',
   },
+  dungeon: {
+    type: 'dungeon',
+    label: 'Dungeons',
+    path: 'dungeons',
+    references: ['gearSet', 'item', 'enemy'],
+    blurb: 'The Depths: floors, rotation days, unlock level and what each keep drops.',
+  },
   stage: {
     type: 'stage',
     label: 'Stages',
     path: 'stages',
-    references: ['campaignChapter', 'enemy'],
-    blurb: 'Waves, energy cost, rewards and star rules.',
+    references: ['campaignChapter', 'dungeon', 'enemy', 'gearSet'],
+    blurb: 'Campaign stages and dungeon floors: waves, energy cost, rewards and star rules.',
+  },
+  summonPool: {
+    type: 'summonPool',
+    label: 'Summon pools',
+    path: 'summon-pools',
+    references: ['item', 'champion'],
+    blurb:
+      'Rates, mercy and the champion table per sigil. Rates must sum to 1, and every rarity advertised needs a champion to deliver it — publish refuses otherwise.',
+  },
+  shop: {
+    type: 'shop',
+    label: 'Shops',
+    path: 'shops',
+    references: ['item', 'gearSet', 'champion'],
+    blurb: 'Rotating stock: slots, offers, prices and restock timing.',
+  },
+  mastery: {
+    type: 'mastery',
+    label: 'Masteries',
+    path: 'masteries',
+    references: [],
+    blurb: 'The three trees: a node’s tier, and the typed effects the engine runs for it.',
   },
   gameConfig: {
     type: 'gameConfig',

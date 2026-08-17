@@ -14,6 +14,9 @@ import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { ContentTypePage } from '@/features/content/ContentTypePage';
 import { ContentItemPage } from '@/features/content/ContentItemPage';
 import { PublishCenterPage } from '@/features/publish/PublishCenterPage';
+import { PlayerSearchPage } from '@/features/players/PlayerSearchPage';
+import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
+import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
 
 /**
@@ -123,6 +126,29 @@ const contentItemRoute = createRoute({
   },
 });
 
+const playersRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/players',
+  component: PlayerSearchPage,
+});
+
+const playerDetailRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/players/$playerId',
+  component: function PlayerDetailRoute() {
+    const { playerId } = playerDetailRoute.useParams();
+    // Remounting on id change resets the action forms; a ban reason typed for one
+    // account must never survive into another's dialog.
+    return <PlayerDetailPage key={playerId} playerId={playerId} />;
+  },
+});
+
+const arenaBotsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/arena/bots',
+  component: BotLadderPage,
+});
+
 const publishRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/publish',
@@ -131,7 +157,15 @@ const publishRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  authedRoute.addChildren([dashboardRoute, contentTypeRoute, contentItemRoute, publishRoute]),
+  authedRoute.addChildren([
+    dashboardRoute,
+    contentTypeRoute,
+    contentItemRoute,
+    playersRoute,
+    playerDetailRoute,
+    arenaBotsRoute,
+    publishRoute,
+  ]),
 ]);
 
 export const router = createRouter({

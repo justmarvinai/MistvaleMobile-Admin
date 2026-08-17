@@ -6,6 +6,66 @@
  */
 
 export interface paths {
+    "/admin/api/arena/bots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What each band of the bot ladder should hold, and what it does
+         * @description Counted by where each bot actually stands rather than by the window it was made in, so the numbers read as they look on the leaderboard.
+         */
+        get: operations["getArenaBotCensus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/arena/bots/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rebuild every bot now, as the nightly job would
+         * @description Re-synthesises each roster from live content and drifts each rating inside its band, then tops the ladder up. For use after a balance publish, so an operator does not have to wait until the reset hour to see the result.
+         */
+        post: operations["refreshArenaBots"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/arena/bots/seed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bring the bot ladder up to strength
+         * @description Idempotent: creates only the difference between what each band should hold and what it does, and sheds from the top of an over-full band so the entry-level opponents survive. What a band *is* comes from `arena.botBands` in the game config.
+         */
+        post: operations["seedArenaBots"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/auth/login": {
         parameters: {
             query?: never;
@@ -244,6 +304,163 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/players": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Find accounts by account or profile name
+         * @description Both names are searched, because a support request rarely says which one it is quoting. Bots are excluded unless `bots=true`. Query: `q`, `limit`, `offset`, `bots`.
+         */
+        get: operations["searchPlayers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Everything about one account
+         * @description Profile, wallet, live energy, holdings as counts, progress, live sessions and the tail of the economy ledger.
+         */
+        get: operations["getPlayer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/ban": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ban or unban an account
+         * @description A ban needs a reason — the account is shown it at its next sign-in attempt — and signs every session out, so it takes effect now rather than when a token expires.
+         */
+        post: operations["setPlayerBanned"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/grant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Grant or remove currencies, experience and items
+         * @description Routed through RewardService, so it lands in `economy_log` beside the battle payouts. Negative amounts take things away. The note is recorded in the audit entry.
+         */
+        post: operations["grantToPlayer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/profile-name": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rename a profile
+         * @description The support path for a name that has to go. Uniqueness is case-insensitive.
+         */
+        post: operations["renamePlayer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/rank": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change an account rank
+         * @description Refuses the caller’s own account — that is how a suite locks itself out.
+         */
+        post: operations["setPlayerRank"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue a temporary password
+         * @description There is no e-mail anywhere in Mistvale, so this is the only password-reset path that exists. The password is generated rather than chosen — the operator reads it out once, every session is signed out, and the account cannot do anything else until it has been replaced.
+         */
+        post: operations["resetPlayerPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Sign an account out everywhere */
+        delete: operations["revokePlayerSessions"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/stats/overview": {
         parameters: {
             query?: never;
@@ -292,6 +509,42 @@ export interface components {
             /** @enum {string} */
             rank: "player" | "gamemaster" | "admin";
         };
+        AdminAccountState: {
+            banReason: string | null;
+            profileName: string;
+            /** @enum {string} */
+            rank: "player" | "gamemaster" | "admin";
+            /** @enum {string} */
+            status: "active" | "banned";
+        };
+        AdminBanRequest: {
+            banned: boolean;
+            reason?: string;
+        };
+        AdminEconomyEntry: {
+            createdAt: string;
+            deltas: {
+                [key: string]: number;
+            };
+            source: string;
+        };
+        AdminGrantRequest: {
+            crystals?: number;
+            items?: {
+                [key: string]: number;
+            };
+            note: string;
+            playerXp?: number;
+            silver?: number;
+            valorMedals?: number;
+        };
+        AdminGrantResult: {
+            applied: {
+                [key: string]: number;
+            };
+            levelsGained: number;
+            newLevel: number;
+        };
         AdminLoginResponse: {
             account: components["schemas"]["AccountSummary"];
         };
@@ -321,6 +574,86 @@ export interface components {
                 total: number;
             };
             recentAudit: components["schemas"]["AuditEntry"][];
+        };
+        AdminPlayerDetail: {
+            account: {
+                accountName: string;
+                banReason: string | null;
+                createdAt: string;
+                forcePasswordChange: boolean;
+                id: string;
+                lastLoginAt: string | null;
+                /** @enum {string} */
+                rank: "player" | "gamemaster" | "admin";
+                /** @enum {string} */
+                status: "active" | "banned";
+            };
+            economy: components["schemas"]["AdminEconomyEntry"][];
+            holdings: {
+                champions: number;
+                gear: number;
+                itemStacks: number;
+            };
+            player: {
+                createdAt: string;
+                crystals: number;
+                energy: number;
+                energyCap: number;
+                id: string;
+                isBot: boolean;
+                level: number;
+                profileName: string;
+                rosterCapacity: number;
+                silver: number;
+                valorMedals: number;
+                xp: number;
+            };
+            progress: {
+                deepestFloors: {
+                    [key: string]: number;
+                };
+                stagesCleared: number;
+                stars: number;
+                totalClears: number;
+            };
+            sessions: components["schemas"]["AdminSession"][];
+        };
+        AdminPlayerSearch: {
+            players: components["schemas"]["AdminPlayerSummary"][];
+            total: number;
+        };
+        AdminPlayerSummary: {
+            accountId: string;
+            accountName: string;
+            createdAt: string;
+            isBot: boolean;
+            lastLoginAt: string | null;
+            level: number;
+            playerId: string;
+            profileName: string;
+            /** @enum {string} */
+            rank: "player" | "gamemaster" | "admin";
+            /** @enum {string} */
+            status: "active" | "banned";
+        };
+        AdminRenameRequest: {
+            profileName: string;
+        };
+        AdminResetPasswordResult: {
+            sessionsRevoked: number;
+            temporaryPassword: string;
+        };
+        AdminSession: {
+            createdAt: string;
+            expiresAt: string;
+            id: string;
+            ip: string | null;
+            lastSeenAt: string;
+            userAgent: string | null;
+        };
+        AdminSetRankRequest: {
+            /** @enum {string} */
+            rank: "player" | "gamemaster" | "admin";
         };
         ApiError: {
             /** @enum {string} */
@@ -451,16 +784,21 @@ export interface components {
                     [key: string]: unknown;
                 } | unknown[];
             };
+            dungeons: components["schemas"]["DungeonDef"][];
             enemies: components["schemas"]["EnemyDef"][];
             factions: components["schemas"]["FactionDef"][];
             gearSets: components["schemas"]["GearSetDef"][];
             gearSlots: components["schemas"]["GearSlotDef"][];
+            gearStats: components["schemas"]["GearStatDef"][];
             items: components["schemas"]["ItemDef"][];
+            masteries: components["schemas"]["MasteryDef"][];
             publishedAt: string | null;
             rev: number;
+            shops: components["schemas"]["ShopDef"][];
             skills: components["schemas"]["SkillDef"][];
             stages: components["schemas"]["StageDef"][];
             statuses: components["schemas"]["StatusDef"][];
+            summonPools: components["schemas"]["SummonPoolDef"][];
         };
         ContentDiff: {
             entries: components["schemas"]["ContentDiffEntry"][];
@@ -512,7 +850,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -526,7 +864,7 @@ export interface components {
         };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -535,9 +873,35 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             discarded: boolean;
             key: string;
+        };
+        DungeonDef: {
+            /** @default  */
+            backgroundAsset: string;
+            bossEnemyKey?: string;
+            floors: number;
+            /** @default [] */
+            itemKeys: string[];
+            key: string;
+            /** @enum {string} */
+            kind: "relic" | "proving" | "springs";
+            /** @default  */
+            lore: string;
+            name: string;
+            /** @default [] */
+            openDays: number[];
+            /** @default  */
+            region: string;
+            /** @default [] */
+            setKeys: string[];
+            /** @default 0 */
+            sortOrder: number;
+            /** @default  */
+            tagline: string;
+            /** @default 1 */
+            unlockLevel: number;
         };
         EnemyDef: {
             /** @default 60 */
@@ -655,9 +1019,39 @@ export interface components {
             /** @default 0 */
             sortOrder: number;
         };
+        GearStatDef: {
+            /** @default true */
+            canBeMain: boolean;
+            /** @default true */
+            canBeSub: boolean;
+            key: string;
+            mainBase: number[];
+            mainMax: number[];
+            name: string;
+            /** @default false */
+            percent: boolean;
+            /** @default 0 */
+            sortOrder: number;
+            /** @enum {string} */
+            stat: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+            subMax: number[];
+            subMin: number[];
+        };
+        GetArenaBotCensusResponse: {
+            bands: {
+                /** @enum {string} */
+                band: "bronze" | "silver" | "gold" | "platinum";
+                present: number;
+                ratingMax: number;
+                ratingMin: number;
+                wanted: number;
+            }[];
+            refreshedAt: string | null;
+            total: number;
+        };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -691,7 +1085,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -706,6 +1100,297 @@ export interface components {
         LoginRequest: {
             accountName: string;
             password: string;
+        };
+        MasteryDef: {
+            /** @default  */
+            description: string;
+            effects: ({
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                /** @default 0 */
+                flat: number;
+                /** @default 0 */
+                pct: number;
+                /** @enum {string} */
+                stat: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                /** @constant */
+                type: "stat";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "damageDealt";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "damageTaken";
+            } | {
+                condition?: {
+                    /** @constant */
+                    type: "targetShielded";
+                } | {
+                    /** @constant */
+                    type: "targetCrowdControlled";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "targetHpBelow";
+                } | {
+                    /** @constant */
+                    type: "targetMaxHpAbove";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "selfHpBelow";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perOwnDebuff";
+                } | {
+                    maxStacks: number;
+                    /** @constant */
+                    type: "perLivingEnemy";
+                } | {
+                    /** @constant */
+                    type: "selfHasNoBuffs";
+                } | {
+                    /** @constant */
+                    type: "aoeSkill";
+                } | {
+                    /** @enum {string} */
+                    mode: "arena";
+                    /** @constant */
+                    type: "mode";
+                };
+                pct: number;
+                /** @constant */
+                type: "lifesteal";
+            } | {
+                /** @default 0 */
+                flat: number;
+                /** @default 1 */
+                maxStacks: number;
+                /** @default 0 */
+                shieldPctMaxHp: number;
+                /** @enum {string} */
+                stat?: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                /** @constant */
+                type: "onKill";
+            } | {
+                pctMaxHp: number;
+                /** @default 2 */
+                turns: number;
+                /** @constant */
+                type: "battleStartShield";
+            } | {
+                chance: number;
+                /** @default 0 */
+                minDamagePctMaxHp: number;
+                /** @constant */
+                type: "cooldownProc";
+            } | {
+                /** @enum {string} */
+                mode: "dealt" | "received" | "shieldReceived";
+                pct: number;
+                /** @constant */
+                type: "healing";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "redirect";
+            } | {
+                chance: number;
+                /** @default 25 */
+                hpLostPct: number;
+                /** @enum {string} */
+                trigger: "heavyHit" | "allyCrowdControlled";
+                /** @constant */
+                type: "counterProc";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "counterDamage";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "protectionBonus";
+            } | {
+                chance: number;
+                /** @default 1 */
+                count: number;
+                /** @constant */
+                type: "cleanseProc";
+            } | {
+                /** @default 1 */
+                chance: number;
+                pct: number;
+                /**
+                 * @default self
+                 * @enum {string}
+                 */
+                target: "self" | "team";
+                /** @default 1 */
+                threshold: number;
+                /** @enum {string} */
+                trigger: "ownBuffExpired" | "ownDebuffExpired" | "allyDied" | "debuffsLandedInTurn";
+                /** @constant */
+                type: "turnMeterProc";
+            } | {
+                /** @default false */
+                hardCcOnly: boolean;
+                pct: number;
+                /** @constant */
+                type: "debuffChance";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "setBonusAmplify";
+            } | {
+                maxPct: number;
+                pctPerUse: number;
+                /** @constant */
+                type: "a1Ramp";
+            } | {
+                pct: number;
+                /** @constant */
+                type: "firstStrike";
+            } | {
+                chance: number;
+                /** @default false */
+                excludeHardCc: boolean;
+                /** @enum {string} */
+                mode: "ownDebuffs" | "allyBuffs";
+                /** @default 1 */
+                turns: number;
+                /** @constant */
+                type: "statusDuration";
+            } | {
+                bossPct: number;
+                chance: number;
+                pct: number;
+                /** @constant */
+                type: "bonusDamageMaxHp";
+            } | {
+                /** @constant */
+                type: "lastStand";
+            })[];
+            /** @default  */
+            icon: string;
+            key: string;
+            name: string;
+            /** @default 0 */
+            sortOrder: number;
+            tier: number;
+            /** @enum {string} */
+            tree: "onslaught" | "bulwark" | "insight";
         };
         PublishContentRequest: {
             /** @default  */
@@ -722,6 +1407,9 @@ export interface components {
         RevertContentResponse: {
             rev: number;
         };
+        RevokePlayerSessionsResponse: {
+            revoked: number;
+        };
         SaveContentEntryRequest: {
             data: {
                 [key: string]: unknown;
@@ -729,9 +1417,71 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "item" | "campaignChapter" | "stage" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "gameConfig";
             key: string;
             saved: boolean;
+        };
+        SeedArenaBotsResponse: {
+            census: components["schemas"]["GetArenaBotCensusResponse"];
+            report: {
+                byBand: {
+                    [key: string]: number;
+                };
+                created: number;
+                refreshed: number;
+                removed: number;
+            };
+        };
+        ShopDef: {
+            /** @default 4 */
+            baseSlots: number;
+            /** @default 150 */
+            crystalSlotCost: number;
+            /** @default 4 */
+            crystalSlots: number;
+            /** @default  */
+            description: string;
+            key: string;
+            name: string;
+            offers: {
+                /**
+                 * @default silver
+                 * @enum {string}
+                 */
+                currency: "silver" | "crystals";
+                /** @default 0 */
+                dailyLimit: number;
+                gear?: {
+                    rankMax: number;
+                    rankMin: number;
+                    rarityWeights: {
+                        [key: string]: number;
+                    };
+                    /** @default [] */
+                    setKeys: string[];
+                };
+                key: string;
+                /** @enum {string} */
+                kind: "item" | "gear" | "champion" | "currency";
+                /** @default 1 */
+                minAccountLevel: number;
+                name: string;
+                price: number;
+                /** @default 0 */
+                pricePerRank: number;
+                /** @default 1 */
+                quantity: number;
+                /** @default  */
+                refKey: string;
+                /** @default 10 */
+                weight: number;
+            }[];
+            /** @default 50 */
+            refreshCost: number;
+            /** @default 60 */
+            restockMinutes: number;
+            /** @default 0 */
+            sortOrder: number;
         };
         SkillDef: {
             /** @default {} */
@@ -1098,6 +1848,31 @@ export interface components {
             parentKey: string;
             rewards: {
                 championXp: number;
+                drops: {
+                    /** @default 0 */
+                    gearChance: number;
+                    /** @default 2 */
+                    gearRankMax: number;
+                    /** @default 1 */
+                    gearRankMin: number;
+                    /** @default {} */
+                    gearRarityWeights: {
+                        [key: string]: number;
+                    };
+                    /** @default [] */
+                    gearSetKeys: string[];
+                    /** @default [] */
+                    gearSlots: ("weapon" | "helm" | "shield" | "gauntlets" | "cuirass" | "boots" | "ring" | "amulet" | "banner")[];
+                    /** @default [] */
+                    items: {
+                        chance: number;
+                        itemKey: string;
+                        /** @default 1 */
+                        max: number;
+                        /** @default 1 */
+                        min: number;
+                    }[];
+                };
                 dropTableKey?: string;
                 playerXp: number;
                 silverMax: number;
@@ -1162,6 +1937,36 @@ export interface components {
             /** @default 0 */
             sortOrder: number;
         };
+        SummonPoolDef: {
+            /** @default  */
+            description: string;
+            entries: {
+                championKey: string;
+                /** @default false */
+                featured: boolean;
+                /** @default 10 */
+                weight: number;
+            }[];
+            key: string;
+            name: string;
+            /** @default {} */
+            pity: {
+                [key: string]: {
+                    after: number;
+                    /** @default 1 */
+                    maxBonus: number;
+                    step: number;
+                };
+            };
+            rates: {
+                [key: string]: number;
+            };
+            sigilKey: string;
+            /** @default 0 */
+            sortOrder: number;
+            /** @enum {string} */
+            tenPullFloor?: "common" | "uncommon" | "rare" | "epic" | "legendary";
+        };
     };
     responses: never;
     parameters: never;
@@ -1171,6 +1976,207 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getArenaBotCensus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["GetArenaBotCensusResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    refreshArenaBots: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SeedArenaBotsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    seedArenaBots: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SeedArenaBotsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
     adminLogin: {
         parameters: {
             query?: never;
@@ -1449,7 +2455,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1535,7 +2541,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1621,7 +2627,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1725,7 +2731,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -1811,7 +2817,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "items" | "chapters" | "stages" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "config";
             };
             cookie?: never;
         };
@@ -2313,6 +3319,740 @@ export interface operations {
             };
             /** @description The session is valid but the account lacks the admin rank. */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    searchPlayers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminPlayerSearch"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    getPlayer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminPlayerDetail"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    setPlayerBanned: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminBanRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminAccountState"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    grantToPlayer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminGrantRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminGrantResult"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Error. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    renamePlayer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminRenameRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminAccountState"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Error. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    setPlayerRank: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminSetRankRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminAccountState"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    resetPlayerPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminResetPasswordResult"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    revokePlayerSessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["RevokePlayerSessionsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

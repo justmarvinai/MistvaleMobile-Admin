@@ -42,6 +42,28 @@ export const ADMIN_ROUTES = {
   stats: {
     overview: '/stats/overview',
   },
+  /** Player management, keyed by player id — see the game repo's `ADMIN_ROUTES.players`. */
+  players: {
+    search: '/players',
+    detail: (id: string) => `/players/${encodeURIComponent(id)}`,
+    resetPassword: (id: string) => `/players/${encodeURIComponent(id)}/reset-password`,
+    rank: (id: string) => `/players/${encodeURIComponent(id)}/rank`,
+    ban: (id: string) => `/players/${encodeURIComponent(id)}/ban`,
+    profileName: (id: string) => `/players/${encodeURIComponent(id)}/profile-name`,
+    grant: (id: string) => `/players/${encodeURIComponent(id)}/grant`,
+    sessions: (id: string) => `/players/${encodeURIComponent(id)}/sessions`,
+  },
+  /**
+   * The Arena's bot ladder — see the game repo's `ADMIN_ROUTES.bots`.
+   *
+   * Ladder-level only. An individual bot is an ordinary player and is managed through
+   * `players` like anybody else, which is the point of not giving bots their own table.
+   */
+  bots: {
+    census: '/arena/bots',
+    seed: '/arena/bots/seed',
+    refresh: '/arena/bots/refresh',
+  },
 } as const;
 
 /**
