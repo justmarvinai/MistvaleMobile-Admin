@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — events are authorable and schedulable
+
+`event` is the game repo's twentieth content type, and scheduling one is now an operator job rather than a deploy — which is the whole point of the framework.
+
+Two things to know while composing one. **The schedule has two shapes**: `weekly` (a start weekday and a duration in game-days) repeats forever and is what the three shipped presets use; `window` (two timestamps) is a one-off, and publish validation refuses one that ends before it starts — a scheduling typo an operator would otherwise only notice when the event never appears. **Milestones must climb**: publish rejects a ladder out of order, since a rung claimable before the one below it would draw a bar that goes backwards.
+
+Point rules are goals with a rate attached, so everything already true of a quest's goal is true here — including that a filter the type does not declare is refused. The template is a weekend event with one rule and two rungs: publishable as-is, and the shape of both arrays is visible before an operator adds to them. A purpose-built event editor (a calendar view, the rule builder, a ladder preview) stays at A4.
+
 ### Added — the Valewarden's Path is authorable
 
 `mission` is the game repo's nineteenth content type, and `pnpm sync-api` plus the typecheck named the two places that had to follow — the same two the quest type touched, which is the type-sync contract behaving exactly as designed twice running.

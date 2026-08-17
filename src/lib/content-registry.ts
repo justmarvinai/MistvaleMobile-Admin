@@ -150,6 +150,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['champion'],
     blurb: 'The Valewarden’s Path: eighty steps in arcs of eight, and what each pays.',
   },
+  event: {
+    type: 'event',
+    label: 'Events',
+    path: 'events',
+    references: [],
+    blurb: 'Timed events: when they run, what earns points, and the milestone ladder.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

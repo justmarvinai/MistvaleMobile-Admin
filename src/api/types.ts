@@ -242,6 +242,7 @@ export const CONTENT_TYPES = [
   'mastery',
   'quest',
   'mission',
+  'event',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 

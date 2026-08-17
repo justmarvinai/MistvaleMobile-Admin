@@ -261,6 +261,26 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: true,
     },
 
+    // A weekend event, publishable as-is. Weekly rather than a dated window because a
+    // recurring event tends itself; the `window` form is a two-field edit away and is what
+    // a one-off launch weekend wants. One rule and two rungs so the shape of both arrays
+    // is obvious before an operator adds to them.
+    event: {
+      key,
+      sortOrder: 0,
+      name: 'New event',
+      description: '',
+      bannerAsset: '',
+      schedule: { kind: 'weekly', startWeekday: 5, durationDays: 3 },
+      pointRules: [{ type: 'battleWin', filters: {}, points: 10, label: 'Each battle won' }],
+      milestones: [
+        { points: 500, rewards: {} },
+        { points: 1500, rewards: {} },
+      ],
+      unlockLevel: 1,
+      active: true,
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {
