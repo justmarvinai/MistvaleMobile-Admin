@@ -171,6 +171,14 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: ['champion', 'gearSet'],
     blurb: 'The daily calendar and the welcome strip: one entity per track, a row per day.',
   },
+  tutorialStep: {
+    type: 'tutorialStep',
+    label: 'Tutorial',
+    path: 'tutorial',
+    references: [],
+    blurb:
+      'The scripted opening, one entity per step. Steps must run 1…n with no gaps — the script is walked by position.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

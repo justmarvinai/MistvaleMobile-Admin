@@ -316,6 +316,28 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: false,
     },
 
+    // A beat — words and a Continue, no goal. The script is walked by *position*, so a new
+    // step lands at the end by default: `step` is left at 1 only because there is no way to
+    // know the current length from here, and publish validation says so plainly if the
+    // numbering ends up with a gap or a duplicate.
+    //
+    // Inactive on purpose. An active step appears in front of every player mid-script the
+    // moment it is published, and where in the script it belongs is the decision being made
+    // here — not one to make by accident on first save.
+    tutorialStep: {
+      key,
+      sortOrder: 0,
+      step: 1,
+      screen: 'haven',
+      highlight: '',
+      title: 'New step',
+      body: 'What the Wardenmaster says here.',
+      rewards: {},
+      grantsBefore: {},
+      grantsRelics: [],
+      active: false,
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {

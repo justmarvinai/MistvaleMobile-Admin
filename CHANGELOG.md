@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the tutorial script in the entity browser
+
+`tutorialStep` is the game repo's twenty-third content type and reaches the browser the way every type does — no editor code, because the registry entry and a template are the whole of it.
+
+- **The template ships a beat**, inactive: an active step appears in front of every player mid-script the moment it is published, and _where in the script it belongs_ is the decision an operator is making — not one to make by accident on first save.
+- Numbering is what the server validates hardest: the script is walked by **position**, so a gap or a duplicate is a step nobody reaches, and publish says so plainly rather than shipping a script that stalls.
+
 ### Added — the mail composer, and news is authorable
 
 Two things arrive together, because they are the operator's two ways of saying something.

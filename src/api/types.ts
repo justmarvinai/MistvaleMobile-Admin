@@ -269,6 +269,7 @@ export const CONTENT_TYPES = [
   'event',
   'loginTrack',
   'newsPost',
+  'tutorialStep',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 
