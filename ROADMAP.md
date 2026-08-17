@@ -15,3 +15,13 @@
 **Post-EA (parked):** guild tooling, Mistspire/Doom-Tower editor, faction-trials editor, fusion event designer, battle-pass editor, TOTP for admin accounts, localization editor.
 
 **Definition of Done per phase:** editors cover every field of their tables (no "edit it in SQL" gaps) · publish validation blocks every referential break the docs specify · audit entries for every mutation · Vitest coverage on composer/diff logic · CHANGELOG updated · feedback checkpoint offered to the owner.
+
+---
+
+### Where the suite stands
+
+**A0–A1 complete. The game repo has finished P6**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+
+The lockstep rule — _whenever a game phase introduces a content table, its editor ships in the same game phase_ — held in the sense that matters: P6's two new content families (`dungeon`, `mastery`) are **fully editable today** through the generic entity browser, which is schema-driven and covers all 17 types, so no field is SQL-only and nothing about authoring the Depths or a mastery tree is blocked. What is still owed is the _purpose-built_ editing they were promised — a floor-band view for a dungeon, a tree canvas for masteries — and those stay scheduled at A4.
+
+The scale A2 has to design for is now real rather than hypothetical: **372 stages** are published (252 campaign across 12 chapters × 3 difficulties, plus 120 Depths floors). Both sets are _generated_ in the game repo's seed from twelve and ten plan entries respectively, so the campaign editor's job is reviewing and retuning generated content — a stage grid per chapter and difficulty, and a wave composer that makes a retune cheap — rather than offering to create 252 rows by hand.

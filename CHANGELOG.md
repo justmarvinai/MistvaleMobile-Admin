@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — the game repo finished P6
+
+No code change here; the type sync was already current. What changed is what the suite is now pointing at, recorded so A2 is planned against reality rather than against the planning docs.
+
+- **372 stages are published** — 252 campaign (12 chapters × 7 × 3 difficulties) plus 120 Depths floors across ten dungeons. Both sets are _generated_ in the game repo's seed from twelve and ten plan entries, which settles a design question for A2's campaign editor: its job is reviewing and retuning generated content — a stage grid per chapter and difficulty, a wave composer that makes a retune cheap — not offering to create 252 rows by hand.
+- The generic entity browser covers all **17** content types, so P6's two new families (`dungeon`, `mastery`) are fully editable today with no SQL-only fields. Their purpose-built editors — a floor-band view, a mastery tree canvas — remain scheduled at A4, and `ROADMAP.md` now says so plainly instead of leaving it to be inferred.
+- Two long-standing gaps that the game repo's `USER_QUESTIONS.md` had parked at "P2" are really **A2** work and are re-dated there: the shallow publish diff (top-level keys only, which a stage's nested `waves` array makes noticeably worse) and the missing balance-sim endpoint behind the champion Balance tab and stage Simulate.
+
 ### Added — masteries
 
 The game repo's P6 shipped the three mastery trees; the type sync brought the content family across as a compile error rather than a runtime surprise.
