@@ -2179,6 +2179,25 @@ export interface components {
             mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial";
             number: number;
             parentKey: string;
+            /** @default [] */
+            presetTeam: {
+                /** @default 0 */
+                ascension: number;
+                championKey: string;
+                /** @default 1 */
+                level: number;
+                /** @default 1 */
+                rank: number;
+                /** @default [] */
+                relics: {
+                    rank: number;
+                    /** @enum {string} */
+                    rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
+                    setKey: string;
+                    /** @enum {string} */
+                    slot: "weapon" | "helm" | "shield" | "gauntlets" | "cuirass" | "boots" | "ring" | "amulet" | "banner";
+                }[];
+            }[];
             rewards: {
                 championXp: number;
                 drops: {

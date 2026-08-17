@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — a stage can carry its own team
+
+The game repo's cold open added `presetTeam` to the stage contract: the champions a `tutorial` stage is fought with, since that fight happens before the account owns anybody. The stage template starts it empty, because publish refuses a borrowed team on any other kind of stage.
+
 ### Added — the tutorial script in the entity browser
 
 `tutorialStep` is the game repo's twenty-third content type and reaches the browser the way every type does — no editor code, because the registry entry and a template are the whole of it.

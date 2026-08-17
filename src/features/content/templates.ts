@@ -210,6 +210,9 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       starRules: { noDeaths: true, maxTurns: 12 },
       firstClearRewards: {},
       unlock: {},
+      // Only a `tutorial` stage brings its own team, and publish refuses one anywhere
+      // else — so the template starts empty and the cold open is the deliberate exception.
+      presetTeam: [],
     },
 
     // A Tier-1 stat node: the simplest thing that is both valid and useful, so an
