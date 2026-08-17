@@ -20,7 +20,9 @@
 
 ### Where the suite stands
 
-**A0–A1 complete. The game repo has finished P6**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+**A0–A1 complete, plus the player-management slice of A5. The game repo has finished P6**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+
+**Player management jumped the queue**, and the reason is worth recording: Mistvale has no e-mail addresses anywhere, so an operator is the _only_ password reset that exists — and there was no operator endpoint. That is a hard-rule violation rather than a missing convenience, so search, the account page and six audited actions (reset password, set rank, ban/unban, rename, grant, sign out everywhere) shipped ahead of A2. The rest of §2.14 — roster and gear drill-ins, summon history, gift-mail attachments, bulk actions — stays at A5 where it belongs, since all of it needs systems that do not exist yet.
 
 The lockstep rule — _whenever a game phase introduces a content table, its editor ships in the same game phase_ — held in the sense that matters: P6's two new content families (`dungeon`, `mastery`) are **fully editable today** through the generic entity browser, which is schema-driven and covers all 17 types, so no field is SQL-only and nothing about authoring the Depths or a mastery tree is blocked. What is still owed is the _purpose-built_ editing they were promised — a floor-band view for a dungeon, a tree canvas for masteries — and those stay scheduled at A4.
 

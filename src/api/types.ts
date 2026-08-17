@@ -100,6 +100,19 @@ export interface HealthReport {
   activeBattles: number;
 }
 
+// ── Player management ───────────────────────────────────────────────────────
+
+export type AdminPlayerSummary = S['AdminPlayerSummary'];
+export type AdminPlayerSearch = S['AdminPlayerSearch'];
+export type AdminPlayerDetail = S['AdminPlayerDetail'];
+export type AdminSession = S['AdminSession'];
+export type AdminEconomyEntry = S['AdminEconomyEntry'];
+export type AdminAccountState = S['AdminAccountState'];
+export type AdminResetPasswordResult = S['AdminResetPasswordResult'];
+export type AdminGrantRequest = S['AdminGrantRequest'];
+export type AdminGrantResult = S['AdminGrantResult'];
+export type AccountStatus = AdminAccountState['status'];
+
 // ── Content entities ────────────────────────────────────────────────────────
 
 export type FactionDef = S['FactionDef'];

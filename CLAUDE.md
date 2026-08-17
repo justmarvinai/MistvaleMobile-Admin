@@ -11,7 +11,9 @@ Operator cockpit (Admin Suite) for **Mistvale**, a 2D pixel-art turn-based champ
 
 ## Project state
 
-**Phases A0–A1 complete → next is A2 (world authoring)** — see `ROADMAP.md`. The scaffold, typed API layer, rank-gated auth, app shell, dashboard, publish center, the generic entity browser (all **17** content types, dungeons and masteries included) and the Game config / Champion / Skills editors exist and are tested. Campaign, drop-table, balance-sandbox and battle-inspector editors do not yet.
+**Phases A0–A1 complete → next is A2 (world authoring)** — see `ROADMAP.md`. The scaffold, typed API layer, rank-gated auth, app shell, dashboard, publish center, the generic entity browser (all **17** content types, dungeons and masteries included), the Game config / Champion / Skills editors, and **Player management** exist and are tested. Campaign, drop-table, balance-sandbox and battle-inspector editors do not yet.
+
+**Player management was pulled forward out of A5**, because Mistvale has no e-mail addresses and so an operator is the only password reset that exists — without it the support path was hand-writing a password hash into the database. Search, the account page, and six audited actions (reset password, set rank, ban/unban, rename, grant, sign out everywhere) are live; the roster/gear drill-ins, summon history, mail attachments and bulk actions stay at A5.
 
 **What the game repo has published** (P0–P6 complete there): 872 content entities, of which **372 stages** — the whole campaign at 12 chapters × 7 stages × 3 difficulties, plus 120 Depths floors across ten dungeons. That is the scale A2's campaign editor has to browse comfortably: the generic entity table already virtualizes, but a stage _grid_ per chapter/difficulty is the shape the authoring flow wants, and the 252 campaign stages are generated from twelve plan entries in the game repo's seed rather than hand-authored — so the editor's job is reviewing and retuning generated content, not creating 252 rows by hand.
 

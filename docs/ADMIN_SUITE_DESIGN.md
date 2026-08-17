@@ -114,11 +114,14 @@ Reusable tables: weighted entries (gear query: set/slot/rank/rarity-weights/leve
 
 Upload frame strips/PNGs (drag-drop) → server packs & registers; preview player (play tracks at set fps); assign to champions/enemies/vfx slots; usage list; orphan finder. Enforces ASSET_GUIDE conventions (size check, naming).
 
-### 2.14 Player management
+### 2.14 Player management — **search, inspect and the six actions shipped** (pulled forward from A5)
 
 - Search by account/profile name; player page: profile & resources, roster (with gear detail drill-in), items, progress (campaign stars, dungeon floors, arena state, quests), summon history with pity counters, economy log tail, battle history (open in Battle inspector), sessions.
 - Actions (all audited, all confirm-guarded): **Grant** (champion / gear roll / items / currency — via RewardService with a mail-attachment option "send as gift mail"), **Reset password** (generates temp password + force-change flag — the EA-0.1 support path), **Set rank** (Player / GameMaster / Admin — typed confirmation, self-demotion blocked), **Ban/unban** (reason required), **Rename profile** (the no-profanity-filter support path), session revoke.
-- Bulk: select-all-filtered → mail composer.
+- Bulk: select-all-filtered → mail composer. _(A5 — needs the mail composer.)_
+- **Shipped now:** search by either name (bots hidden by default), the account page (wallet, live energy, holdings as counts, progress and deepest floors, live sessions, economy tail), and **Reset password · Set rank · Ban/unban · Rename profile · Grant · Sign out everywhere** — every one audited with before/after, the two irreversible ones behind a typed confirmation of the account name. Two guards refuse the caller's own account: an admin cannot change their own rank or ban themselves.
+- **Why this jumped the queue:** there is no e-mail address anywhere in Mistvale, so an operator is the _only_ password reset that exists. Without this the support path was hand-writing an argon2id hash into the database — a hard-rule violation, not a missing convenience.
+- **Still A5:** roster and gear drill-in (holdings are counts today), summon history with pity, battle history into the inspector, grants of champions/gear rolls, the gift-mail attachment option, and bulk actions.
 
 ### 2.15 Bot manager
 

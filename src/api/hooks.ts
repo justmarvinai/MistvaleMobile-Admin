@@ -8,6 +8,13 @@ import {
 import { ADMIN_ROUTES, type ApiError, PLAYER_API_PREFIX, request } from './client';
 import { invalidateContent, queryKeys } from './query-client';
 import type {
+  AccountRank,
+  AdminAccountState,
+  AdminGrantRequest,
+  AdminGrantResult,
+  AdminPlayerDetail,
+  AdminPlayerSearch,
+  AdminResetPasswordResult,
   ContentDiff,
   ContentItemResponse,
   ContentListResponse,
@@ -224,5 +231,127 @@ export function useRevisions(): UseQueryResult<RevisionsResponse, ApiError> {
   return useQuery<RevisionsResponse, ApiError>({
     queryKey: queryKeys.revisions,
     queryFn: () => request<RevisionsResponse>(ADMIN_ROUTES.content.revisions),
+  });
+}
+
+// ── Player management ────────────────────────────────────────────────────────
+
+/**
+ * The support desk's data layer.
+ *
+ * Every mutation invalidates the account it touched rather than patching the cache: a
+ * ban revokes sessions, a grant moves the wallet *and* writes a ledger line, and a reset
+ * changes three fields at once. Re-reading is both simpler and the only way to stay
+ * honest about what the server actually did (CLAUDE.md — server is truth).
+ */
+export interface PlayerSearchInput {
+  q: string;
+  limit?: number;
+  offset?: number;
+  bots?: boolean;
+}
+
+export function usePlayerSearch(
+  input: PlayerSearchInput,
+): UseQueryResult<AdminPlayerSearch, ApiError> {
+  const params = new URLSearchParams({
+    q: input.q,
+    limit: String(input.limit ?? 25),
+    offset: String(input.offset ?? 0),
+    bots: String(input.bots ?? false),
+  });
+  return useQuery<AdminPlayerSearch, ApiError>({
+    queryKey: queryKeys.playerSearch(params.toString()),
+    queryFn: () => request<AdminPlayerSearch>(`${ADMIN_ROUTES.players.search}?${params}`),
+    placeholderData: (previous) => previous,
+  });
+}
+
+export function usePlayer(id: string): UseQueryResult<AdminPlayerDetail, ApiError> {
+  return useQuery<AdminPlayerDetail, ApiError>({
+    queryKey: queryKeys.player(id),
+    queryFn: () => request<AdminPlayerDetail>(ADMIN_ROUTES.players.detail(id)),
+  });
+}
+
+/** Shared success handler: re-read the account, and the search behind it. */
+function invalidatePlayer(client: ReturnType<typeof useQueryClient>, id: string) {
+  return async (): Promise<void> => {
+    await Promise.all([
+      client.invalidateQueries({ queryKey: queryKeys.player(id) }),
+      client.invalidateQueries({ queryKey: ['players', 'search'] }),
+      client.invalidateQueries({ queryKey: queryKeys.stats }),
+    ]);
+  };
+}
+
+export function useResetPassword(
+  id: string,
+): UseMutationResult<AdminResetPasswordResult, ApiError, void> {
+  const client = useQueryClient();
+  return useMutation<AdminResetPasswordResult, ApiError, void>({
+    mutationFn: () =>
+      request<AdminResetPasswordResult>(ADMIN_ROUTES.players.resetPassword(id), {
+        method: 'POST',
+      }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+export function useSetRank(
+  id: string,
+): UseMutationResult<AdminAccountState, ApiError, AccountRank> {
+  const client = useQueryClient();
+  return useMutation<AdminAccountState, ApiError, AccountRank>({
+    mutationFn: (rank) =>
+      request<AdminAccountState>(ADMIN_ROUTES.players.rank(id), { method: 'POST', body: { rank } }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+export function useSetBanned(
+  id: string,
+): UseMutationResult<AdminAccountState, ApiError, { banned: boolean; reason?: string }> {
+  const client = useQueryClient();
+  return useMutation<AdminAccountState, ApiError, { banned: boolean; reason?: string }>({
+    mutationFn: (body) =>
+      request<AdminAccountState>(ADMIN_ROUTES.players.ban(id), { method: 'POST', body }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+export function useRenamePlayer(
+  id: string,
+): UseMutationResult<AdminAccountState, ApiError, string> {
+  const client = useQueryClient();
+  return useMutation<AdminAccountState, ApiError, string>({
+    mutationFn: (profileName) =>
+      request<AdminAccountState>(ADMIN_ROUTES.players.profileName(id), {
+        method: 'POST',
+        body: { profileName },
+      }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+export function useGrant(
+  id: string,
+): UseMutationResult<AdminGrantResult, ApiError, AdminGrantRequest> {
+  const client = useQueryClient();
+  return useMutation<AdminGrantResult, ApiError, AdminGrantRequest>({
+    mutationFn: (body) =>
+      request<AdminGrantResult>(ADMIN_ROUTES.players.grant(id), { method: 'POST', body }),
+    onSuccess: invalidatePlayer(client, id),
+  });
+}
+
+export function useRevokeSessions(
+  id: string,
+): UseMutationResult<{ revoked: number }, ApiError, void> {
+  const client = useQueryClient();
+  return useMutation<{ revoked: number }, ApiError, void>({
+    mutationFn: () =>
+      request<{ revoked: number }>(ADMIN_ROUTES.players.sessions(id), { method: 'DELETE' }),
+    onSuccess: invalidatePlayer(client, id),
   });
 }

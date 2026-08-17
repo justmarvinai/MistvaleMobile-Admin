@@ -76,6 +76,18 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
         })}
       </Box>
 
+      <SectionLabel icon={<IconUsers size={12} />}>Live ops</SectionLabel>
+      <Box>
+        <NavLink
+          component={Link}
+          to="/players"
+          onClick={onNavigate}
+          active={pathname.startsWith('/players')}
+          label="Players"
+          leftSection={<IconUsers size={16} />}
+        />
+      </Box>
+
       <SectionLabel icon={<IconRocket size={12} />}>System</SectionLabel>
       <Box>
         <NavLink

@@ -5,6 +5,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — Player management (A5, pulled forward)
+
+Mistvale has no e-mail addresses. That is a deliberate simplification with one binding consequence — **an operator is the only password reset there is** — and until now there was no screen for it, so the support path was hand-writing a password hash into the database. That breaks the no-direct-DB rule this suite exists to uphold, which is why this jumped ahead of A2.
+
+- **Search** by account _or_ profile name, because a support request rarely says which one it is quoting. Bots hidden by default, one switch away.
+- **The account page**: wallet, live energy, holdings as counts, progress and deepest floors, every live session with where it is signed in from, and the tail of the economy ledger with each line's deltas.
+- **Six actions.** Reset password (the temporary one is shown once, with a copy button — the server keeps only its hash, so there is nothing to show twice), set rank, ban/unban, rename profile, grant currencies, sign out everywhere.
+- **Safety rails.** The two that cannot be undone by clicking again — reset and ban — need the account name typed out, which is the one thing an operator with the wrong account open would get wrong. A ban cannot be sent without a reason. A grant cannot be sent without a note, because the note is what the audit trail will show a year later.
+- **The screen never guesses at server rules.** Rank is a plain select, and the server's refusal to let an admin change their own comes back as an error toast rather than being predicted here — one rule, enforced where it belongs.
+- 8 RTL cases over the refusals: no action fires on a single click, the typed confirmation unlocks only on an exact match, the temporary password is absent until the reset returns it, and a grant sends only the fields that were filled in.
+
 ### Changed — the game repo finished P6
 
 No code change here; the type sync was already current. What changed is what the suite is now pointing at, recorded so A2 is planned against reality rather than against the planning docs.
