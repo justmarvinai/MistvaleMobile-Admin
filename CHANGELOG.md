@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — quests are authorable
+
+The game repo's P8a made `quest` its eighteenth content type, and the generic entity browser picked it up the moment `pnpm sync-api` ran — schema-driven browsing is exactly the property that makes a new content family arrive without an editor being written for it. All nineteen seeded quests are readable and editable today, with the draft → validate → diff → publish flow already around them.
+
+Worth knowing while authoring one: a goal is `{type, target, filters}`, and **publish validation refuses a filter the goal's type does not declare**. `{type:'summon', mode:'campaign'}` looks entirely reasonable in the form and would silently never complete, so it is rejected at validate rather than discovered by a player. A purpose-built quest editor — goal builder, reward picker, a preview of what the checklist reads like — is A4's, alongside the mission and event composers it shares primitives with.
+
 ### Added — Fresh start
 
 A full account reset, in its own red danger zone on the account page. Returns an account to exactly the state registration leaves it in: champions, relics, items, campaign and Depths progress, the Chronicle, shop stock, summon history, battles, arena standing and Hall of Valor all destroyed, back to level 1 with the starter chooser waiting. The login, password and rank survive — a reset is not a deletion.

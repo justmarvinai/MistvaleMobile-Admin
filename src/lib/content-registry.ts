@@ -136,6 +136,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'The three trees: a node’s tier, and the typed effects the engine runs for it.',
   },
+  quest: {
+    type: 'quest',
+    label: 'Quests',
+    path: 'quests',
+    references: [],
+    blurb: 'The daily, weekly and monthly checklist: what it asks, and what it pays.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

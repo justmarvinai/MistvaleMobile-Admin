@@ -225,6 +225,24 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       effects: [{ type: 'stat', stat: 'atk', flat: 50, pct: 0 }],
     },
 
+    // A daily with one goal and no filters. Filters are the part that needs thought — each
+    // goal type declares which it accepts, and publish rejects any other — so the template
+    // leaves them off rather than guessing at one an operator would have to notice and
+    // remove.
+    quest: {
+      key,
+      sortOrder: 0,
+      name: 'New quest',
+      description: '',
+      period: 'daily',
+      goals: [{ type: 'battleWin', target: 5, filters: {} }],
+      rewards: {},
+      countsTowardChest: true,
+      unlockLevel: 1,
+      icon: '',
+      active: true,
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {

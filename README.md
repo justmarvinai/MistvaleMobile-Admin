@@ -2,7 +2,7 @@
 
 The operator cockpit for **Mistvale** — a 2D pixel-art, turn-based champion-collection RPG (repo: `MistvaleMobile`). Every champion, skill, enemy, item, stage, quest, event, shop, and balance constant of the game is authored and tuned here; player support (grants, password resets, bans, mail) lives here too.
 
-**Status: Phases A0–A1 shipped.** Auth, app shell, dashboard, publish center, the generic entity browser for all 12 content types, and the Game config / Champion / Skills editors are built and tested. Next: A2 (campaign, drop tables, balance sandbox, battle inspector).
+**Status: Phases A0–A1 shipped.** Auth, app shell, dashboard, publish center, the generic entity browser for all 18 content types, and the Game config / Champion / Skills editors are built and tested. Next: A2 (campaign, drop tables, balance sandbox, battle inspector).
 
 ## Running it
 

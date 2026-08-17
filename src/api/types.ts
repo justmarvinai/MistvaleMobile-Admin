@@ -240,6 +240,7 @@ export const CONTENT_TYPES = [
   'summonPool',
   'shop',
   'mastery',
+  'quest',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 
