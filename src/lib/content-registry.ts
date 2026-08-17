@@ -157,6 +157,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'Timed events: when they run, what earns points, and the milestone ladder.',
   },
+  newsPost: {
+    type: 'newsPost',
+    label: 'News',
+    path: 'news',
+    references: [],
+    blurb: 'Announcements, with the window each is up for. Body is markdown-lite.',
+  },
   loginTrack: {
     type: 'loginTrack',
     label: 'Login tracks',

@@ -7,6 +7,7 @@ import {
   IconGauge,
   IconRocket,
   IconSparkles,
+  IconMail,
   IconSwords,
   IconUsers,
 } from '@tabler/icons-react';
@@ -93,6 +94,14 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/arena')}
           label="Arena bots"
           leftSection={<IconSwords size={16} />}
+        />
+        <NavLink
+          component={Link}
+          to="/mail"
+          onClick={onNavigate}
+          active={pathname.startsWith('/mail')}
+          label="Mail"
+          leftSection={<IconMail size={16} />}
         />
       </Box>
 

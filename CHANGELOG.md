@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the mail composer, and news is authorable
+
+Two things arrive together, because they are the operator's two ways of saying something.
+
+**The composer** (§2.16) sends to one player or to everybody. It is the one page in the suite that hands players currency directly and irreversibly — a message cannot be recalled, and a thousand of them cannot be recalled one at a time — so it is guarded twice: attachments go through the new reward picker, which only offers keys that exist; and a send to everybody unlocks only once **everybody** is typed out. Under it, the send log: one row per send with reached / read / collected, because after a compensation mail that is the only question anybody has.
+
+**`RewardPicker` is a shared primitive, not part of the composer.** A reward map is the same flat shape everywhere in Mistvale — quests, missions, event ladders, calendar days, mail — and it is unforgiving of a typo: `sigil_gleeming` is a perfectly valid key that pays nothing. So the picker never offers free text. Currencies come from the closed list, items from the live catalogue, and a key that has since left the catalogue is called out in red rather than saved quietly. The quest, mission, event and login-track editors at A4 are the reason it was built here rather than inside the page that needed it first.
+
+**`newsPost` is the game repo's twenty-second content type.** A post carries a window, so it appears and disappears on the clock the way an event does — write Friday's patch note on Tuesday, publish once, and it shows up by itself. Publish rejects a window that closes before it opens and a timestamp that is not one. The template ships inactive and unwindowed: a draft announcement that went live the moment it was saved would be this feature's worst failure.
+
 ### Added — login tracks are authorable
 
 `loginTrack` is the game repo's twenty-first content type, and re-cutting next month's calendar is now a draft to review rather than a deploy.

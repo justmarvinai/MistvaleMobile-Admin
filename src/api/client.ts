@@ -66,6 +66,17 @@ export const ADMIN_ROUTES = {
     seed: '/arena/bots/seed',
     refresh: '/arena/bots/refresh',
   },
+  /**
+   * The mail composer — see the game repo's `ADMIN_ROUTES.mail`.
+   *
+   * Sending is one call whatever the target; the fan-out to every player happens
+   * server-side inside one transaction. The log reads back by *batch*, because what an
+   * operator wants after a compensation mail is "did they take it".
+   */
+  mail: {
+    send: '/mail',
+    log: '/mail/batches',
+  },
 } as const;
 
 /**

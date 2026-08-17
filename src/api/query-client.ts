@@ -44,6 +44,7 @@ export const queryKeys = {
   playerSearch: (params: string) => ['players', 'search', params] as const,
   player: (id: string) => ['players', 'detail', id] as const,
   arenaBots: ['arena', 'bots'] as const,
+  mailBatches: ['mail', 'batches'] as const,
 };
 
 /**

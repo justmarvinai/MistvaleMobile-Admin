@@ -281,6 +281,20 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: true,
     },
 
+    // A post an operator fills in and schedules. Inactive and unwindowed: a draft
+    // announcement that went live the moment it was saved would be the feature's worst
+    // failure, and an empty window means "always up" rather than "never".
+    newsPost: {
+      key,
+      sortOrder: 0,
+      title: 'New post',
+      body: 'What happened, and what it means for the player.',
+      startsAt: '',
+      endsAt: '',
+      pinned: false,
+      active: false,
+    },
+
     // A seven-day welcome strip. Days must run 1…n with no gaps — the Nth claim pays the
     // day numbered N — so the template ships all seven rather than one to copy, which is
     // the shape an operator edits rather than assembles.

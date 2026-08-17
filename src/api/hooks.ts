@@ -12,6 +12,9 @@ import type {
   AdminAccountState,
   ArenaBotCensus,
   ArenaLadderResult,
+  MailBatchLog,
+  MailSendRequest,
+  MailSendResult,
   AdminGrantRequest,
   AdminGrantResult,
   AdminPlayerDetail,
@@ -415,4 +418,28 @@ export function useSeedArenaBots(): UseMutationResult<ArenaLadderResult, ApiErro
 
 export function useRefreshArenaBots(): UseMutationResult<ArenaLadderResult, ApiError, void> {
   return useLadderAction(ADMIN_ROUTES.bots.refresh);
+}
+
+/**
+ * The mail composer.
+ *
+ * The log is invalidated on a send rather than refetched on a timer: a batch's claim stats
+ * only move when a player opens something, and an operator watching them move is watching
+ * a number that will be different in an hour whatever this page does.
+ */
+export function useMailBatches(): UseQueryResult<MailBatchLog, ApiError> {
+  return useQuery<MailBatchLog, ApiError>({
+    queryKey: queryKeys.mailBatches,
+    queryFn: () => request<MailBatchLog>(ADMIN_ROUTES.mail.log),
+  });
+}
+
+export function useSendMail(): UseMutationResult<MailSendResult, ApiError, MailSendRequest> {
+  const client = useQueryClient();
+  return useMutation<MailSendResult, ApiError, MailSendRequest>({
+    mutationFn: (body) => request<MailSendResult>(ADMIN_ROUTES.mail.send, { method: 'POST', body }),
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: queryKeys.mailBatches });
+    },
+  });
 }

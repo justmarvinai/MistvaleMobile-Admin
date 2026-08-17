@@ -304,6 +304,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/mail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Compose and send a message, to one player or to everybody
+         * @description Fans out to a row per recipient inside one transaction, so a send either reaches everybody or nobody. Bots are never recipients. Attachments are validated against the live item catalogue first: there is no publish step between an operator typing a key and a thousand players opening a message that pays nothing. Audited, and stamped with the operator’s own account name so a player can ask about it.
+         */
+        post: operations["sendMail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/mail/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What each send reached, and how much of it was collected
+         * @description One row per send rather than per message: after a compensation mail the question is whether players took it, which a thousand rows cannot answer. Messages the game itself raised carry no batch and are not listed.
+         */
+        get: operations["getMailBatches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/players": {
         parameters: {
             query?: never;
@@ -815,6 +855,7 @@ export interface components {
             loginTracks: components["schemas"]["LoginTrackDef"][];
             masteries: components["schemas"]["MasteryDef"][];
             missions: components["schemas"]["MissionDef"][];
+            newsPosts: components["schemas"]["NewsPostDef"][];
             publishedAt: string | null;
             quests: components["schemas"]["QuestDef"][];
             rev: number;
@@ -874,7 +915,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -888,7 +929,7 @@ export interface components {
         };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -897,7 +938,7 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             discarded: boolean;
             key: string;
         };
@@ -1118,7 +1159,7 @@ export interface components {
         };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -1128,6 +1169,21 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             pendingDelete: boolean;
+        };
+        GetMailBatchesResponse: {
+            batches: {
+                attachments: {
+                    [key: string]: number;
+                };
+                batchId: string;
+                claimed: number;
+                expiresAt: string | null;
+                read: number;
+                recipients: number;
+                sentAt: string;
+                sentBy: string;
+                title: string;
+            }[];
         };
         ItemDef: {
             /** @enum {string} */
@@ -1152,7 +1208,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -1540,6 +1596,21 @@ export interface components {
             sortOrder: number;
             step: number;
         };
+        NewsPostDef: {
+            /** @default true */
+            active: boolean;
+            body: string;
+            /** @default  */
+            endsAt: string;
+            key: string;
+            /** @default false */
+            pinned: boolean;
+            /** @default 0 */
+            sortOrder: number;
+            /** @default  */
+            startsAt: string;
+            title: string;
+        };
         PublishContentRequest: {
             /** @default  */
             note: string;
@@ -1608,7 +1679,7 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "gameConfig";
             key: string;
             saved: boolean;
         };
@@ -1622,6 +1693,24 @@ export interface components {
                 refreshed: number;
                 removed: number;
             };
+        };
+        SendMailRequest: {
+            /** @default {} */
+            attachments: {
+                [key: string]: number;
+            };
+            body: string;
+            /** @default 30 */
+            expiresInDays: number;
+            /** Format: uuid */
+            playerId?: string;
+            /** @enum {string} */
+            target: "player" | "all";
+            title: string;
+        };
+        SendMailResponse: {
+            batchId: string;
+            recipients: number;
         };
         ShopDef: {
             /** @default 4 */
@@ -2646,7 +2735,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "config";
             };
             cookie?: never;
         };
@@ -2732,7 +2821,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "config";
             };
             cookie?: never;
         };
@@ -2818,7 +2907,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "config";
             };
             cookie?: never;
         };
@@ -2922,7 +3011,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "config";
             };
             cookie?: never;
         };
@@ -3008,7 +3097,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "config";
             };
             cookie?: never;
         };
@@ -3488,6 +3577,172 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["ContentValidationResult"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    sendMail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendMailRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SendMailResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    getMailBatches: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["GetMailBatchesResponse"];
                         /** @constant */
                         ok: true;
                         rev: number;

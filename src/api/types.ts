@@ -118,6 +118,12 @@ export type ArenaBotCensus = S['GetArenaBotCensusResponse'];
 export type ArenaBotCensusEntry = ArenaBotCensus['bands'][number];
 export type ArenaBand = ArenaBotCensusEntry['band'];
 /** Seeding and refreshing answer the same way: what happened, and the ladder now. */
+export type MailSendRequest = S['SendMailRequest'];
+export type MailSendResult = S['SendMailResponse'];
+export type MailBatchLog = S['GetMailBatchesResponse'];
+export type MailBatch = MailBatchLog['batches'][number];
+export type MailTarget = MailSendRequest['target'];
+
 export type ArenaLadderResult = S['SeedArenaBotsResponse'];
 export type ArenaLadderReport = ArenaLadderResult['report'];
 export type AccountStatus = AdminAccountState['status'];
@@ -173,6 +179,24 @@ export type EffectTarget = Extract<EffectComponent, { type: 'applyStatus' }>['ta
 // which `types.test.ts` covers by counting against the generated union.
 
 export const ELEMENTS = ['ember', 'tide', 'verdant', 'mist'] as const satisfies readonly Element[];
+
+/**
+ * Every key in a reward map that is *not* an item.
+ *
+ * Mirrors `REWARD_SCALARS` in the game repo's shared package. A reward map mixes wallet
+ * keys and item keys in one flat object, and telling them apart is what lets the picker
+ * offer the closed list for one and the live catalogue for the other.
+ */
+export const REWARD_SCALARS = ['silver', 'crystals', 'valorMedals', 'playerXp'] as const;
+export type RewardScalar = (typeof REWARD_SCALARS)[number];
+
+/** What a player sees each scalar called. */
+export const SCALAR_LABELS: Readonly<Record<RewardScalar, string>> = Object.freeze({
+  silver: 'Silver',
+  crystals: 'Crystals',
+  valorMedals: 'Valor Medals',
+  playerXp: 'Account XP',
+});
 
 export const RARITIES = [
   'common',
@@ -244,6 +268,7 @@ export const CONTENT_TYPES = [
   'mission',
   'event',
   'loginTrack',
+  'newsPost',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 
