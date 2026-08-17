@@ -243,6 +243,24 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: true,
     },
 
+    // Arc 1, step 1 — publishable as-is. Arc and step both matter: arcs open in order, so
+    // a *gap* in the numbering strands every arc past it, and publish validation says so
+    // rather than letting a chain silently stop halfway.
+    mission: {
+      key,
+      sortOrder: 0,
+      name: 'New mission',
+      description: '',
+      arc: 1,
+      step: 1,
+      arcName: 'New arc',
+      goals: [{ type: 'battleWin', target: 5, filters: {} }],
+      rewards: {},
+      grants: { champions: [], title: '' },
+      icon: '',
+      active: true,
+    },
+
     // Rates that already sum to 1, so a new pool is publishable the moment its champion
     // list is filled in rather than failing validation on the first save.
     summonPool: {

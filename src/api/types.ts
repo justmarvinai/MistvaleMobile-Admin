@@ -241,6 +241,7 @@ export const CONTENT_TYPES = [
   'shop',
   'mastery',
   'quest',
+  'mission',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 

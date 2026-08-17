@@ -143,6 +143,13 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'The daily, weekly and monthly checklist: what it asks, and what it pays.',
   },
+  mission: {
+    type: 'mission',
+    label: 'Missions',
+    path: 'missions',
+    references: ['champion'],
+    blurb: 'The Valewarden’s Path: eighty steps in arcs of eight, and what each pays.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

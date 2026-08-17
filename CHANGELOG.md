@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the Valewarden's Path is authorable
+
+`mission` is the game repo's nineteenth content type, and `pnpm sync-api` plus the typecheck named the two places that had to follow — the same two the quest type touched, which is the type-sync contract behaving exactly as designed twice running.
+
+All eighty missions are browsable and editable through the schema-driven entity browser. Two things worth knowing while authoring one: **arcs open in order, so a gap in the arc numbering strands every arc past it** — publish validation refuses that rather than letting a chain silently stop halfway — and a step's `grants.champions` is checked against the champion catalogue, because the last step of the chain hands over an exclusive Legendary and a dangling key there would pay nothing. The purpose-built mission editor (arc board, goal builder, reward picker) stays at A4.
+
 ### Added — quests are authorable
 
 The game repo's P8a made `quest` its eighteenth content type, and the generic entity browser picked it up the moment `pnpm sync-api` ran — schema-driven browsing is exactly the property that makes a new content family arrive without an editor being written for it. All nineteen seeded quests are readable and editable today, with the draft → validate → diff → publish flow already around them.
