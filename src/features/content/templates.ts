@@ -327,6 +327,29 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
     // Inactive on purpose. An active step appears in front of every player mid-script the
     // moment it is published, and where in the script it belongs is the decision being made
     // here — not one to make by accident on first save.
+    // A plain interface beep, audible the moment it is published. Deliberately a *tone*
+    // rather than the noise source: a new cue that says nothing is hard to tell from a
+    // new cue that is broken.
+    soundCue: {
+      key,
+      sortOrder: 0,
+      bus: 'sfx',
+      sample: '',
+      voice: {
+        source: 'tone',
+        wave: 'square',
+        startHz: 660,
+        endHz: 660,
+        attack: 0.004,
+        decay: 0.12,
+        gain: 0.4,
+        filterHz: 6000,
+        overtones: [],
+      },
+      throttleMs: 40,
+      active: false,
+    },
+
     tutorialStep: {
       key,
       sortOrder: 0,

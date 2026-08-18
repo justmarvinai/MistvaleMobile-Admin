@@ -179,6 +179,14 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     blurb:
       'The scripted opening, one entity per step. Steps must run 1…n with no gaps — the script is walked by position.',
   },
+  soundCue: {
+    type: 'soundCue',
+    label: 'Sounds',
+    path: 'sounds',
+    references: [],
+    blurb:
+      'Every noise the game makes. A cue names a bus and either a recording or a handful of synth numbers — retune one and the next press of the button sounds different, with no deploy.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

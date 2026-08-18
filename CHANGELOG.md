@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — sounds are editable (game repo P10c)
+
+`soundCue` is the game's twenty-fourth content type, and the generic browser picks it up whole: every cue the game makes, its bus, and either the recording behind it or the envelope-and-oscillator numbers it is built from. Retuning what a button sounds like is now a content edit rather than a deploy, and pointing a cue at a dropped-in audio pack is one field.
+
+The "new entity" template is a plain interface beep — a _tone_ rather than a noise burst, deliberately, because a new cue that says nothing is hard to tell from a new cue that is broken. It publishes inactive like every other template.
+
 ### Added — the tutorial script, as a script
 
 The generic browser could already edit every field of a step. What it could not do was show fifteen of them as somebody's first hour, or reorder them.

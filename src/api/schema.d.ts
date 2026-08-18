@@ -901,6 +901,7 @@ export interface components {
             rev: number;
             shops: components["schemas"]["ShopDef"][];
             skills: components["schemas"]["SkillDef"][];
+            soundCues: components["schemas"]["SoundCueDef"][];
             stages: components["schemas"]["StageDef"][];
             statuses: components["schemas"]["StatusDef"][];
             summonPools: components["schemas"]["SummonPoolDef"][];
@@ -956,7 +957,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -970,7 +971,7 @@ export interface components {
         };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -979,7 +980,7 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             discarded: boolean;
             key: string;
         };
@@ -1200,7 +1201,7 @@ export interface components {
         };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -1249,7 +1250,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -1732,7 +1733,7 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
             key: string;
             saved: boolean;
         };
@@ -2162,6 +2163,48 @@ export interface components {
                 effect: "shield";
                 pct: number;
             })[];
+        };
+        SoundCueDef: {
+            /** @default true */
+            active: boolean;
+            /**
+             * @default sfx
+             * @enum {string}
+             */
+            bus: "music" | "sfx" | "ui";
+            key: string;
+            /** @default  */
+            sample: string;
+            /** @default 0 */
+            sortOrder: number;
+            /** @default 40 */
+            throttleMs: number;
+            voice: {
+                /** @default 0.004 */
+                attack: number;
+                /** @default 0.12 */
+                decay: number;
+                /** @default 660 */
+                endHz: number;
+                /** @default 20000 */
+                filterHz: number;
+                /** @default 0.5 */
+                gain: number;
+                /** @default [] */
+                overtones: number[];
+                /**
+                 * @default tone
+                 * @enum {string}
+                 */
+                source: "tone" | "noise";
+                /** @default 660 */
+                startHz: number;
+                /**
+                 * @default square
+                 * @enum {string}
+                 */
+                wave: "sine" | "square" | "sawtooth" | "triangle";
+            };
         };
         StageDef: {
             /**
@@ -2846,7 +2889,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
             };
             cookie?: never;
         };
@@ -2932,7 +2975,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
             };
             cookie?: never;
         };
@@ -3018,7 +3061,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
             };
             cookie?: never;
         };
@@ -3122,7 +3165,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
             };
             cookie?: never;
         };
@@ -3208,7 +3251,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
             };
             cookie?: never;
         };
