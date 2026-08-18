@@ -5,6 +5,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the tutorial script, as a script
+
+The generic browser could already edit every field of a step. What it could not do was show fifteen of them as somebody's first hour, or reorder them.
+
+- **The whole script on one screen**, in the order a player walks it: what each step says, what it points at, what it waits for and how much it hands over. A beat says "nothing — a centred beat" rather than leaving two cells blank.
+- **Reordering is an arrow.** The script is walked by position and publish refuses a gap or a duplicate, so moving step 9 above step 8 by hand meant editing two entities and getting both numbers right. A move is now a **swap of two numbers** — two writes rather than a renumber of everything below, which keeps the draft small and the publish diff readable. The two saves go in sequence and the second only if the first landed; a half-applied swap is the exact state this page exists to stop anybody reaching.
+- **Numbering problems are reported here rather than at the publish gate** — the same three rules the server enforces, in the same words, while the operator is still editing. The server is still the thing that refuses.
+- It is a _reviewing_ view, not a second field editor. Every field stays editable in the generic browser, and duplicating any of it here would create a second place to change one thing.
+
 ### Changed — a stage can carry its own team
 
 The game repo's cold open added `presetTeam` to the stage contract: the champions a `tutorial` stage is fought with, since that fight happens before the account owns anybody. The stage template starts it empty, because publish refuses a borrowed team on any other kind of stage.

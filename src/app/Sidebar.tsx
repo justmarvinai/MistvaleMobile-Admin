@@ -6,6 +6,7 @@ import {
   IconDatabase,
   IconGauge,
   IconRocket,
+  IconRoute,
   IconSparkles,
   IconMail,
   IconSwords,
@@ -76,6 +77,17 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           );
         })}
       </Box>
+
+      {/* Beside the generated Content list rather than in it: the registry entry points
+          at the generic browser, and this is the same type seen as a script. */}
+      <NavLink
+        component={Link}
+        to="/tutorial"
+        onClick={onNavigate}
+        active={pathname.startsWith('/tutorial')}
+        label="Tutorial script"
+        leftSection={<IconRoute size={16} />}
+      />
 
       <SectionLabel icon={<IconUsers size={12} />}>Live ops</SectionLabel>
       <Box>

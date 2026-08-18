@@ -18,6 +18,7 @@ import { PlayerSearchPage } from '@/features/players/PlayerSearchPage';
 import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
 import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
+import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
 
 /**
@@ -150,6 +151,18 @@ const arenaBotsRoute = createRoute({
   component: BotLadderPage,
 });
 
+/**
+ * The script as a script, beside the generic browser rather than instead of it.
+ *
+ * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
+ * one thing the browser cannot do without an operator getting two numbers right by hand.
+ */
+const tutorialScriptRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/tutorial',
+  component: TutorialScriptPage,
+});
+
 const mailRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/mail',
@@ -171,6 +184,7 @@ const routeTree = rootRoute.addChildren([
     playersRoute,
     playerDetailRoute,
     arenaBotsRoute,
+    tutorialScriptRoute,
     mailRoute,
     publishRoute,
   ]),

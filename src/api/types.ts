@@ -61,6 +61,8 @@ export type ContentState = S['ContentEntry']['state'];
 
 export type ContentListItem = S['ContentEntry'];
 export type ContentListResponse = S['ListContentEntriesResponse'];
+/** One row of a content list — the entity, its draft state and who touched it last. */
+export type ContentEntry = S['ContentEntry'];
 export type ContentItemResponse = S['GetContentEntryResponse'];
 export type ContentTypeCount = S['ContentTypeCount'];
 export type ContentOverview = S['ListContentTypesResponse'];
