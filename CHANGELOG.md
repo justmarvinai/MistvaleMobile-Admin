@@ -5,6 +5,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — four more cues to retune, and the sound catalogue is in the spec
+
+The game repo's summon rework adds `summon_charge`, `summon_tease`, `summon_burst` and a
+`summon_epic` of its own. They need nothing here — the browser has picked `soundCue` up
+whole since it landed — but they are four more rows an operator can reach, and §2.12 of the
+design doc had never said what the Sounds page is: a bus, a throttle, and either a path to a
+recording or the half-dozen numbers a shaped tone is described by. Written down now,
+including the one thing it does not do — audition, which needs the client's synth.
+
 ### Changed — the tutorial has a voice, a face, and no dim
 
 The game repo's audio pack landed, and three content fields came with it. The

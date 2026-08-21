@@ -103,12 +103,14 @@ Reusable tables: weighted entries (gear query: set/slot/rank/rarity-weights/leve
 - Login calendar: 30-day grid + 7-day welcome strip, drag rewards onto days, month preview as players see it.
 - News: markdown editor with live game-style preview, schedule window, pin.
 
-### 2.12 Masteries, Hall of Valor, Tutorial, Game config
+### 2.12 Masteries, Hall of Valor, Tutorial, Sounds, Game config
 
 - Masteries: 3-tree node canvas, per-node effect (engine-known) + emblem costs; connectivity validation (tier gating).
 - Hall of Valor: element × stat grid, 10-level cost/bonus curves with total-cost summary.
 - **Tutorial — shipped** (`/tutorial`, beside the generic browser rather than instead of it): the whole script in walking order — what each step says, the screen and `data-mv-highlight` key it points at, the goal it waits for, and how much it hands over. **Reordering is the reason it exists**: the script is walked by position and publish refuses a gap or a duplicate, so a move is rendered as a swap of two numbers — two writes rather than a renumber of everything below — applied in sequence so a half-applied swap cannot leave two steps sharing a number. The same numbering rules the server enforces are reported here while the operator is still editing; the server is still the thing that refuses. Field editing stays in the generic browser, deliberately: a second place to change one thing is worse than a click.
   - _Not built, and not missed:_ a highlight-target picker (the keys are a client convention that content deliberately is not validated against, so a picker would be a list that lies the moment the client ships one more) and the storyboard dry-run (the overlay itself, on a test account, is the honest version of that and now exists).
+- Sounds: the catalogue, through the generic browser. A cue is a bus, a throttle, and either a **`sample` path** to a published recording — which wins wherever one exists — or a **synth voice**: source, wave, start and end Hz, attack, decay, gain, filter and up to four overtones. Half a dozen numbers describe a shaped tone or a noise burst, which is what a pixel game's interface has always been made of, and it means retuning what the game sounds like is a content edit rather than a release. The two music tracks live here too, as looping cues on the music bus that stand on a recording rather than a voice.
+  - _Not built:_ an audition button. Rendering a voice needs the client's synth, and until the suite borrows it the loop is edit → publish → listen in the game.
 - Game config: schema-driven forms grouped by domain (Energy, XP curves, Gear upgrade tables, Combat constants, Element wheel, Arena tiers & rewards, Pity defaults, Rate limits, Reset time…). Each field: current live value vs draft, default, and helptext sourced from docs. This is the game's control room — every constant the design docs mark _tunable_ appears here.
 
 ### 2.13 Asset manager
