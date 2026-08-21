@@ -334,7 +334,11 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       key,
       sortOrder: 0,
       bus: 'sfx',
+      // A synthesised cue rather than a file, because that is what a *cue* is here: the
+      // two entries that name a `sample` are the music, and they loop. Both fields are on
+      // the template so an operator building a track knows they exist.
       sample: '',
+      loop: false,
       voice: {
         source: 'tone',
         wave: 'square',
@@ -361,6 +365,12 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       rewards: {},
       grantsBefore: {},
       grantsRelics: [],
+      // The speaker every step in the script has, so a new beat looks like the ones around
+      // it. `sound` is empty because a new step has no recording yet — dropping one into
+      // the game repo's `assets/music_and_sounds/tutorial_sounds/` and naming it here is
+      // what gives the step a voice, and a step without one is simply read.
+      portrait: 'portraits/wardenmaster_avatar.jpg',
+      sound: '',
       active: false,
     },
 

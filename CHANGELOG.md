@@ -5,6 +5,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — the tutorial has a voice, a face, and no dim
+
+The game repo's audio pack landed, and three content fields came with it. The
+generic entity editor edits them already — the Admin API is generic over the
+registry — so what changed here is the **templates**, which is where an operator
+finds out a field exists at all.
+
+- `tutorialStep` gains `portrait` and `sound`. A new step starts with the
+  Wardenmaster's own portrait, because every step in the script has it, and with no
+  recording, because a new beat does not have one yet.
+- `soundCue` gains `loop`, beside the `sample` it already had. Both are on the
+  template so an operator building a music track can see the two fields that make
+  one — everything else in the catalogue is a synthesised cue that neither loops nor
+  names a file.
+
+`pnpm sync-api` picks the same three up as types, so pointing a step at a portrait
+that is not a string is a type error here rather than a publish failure there.
+
 ### Added — sounds are editable (game repo P10c)
 
 `soundCue` is the game's twenty-fourth content type, and the generic browser picks it up whole: every cue the game makes, its bus, and either the recording behind it or the envelope-and-oscillator numbers it is built from. Retuning what a button sounds like is now a content edit rather than a deploy, and pointing a cue at a dropped-in audio pack is one field.

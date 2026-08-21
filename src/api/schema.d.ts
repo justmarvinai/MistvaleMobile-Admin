@@ -2173,6 +2173,8 @@ export interface components {
              */
             bus: "music" | "sfx" | "ui";
             key: string;
+            /** @default false */
+            loop: boolean;
             /** @default  */
             sample: string;
             /** @default 0 */
@@ -2391,6 +2393,8 @@ export interface components {
             /** @default  */
             highlight: string;
             key: string;
+            /** @default  */
+            portrait: string;
             /** @default {} */
             rewards: {
                 [key: string]: number;
@@ -2398,6 +2402,8 @@ export interface components {
             screen: string;
             /** @default 0 */
             sortOrder: number;
+            /** @default  */
+            sound: string;
             step: number;
             title: string;
         };
