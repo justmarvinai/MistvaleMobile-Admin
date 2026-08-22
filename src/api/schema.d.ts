@@ -838,6 +838,7 @@ export interface components {
             } | null;
             /** @default 1 */
             balanceVersion: number;
+            baseRank?: number;
             baseStats: {
                 /** @default 0 */
                 acc: number;
@@ -1098,7 +1099,7 @@ export interface components {
                 label: string;
                 points: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
             }[];
             schedule: {
                 endsAt: string;
@@ -1619,7 +1620,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
             }[];
             /**
              * @default {
@@ -1683,7 +1684,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
             }[];
             /** @default  */
             icon: string;
@@ -2375,7 +2376,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
             };
             /** @default {} */
             grantsBefore: {

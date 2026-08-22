@@ -46,6 +46,7 @@ export const championFormSchema = z.object({
   element: z.enum(ELEMENTS),
   rarity: z.enum(RARITIES),
   role: z.enum(ROLES),
+  baseRank: z.number().int().min(1).max(6),
   baseStats: baseStatsSchema,
   skills: z
     .array(contentKey)
@@ -60,6 +61,33 @@ export const championFormSchema = z.object({
 });
 
 export type ChampionFormValues = z.infer<typeof championFormSchema>;
+
+/**
+ * The star a champion of each rarity can be *called* at.
+ *
+ * Mirror of `RANK_RANGE_BY_RARITY.base` in
+ * `MistvaleMobile/packages/shared/src/progression.ts`, the same way
+ * `content-registry.ts` mirrors the server's content registry — the bands are a rule in
+ * code rather than a constraint in the OpenAPI artifact, so there is nothing to generate
+ * them from. The server is still the guard: it clamps on read and publish refuses an
+ * out-of-band value in its own words, so a stale row here is a worse picker rather than
+ * bad content.
+ *
+ * How far a champion can *climb* is deliberately absent, here and everywhere: that is the
+ * rarity's ceiling and belongs to no editor.
+ */
+export const BASE_RANKS_BY_RARITY: Readonly<Record<string, readonly number[]>> = Object.freeze({
+  common: [1, 2],
+  uncommon: [2, 3],
+  rare: [3],
+  epic: [4],
+  legendary: [5],
+});
+
+/** The star a champion of this rarity is called at when nothing says otherwise. */
+export function defaultBaseRank(rarity: string): number {
+  return BASE_RANKS_BY_RARITY[rarity]?.[0] ?? 1;
+}
 
 /** Per-rarity kit depth the server warns about at publish (validate.ts). */
 export const EXPECTED_SKILLS_BY_RARITY: Record<string, number> = {
@@ -89,6 +117,11 @@ export function toChampionForm(data: Record<string, unknown>, key: string): Cham
     element: pick(data.element, ELEMENTS, 'mist'),
     rarity: pick(data.rarity, RARITIES, 'rare'),
     role: pick(data.role, ROLES, 'attack'),
+    // Written back explicitly even when it matches the rarity's default. The form rebuilds
+    // the entity field by field, so a field it does not carry is a field a save deletes —
+    // and dropping this one would quietly move every ★2 Common and ★3 Uncommon in the seed
+    // down a star.
+    baseRank: numberOr(data.baseRank, defaultBaseRank(pick(data.rarity, RARITIES, 'rare'))),
     baseStats: {
       hp: numberOr(stats.hp, 12_000),
       atk: numberOr(stats.atk, 900),

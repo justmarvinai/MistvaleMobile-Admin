@@ -5,6 +5,28 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Fixed — saving a champion no longer forgets the star it was called at
+
+The game repo's C6 gives a champion `baseRank`: the star it is _summoned_ at, which is now
+a band rather than always ★1 — a Common at ★1 or ★2, an Uncommon at ★2 or ★3, and a fixed
+★3/★4/★5 for the three above. The champion editor rebuilds the entity field by field, so a
+field it does not carry is a field a save deletes; opening any ★2 Common or ★3 Uncommon and
+pressing Save would have moved it down a star, with no error anywhere, because the server
+reads an absent `baseRank` as the bottom of its rarity's band.
+
+It is a **Called at** picker beside Rarity now, offering only the stars that rarity allows
+and disabled where there is only one — and changing the rarity moves it into the new band
+rather than leaving a number publish would refuse. `BASE_RANKS_BY_RARITY` mirrors the game
+repo's `RANK_RANGE_BY_RARITY.base` the way `content-registry.ts` mirrors its content
+registry: the bands are a rule in code rather than a constraint in the API artifact, so
+there is nothing to generate them from, and the server stays the guard.
+
+How far a champion can _climb_ is deliberately not a field, here or anywhere. That is the
+rarity's ceiling, enforced server-side, so no editor can author a Common into a six-star.
+
+`championAwaken` also arrives with the sync, as a goal type a quest, mission or event can
+be built on.
+
 ### Added — four more cues to retune, and the sound catalogue is in the spec
 
 The game repo's summon rework adds `summon_charge`, `summon_tease`, `summon_burst` and a

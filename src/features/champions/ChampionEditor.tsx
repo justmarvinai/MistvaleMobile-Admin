@@ -27,7 +27,9 @@ import { EditorShell } from '@/features/content/EditorShell';
 import type { EntityEditorProps } from '@/features/content/ContentItemPage';
 import { useContentOptions } from '@/features/content/useContentOptions';
 import {
+  BASE_RANKS_BY_RARITY,
   championFormSchema,
+  defaultBaseRank,
   EXPECTED_SKILLS_BY_RARITY,
   toChampionForm,
   type ChampionFormValues,
@@ -66,6 +68,7 @@ export function ChampionEditor({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isDirty },
   } = useForm<ChampionFormValues>({
     resolver: zodResolver(championFormSchema),
@@ -199,7 +202,21 @@ export function ChampionEditor({
                   options={ELEMENTS}
                   description="Ember beats Verdant beats Tide beats Ember. Mist sits outside the wheel."
                 />
-                <EnumSelect control={control} name="rarity" label="Rarity" options={RARITIES} />
+                <EnumSelect
+                  control={control}
+                  name="rarity"
+                  label="Rarity"
+                  options={RARITIES}
+                  onPicked={(rarity) => {
+                    // The bands do not overlap across every pair, so a rarity change can
+                    // strand the called star outside its own band — publish would refuse
+                    // it, and the operator never typed the number that broke it.
+                    const allowed = BASE_RANKS_BY_RARITY[rarity] ?? [];
+                    if (!allowed.includes(values.baseRank)) {
+                      setValue('baseRank', defaultBaseRank(rarity), { shouldDirty: true });
+                    }
+                  }}
+                />
                 <EnumSelect
                   control={control}
                   name="role"
@@ -208,6 +225,35 @@ export function ChampionEditor({
                   description="Drives AI defaults and roster filters."
                 />
               </SimpleGrid>
+
+              {/* The star this champion is *called* at, which is the only part of its star
+                  track an editor gets a say in. How far it can climb is the rarity's
+                  ceiling and belongs to nobody's form. */}
+              <Controller
+                control={control}
+                name="baseRank"
+                render={({ field, fieldState }) => {
+                  const allowed = BASE_RANKS_BY_RARITY[values.rarity] ?? [1];
+                  return (
+                    <Select
+                      label="Called at"
+                      description={
+                        allowed.length > 1
+                          ? `A ${values.rarity} champion is summoned at one of these. It can be raised from here to the ceiling its rarity allows.`
+                          : `Every ${values.rarity} champion is summoned at ★${allowed[0]}. Change the rarity to change this.`
+                      }
+                      data={allowed.map((rank) => ({ value: String(rank), label: `★${rank}` }))}
+                      value={String(field.value)}
+                      onChange={(next) => next && field.onChange(Number(next))}
+                      onBlur={field.onBlur}
+                      error={fieldState.error?.message}
+                      disabled={allowed.length < 2}
+                      allowDeselect={false}
+                      w={{ base: '100%', sm: 220 }}
+                    />
+                  );
+                }}
+              />
 
               <Controller
                 control={control}
@@ -446,12 +492,15 @@ function EnumSelect({
   label,
   options,
   description,
+  onPicked,
 }: {
   control: ReturnType<typeof useForm<ChampionFormValues>>['control'];
   name: 'element' | 'rarity' | 'role';
   label: string;
   options: readonly string[];
   description?: string;
+  /** Runs after the field takes the new value, for a sibling that depends on it. */
+  onPicked?: (value: string) => void;
 }): ReactNode {
   return (
     <Controller
@@ -463,7 +512,11 @@ function EnumSelect({
           description={description}
           data={options.map((option) => ({ value: option, label: humanizeKey(option) }))}
           value={field.value}
-          onChange={(next) => next && field.onChange(next)}
+          onChange={(next) => {
+            if (!next) return;
+            field.onChange(next);
+            onPicked?.(next);
+          }}
           onBlur={field.onBlur}
           error={fieldState.error?.message}
           allowDeselect={false}
