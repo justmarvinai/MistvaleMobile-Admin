@@ -5,6 +5,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — the API types know about the Valewurm
+
+The game repo's C9 adds a Titan: a `dungeon` of kind `titan` carrying a `titan` block (its
+turn cap, its keys a day, and a ladder of damage tiers), plus a `titan`-mode stage and two
+goal types (`titanRun`, `titanDamage`). `pnpm sync-api` picks all of it up from the
+regenerated OpenAPI artifact, so the generic entity browser edits a Titan today with no
+purpose-built editor — the ladder is an ordinary array of objects and the publish gate is
+where the rules are enforced (ascending damage, no duplicate rungs, no rung that pays
+nothing, exactly one stage per keep).
+
+**No Titan editor is planned yet, and that is the same judgement the bot manager was
+built on**: a purpose-built editor earns its place when the generic browser cannot express
+the thing safely. A damage ladder is a list of three fields, and the server reports every
+rule it breaks while editing. If authoring a second Titan turns out to be awkward in
+practice, that is the moment to build one.
+
 ### Fixed — saving a champion no longer forgets the star it was called at
 
 The game repo's C6 gives a champion `baseRank`: the star it is _summoned_ at, which is now

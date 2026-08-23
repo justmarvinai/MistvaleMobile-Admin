@@ -994,7 +994,7 @@ export interface components {
             itemKeys: string[];
             key: string;
             /** @enum {string} */
-            kind: "relic" | "proving" | "springs";
+            kind: "relic" | "proving" | "springs" | "titan";
             /** @default  */
             lore: string;
             name: string;
@@ -1008,6 +1008,21 @@ export interface components {
             sortOrder: number;
             /** @default  */
             tagline: string;
+            titan?: {
+                /** @default 2 */
+                keysPerDay: number;
+                /** @default [] */
+                tiers: {
+                    damage: number;
+                    key: string;
+                    name: string;
+                    rewards: {
+                        [key: string]: number;
+                    };
+                }[];
+                /** @default 50 */
+                turnCap: number;
+            };
             /** @default 1 */
             unlockLevel: number;
         };
@@ -1099,7 +1114,7 @@ export interface components {
                 label: string;
                 points: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
             }[];
             schedule: {
                 endsAt: string;
@@ -1620,7 +1635,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
             }[];
             /**
              * @default {
@@ -1684,7 +1699,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
             }[];
             /** @default  */
             icon: string;
@@ -2222,7 +2237,7 @@ export interface components {
             };
             key: string;
             /** @enum {string} */
-            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial";
+            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial" | "titan";
             number: number;
             parentKey: string;
             /** @default [] */
@@ -2376,7 +2391,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
             };
             /** @default {} */
             grantsBefore: {
