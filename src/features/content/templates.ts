@@ -416,6 +416,117 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       ],
     },
 
+    // A short errand with one favour on it, so the shape of a favour is visible rather
+    // than described. `rewards` is empty because it is currency and item *keys*, and a
+    // template must not invent one.
+    expedition: {
+      key,
+      sortOrder: 0,
+      name: 'New expedition',
+      description: 'Where they are going, in a sentence.',
+      hours: 4,
+      partySize: 2,
+      unlockLevel: 1,
+      rewards: {},
+      favours: [{ kind: 'role', value: 'support', bonusPct: 15 }],
+      icon: '',
+    },
+
+    // A publishable stair with nothing invented in it.
+    //
+    // The three rooms are a rest and two caches on purpose: a `fight` room is refused by
+    // publish validation with no waves, and a wave needs a real `enemyKey` — so a template
+    // that shipped one would either fail on first save or invent a reference. What is here
+    // instead is the *structure* — three rooms in band for three doors on every floor, and
+    // three boons available on floor 1, which are the two rules validation checks first —
+    // and the fights are added with the enemy picker.
+    deepRun: {
+      key,
+      sortOrder: 0,
+      name: 'New deep run',
+      lore: '',
+      tagline: '',
+      backgroundAsset: '',
+      unlockLevel: 1,
+      runsPerDay: 2,
+      floors: 12,
+      forks: 3,
+      rooms: [
+        {
+          key: `${key}_rest`,
+          name: 'A dry ledge',
+          kind: 'rest',
+          description: 'Somewhere to sit. The party mends a little.',
+          minFloor: 1,
+          maxFloor: 60,
+          waves: [],
+          healPct: 25,
+          rewards: {},
+          boonsOffered: 0,
+          weight: 1,
+        },
+        {
+          key: `${key}_cache_small`,
+          name: 'A spilled satchel',
+          kind: 'cache',
+          description: 'Someone came this way and did not come back.',
+          minFloor: 1,
+          maxFloor: 60,
+          waves: [],
+          healPct: 0,
+          rewards: {},
+          boonsOffered: 0,
+          weight: 1,
+        },
+        {
+          key: `${key}_cache_deep`,
+          name: 'A sealed niche',
+          kind: 'cache',
+          description: 'Wedged shut, and worth the shoulder.',
+          minFloor: 1,
+          maxFloor: 60,
+          waves: [],
+          healPct: 0,
+          rewards: {},
+          boonsOffered: 0,
+          weight: 1,
+        },
+      ],
+      boons: [
+        {
+          key: `${key}_boon_atk`,
+          name: 'Sharper',
+          description: 'The party hits harder for the rest of the descent.',
+          rarity: 'common',
+          bonuses: { atk: 120 },
+          effects: [],
+          stacks: true,
+          minFloor: 1,
+        },
+        {
+          key: `${key}_boon_def`,
+          name: 'Braced',
+          description: 'The party takes less for the rest of the descent.',
+          rarity: 'common',
+          bonuses: { def: 90 },
+          effects: [],
+          stacks: true,
+          minFloor: 1,
+        },
+        {
+          key: `${key}_boon_hp`,
+          name: 'Stubborn',
+          description: 'Everyone still standing has more left in them.',
+          rarity: 'common',
+          bonuses: { hp: 1500 },
+          effects: [],
+          stacks: true,
+          minFloor: 1,
+        },
+      ],
+      depthTiers: [],
+    },
+
     gameConfig: {
       key,
       value: 0,

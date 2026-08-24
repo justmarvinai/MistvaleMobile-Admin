@@ -187,6 +187,22 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     blurb:
       'Every noise the game makes. A cue names a bus and either a recording or a handful of synth numbers — retune one and the next press of the button sounds different, with no deploy.',
   },
+  expedition: {
+    type: 'expedition',
+    label: 'Expeditions',
+    path: 'expeditions',
+    references: [],
+    blurb:
+      'Work that is not a fight: how long a party is gone, how many it takes, and which favours raise the yield. A champion away cannot be fielded.',
+  },
+  deepRun: {
+    type: 'deepRun',
+    label: 'Deep Runs',
+    path: 'deep-runs',
+    references: [],
+    blurb:
+      'A branching descent fought without relics. One entity carries the whole stair — its rooms, its boons and its depth ladder.',
+  },
   gameConfig: {
     type: 'gameConfig',
     label: 'Game config',

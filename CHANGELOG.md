@@ -5,6 +5,27 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — Expeditions and the Sunken Stair are authorable
+
+The game repo's C10 closed with two new content types, and the type sync had fallen behind
+by both: `expedition` (C10c) and `deepRun` (C10f). `pnpm sync-api` picks them up, and the
+three places a content type has to be named by hand now name them — the runtime
+`CONTENT_TYPES` list the pickers read, the registry entry that gives a type its label, path
+and blurb, and a template so **New → Save** succeeds on the first press.
+
+The Deep Run's template is the interesting one. Its three rooms are a rest and two caches
+rather than fights, and that is deliberate: publish validation refuses a `fight` room with
+no waves, and a wave needs a real `enemyKey` — so a template carrying one would either fail
+on first save or invent a reference that does not exist. What ships instead is the
+_structure_ validation checks first — three rooms in band so every floor can offer three
+doors, and three boons available on floor 1 so the first offer cannot repeat — and the
+fights are added with the enemy picker.
+
+Both templates were checked against the game repo's own Zod schemas and the Deep Run's
+publish validation rather than by eye, which caught the first cut writing a stat bonus as
+`maxHp`: the engine's stat key is `hp`, and a template that fails on save is worse than no
+template.
+
 ### Changed — the API types know about the Valewurm
 
 The game repo's C9 adds a Titan: a `dungeon` of kind `titan` carrying a `titan` block (its

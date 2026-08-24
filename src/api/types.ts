@@ -273,6 +273,8 @@ export const CONTENT_TYPES = [
   'newsPost',
   'tutorialStep',
   'soundCue',
+  'expedition',
+  'deepRun',
   'gameConfig',
 ] as const satisfies readonly ContentType[];
 

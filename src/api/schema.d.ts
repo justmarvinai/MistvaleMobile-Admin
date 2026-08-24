@@ -885,9 +885,11 @@ export interface components {
                     [key: string]: unknown;
                 } | unknown[];
             };
+            deepRuns: components["schemas"]["DeepRunDef"][];
             dungeons: components["schemas"]["DungeonDef"][];
             enemies: components["schemas"]["EnemyDef"][];
             events: components["schemas"]["EventDef"][];
+            expeditions: components["schemas"]["ExpeditionDef"][];
             factions: components["schemas"]["FactionDef"][];
             gearSets: components["schemas"]["GearSetDef"][];
             gearSlots: components["schemas"]["GearSlotDef"][];
@@ -958,7 +960,7 @@ export interface components {
         };
         ContentTypeCount: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             drafts: number;
             label: string;
             live: number;
@@ -970,9 +972,366 @@ export interface components {
             ok: boolean;
             warnings: components["schemas"]["ContentIssue"][];
         };
+        DeepRunDef: {
+            /** @default  */
+            backgroundAsset: string;
+            boons: {
+                /** @default {} */
+                bonuses: {
+                    [key: string]: number;
+                };
+                /** @default  */
+                description: string;
+                /** @default [] */
+                effects: ({
+                    condition?: {
+                        /** @constant */
+                        type: "targetShielded";
+                    } | {
+                        /** @constant */
+                        type: "targetCrowdControlled";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "targetHpBelow";
+                    } | {
+                        /** @constant */
+                        type: "targetMaxHpAbove";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "selfHpBelow";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perOwnDebuff";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perLivingEnemy";
+                    } | {
+                        /** @constant */
+                        type: "selfHasNoBuffs";
+                    } | {
+                        /** @constant */
+                        type: "aoeSkill";
+                    } | {
+                        /** @enum {string} */
+                        mode: "arena";
+                        /** @constant */
+                        type: "mode";
+                    };
+                    /** @default 0 */
+                    flat: number;
+                    /** @default 0 */
+                    pct: number;
+                    /** @enum {string} */
+                    stat: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                    /** @constant */
+                    type: "stat";
+                } | {
+                    condition?: {
+                        /** @constant */
+                        type: "targetShielded";
+                    } | {
+                        /** @constant */
+                        type: "targetCrowdControlled";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "targetHpBelow";
+                    } | {
+                        /** @constant */
+                        type: "targetMaxHpAbove";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "selfHpBelow";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perOwnDebuff";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perLivingEnemy";
+                    } | {
+                        /** @constant */
+                        type: "selfHasNoBuffs";
+                    } | {
+                        /** @constant */
+                        type: "aoeSkill";
+                    } | {
+                        /** @enum {string} */
+                        mode: "arena";
+                        /** @constant */
+                        type: "mode";
+                    };
+                    pct: number;
+                    /** @constant */
+                    type: "damageDealt";
+                } | {
+                    condition?: {
+                        /** @constant */
+                        type: "targetShielded";
+                    } | {
+                        /** @constant */
+                        type: "targetCrowdControlled";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "targetHpBelow";
+                    } | {
+                        /** @constant */
+                        type: "targetMaxHpAbove";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "selfHpBelow";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perOwnDebuff";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perLivingEnemy";
+                    } | {
+                        /** @constant */
+                        type: "selfHasNoBuffs";
+                    } | {
+                        /** @constant */
+                        type: "aoeSkill";
+                    } | {
+                        /** @enum {string} */
+                        mode: "arena";
+                        /** @constant */
+                        type: "mode";
+                    };
+                    pct: number;
+                    /** @constant */
+                    type: "damageTaken";
+                } | {
+                    condition?: {
+                        /** @constant */
+                        type: "targetShielded";
+                    } | {
+                        /** @constant */
+                        type: "targetCrowdControlled";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "targetHpBelow";
+                    } | {
+                        /** @constant */
+                        type: "targetMaxHpAbove";
+                    } | {
+                        pct: number;
+                        /** @constant */
+                        type: "selfHpBelow";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perOwnDebuff";
+                    } | {
+                        maxStacks: number;
+                        /** @constant */
+                        type: "perLivingEnemy";
+                    } | {
+                        /** @constant */
+                        type: "selfHasNoBuffs";
+                    } | {
+                        /** @constant */
+                        type: "aoeSkill";
+                    } | {
+                        /** @enum {string} */
+                        mode: "arena";
+                        /** @constant */
+                        type: "mode";
+                    };
+                    pct: number;
+                    /** @constant */
+                    type: "lifesteal";
+                } | {
+                    /** @default 0 */
+                    flat: number;
+                    /** @default 1 */
+                    maxStacks: number;
+                    /** @default 0 */
+                    shieldPctMaxHp: number;
+                    /** @enum {string} */
+                    stat?: "hp" | "atk" | "def" | "spd" | "critRate" | "critDmg" | "res" | "acc";
+                    /** @constant */
+                    type: "onKill";
+                } | {
+                    pctMaxHp: number;
+                    /** @default 2 */
+                    turns: number;
+                    /** @constant */
+                    type: "battleStartShield";
+                } | {
+                    chance: number;
+                    /** @default 0 */
+                    minDamagePctMaxHp: number;
+                    /** @constant */
+                    type: "cooldownProc";
+                } | {
+                    /** @enum {string} */
+                    mode: "dealt" | "received" | "shieldReceived";
+                    pct: number;
+                    /** @constant */
+                    type: "healing";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "redirect";
+                } | {
+                    chance: number;
+                    /** @default 25 */
+                    hpLostPct: number;
+                    /** @enum {string} */
+                    trigger: "heavyHit" | "allyCrowdControlled";
+                    /** @constant */
+                    type: "counterProc";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "counterDamage";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "protectionBonus";
+                } | {
+                    chance: number;
+                    /** @default 1 */
+                    count: number;
+                    /** @constant */
+                    type: "cleanseProc";
+                } | {
+                    /** @default 1 */
+                    chance: number;
+                    pct: number;
+                    /**
+                     * @default self
+                     * @enum {string}
+                     */
+                    target: "self" | "team";
+                    /** @default 1 */
+                    threshold: number;
+                    /** @enum {string} */
+                    trigger: "ownBuffExpired" | "ownDebuffExpired" | "allyDied" | "debuffsLandedInTurn";
+                    /** @constant */
+                    type: "turnMeterProc";
+                } | {
+                    /** @default false */
+                    hardCcOnly: boolean;
+                    pct: number;
+                    /** @constant */
+                    type: "debuffChance";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "setBonusAmplify";
+                } | {
+                    maxPct: number;
+                    pctPerUse: number;
+                    /** @constant */
+                    type: "a1Ramp";
+                } | {
+                    pct: number;
+                    /** @constant */
+                    type: "firstStrike";
+                } | {
+                    chance: number;
+                    /** @default false */
+                    excludeHardCc: boolean;
+                    /** @enum {string} */
+                    mode: "ownDebuffs" | "allyBuffs";
+                    /** @default 1 */
+                    turns: number;
+                    /** @constant */
+                    type: "statusDuration";
+                } | {
+                    bossPct: number;
+                    chance: number;
+                    pct: number;
+                    /** @constant */
+                    type: "bonusDamageMaxHp";
+                } | {
+                    /** @constant */
+                    type: "lastStand";
+                })[];
+                key: string;
+                /** @default 1 */
+                minFloor: number;
+                name: string;
+                /**
+                 * @default common
+                 * @enum {string}
+                 */
+                rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
+                /** @default false */
+                stacks: boolean;
+            }[];
+            /** @default [] */
+            depthTiers: {
+                floor: number;
+                key: string;
+                name: string;
+                rewards: {
+                    [key: string]: number;
+                };
+            }[];
+            /** @default 12 */
+            floors: number;
+            /** @default 3 */
+            forks: number;
+            key: string;
+            /** @default  */
+            lore: string;
+            name: string;
+            rooms: {
+                /** @default 3 */
+                boonsOffered: number;
+                /** @default  */
+                description: string;
+                /** @default 0 */
+                healPct: number;
+                key: string;
+                /** @enum {string} */
+                kind: "fight" | "elite" | "rest" | "cache";
+                /** @default 60 */
+                maxFloor: number;
+                /** @default 1 */
+                minFloor: number;
+                name: string;
+                /** @default {} */
+                rewards: {
+                    [key: string]: number;
+                };
+                /** @default [] */
+                waves: {
+                    enemyKey: string;
+                    level: number;
+                    slot: number;
+                    /** @default 1 */
+                    stars: number;
+                }[][];
+                /** @default 1 */
+                weight: number;
+            }[];
+            /** @default 2 */
+            runsPerDay: number;
+            /** @default 0 */
+            sortOrder: number;
+            /** @default  */
+            tagline: string;
+            /** @default 1 */
+            unlockLevel: number;
+        };
         DeleteContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             key: string;
             pendingDelete: boolean;
         };
@@ -981,7 +1340,7 @@ export interface components {
         };
         DiscardContentDraftResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             discarded: boolean;
             key: string;
         };
@@ -994,7 +1353,7 @@ export interface components {
             itemKeys: string[];
             key: string;
             /** @enum {string} */
-            kind: "relic" | "proving" | "springs" | "titan";
+            kind: "relic" | "proving" | "springs" | "titan" | "worldBoss";
             /** @default  */
             lore: string;
             name: string;
@@ -1025,6 +1384,39 @@ export interface components {
             };
             /** @default 1 */
             unlockLevel: number;
+            worldBoss?: {
+                /** @default 3 */
+                attemptsPerDay: number;
+                /** @default 3 */
+                claimGraceDays: number;
+                /** @default {} */
+                fellingRewards: {
+                    [key: string]: number;
+                };
+                maxHp: number;
+                schedule: {
+                    endsAt: string;
+                    /** @constant */
+                    kind: "window";
+                    startsAt: string;
+                } | {
+                    durationDays: number;
+                    /** @constant */
+                    kind: "weekly";
+                    startWeekday: number;
+                };
+                /** @default [] */
+                tiers: {
+                    damage: number;
+                    key: string;
+                    name: string;
+                    rewards: {
+                        [key: string]: number;
+                    };
+                }[];
+                /** @default 50 */
+                turnCap: number;
+            };
         };
         EnemyDef: {
             /** @default 60 */
@@ -1114,7 +1506,7 @@ export interface components {
                 label: string;
                 points: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
             }[];
             schedule: {
                 endsAt: string;
@@ -1126,6 +1518,31 @@ export interface components {
                 /** @constant */
                 kind: "weekly";
                 startWeekday: number;
+            };
+            /** @default 0 */
+            sortOrder: number;
+            /** @default 1 */
+            unlockLevel: number;
+        };
+        ExpeditionDef: {
+            /** @default  */
+            description: string;
+            /** @default [] */
+            favours: {
+                bonusPct: number;
+                /** @enum {string} */
+                kind: "faction" | "element" | "role" | "rarity";
+                value: string;
+            }[];
+            hours: number;
+            /** @default  */
+            icon: string;
+            key: string;
+            name: string;
+            partySize: number;
+            /** @default {} */
+            rewards: {
+                [key: string]: number;
             };
             /** @default 0 */
             sortOrder: number;
@@ -1217,7 +1634,7 @@ export interface components {
         };
         GetContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             data: {
                 [key: string]: unknown;
             };
@@ -1266,7 +1683,7 @@ export interface components {
         };
         ListContentEntriesResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             items: components["schemas"]["ContentEntry"][];
         };
         ListContentRevisionsResponse: {
@@ -1635,7 +2052,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
             }[];
             /**
              * @default {
@@ -1699,7 +2116,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
             }[];
             /** @default  */
             icon: string;
@@ -1749,7 +2166,7 @@ export interface components {
         };
         SaveContentEntryResponse: {
             /** @enum {string} */
-            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "gameConfig";
+            contentType: "faction" | "status" | "skill" | "asset" | "champion" | "enemy" | "gearSet" | "gearSlot" | "gearStat" | "item" | "campaignChapter" | "dungeon" | "stage" | "summonPool" | "shop" | "mastery" | "quest" | "mission" | "event" | "loginTrack" | "newsPost" | "tutorialStep" | "soundCue" | "expedition" | "deepRun" | "gameConfig";
             key: string;
             saved: boolean;
         };
@@ -2237,7 +2654,7 @@ export interface components {
             };
             key: string;
             /** @enum {string} */
-            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial" | "titan";
+            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial" | "titan" | "trial" | "worldBoss" | "deepRun";
             number: number;
             parentKey: string;
             /** @default [] */
@@ -2298,6 +2715,16 @@ export interface components {
                 maxTurns: number;
                 /** @default true */
                 noDeaths: boolean;
+            };
+            trial?: {
+                /** @default  */
+                hint: string;
+                name: string;
+                /** @default {} */
+                parRewards: {
+                    [key: string]: number;
+                };
+                parTurns: number;
             };
             /** @default {} */
             unlock: {
@@ -2391,7 +2818,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
             };
             /** @default {} */
             grantsBefore: {
@@ -2911,7 +3338,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "expeditions" | "deep-runs" | "config";
             };
             cookie?: never;
         };
@@ -2997,7 +3424,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "expeditions" | "deep-runs" | "config";
             };
             cookie?: never;
         };
@@ -3083,7 +3510,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "expeditions" | "deep-runs" | "config";
             };
             cookie?: never;
         };
@@ -3187,7 +3614,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "expeditions" | "deep-runs" | "config";
             };
             cookie?: never;
         };
@@ -3273,7 +3700,7 @@ export interface operations {
                 /** @description Content key (lowercase snake_case). */
                 key: string;
                 /** @description Content type path segment. */
-                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "config";
+                type: "factions" | "statuses" | "skills" | "assets" | "champions" | "enemies" | "gear-sets" | "gear-slots" | "gear-stats" | "items" | "chapters" | "dungeons" | "stages" | "summon-pools" | "shops" | "masteries" | "quests" | "missions" | "events" | "login-tracks" | "news" | "tutorial" | "sounds" | "expeditions" | "deep-runs" | "config";
             };
             cookie?: never;
         };
