@@ -1353,7 +1353,7 @@ export interface components {
             itemKeys: string[];
             key: string;
             /** @enum {string} */
-            kind: "relic" | "proving" | "springs" | "titan" | "worldBoss";
+            kind: "relic" | "proving" | "springs" | "titan" | "worldBoss" | "spire";
             /** @default  */
             lore: string;
             name: string;
@@ -1365,6 +1365,21 @@ export interface components {
             setKeys: string[];
             /** @default 0 */
             sortOrder: number;
+            spire?: {
+                /** @default 10 */
+                bossEvery: number;
+                /** @default 5 */
+                keysPerDay: number;
+                /** @default [] */
+                landings: {
+                    floor: number;
+                    key: string;
+                    name: string;
+                    rewards: {
+                        [key: string]: number;
+                    };
+                }[];
+            };
             /** @default  */
             tagline: string;
             titan?: {
@@ -1506,7 +1521,7 @@ export interface components {
                 label: string;
                 points: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "spireFloor" | "spireHeight" | "titanDamage";
             }[];
             schedule: {
                 endsAt: string;
@@ -2052,7 +2067,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "spireFloor" | "spireHeight" | "titanDamage";
             }[];
             /**
              * @default {
@@ -2116,7 +2131,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "spireFloor" | "spireHeight" | "titanDamage";
             }[];
             /** @default  */
             icon: string;
@@ -2654,7 +2669,7 @@ export interface components {
             };
             key: string;
             /** @enum {string} */
-            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial" | "titan" | "trial" | "worldBoss" | "deepRun";
+            mode: "campaign" | "dungeon" | "springs" | "proving" | "tutorial" | "titan" | "trial" | "worldBoss" | "deepRun" | "spire";
             number: number;
             parentKey: string;
             /** @default [] */
@@ -2715,6 +2730,11 @@ export interface components {
                 maxTurns: number;
                 /** @default true */
                 noDeaths: boolean;
+            };
+            teamRestriction?: {
+                /** @enum {string} */
+                kind: "element" | "faction" | "role" | "minRarity";
+                value: string;
             };
             trial?: {
                 /** @default  */
@@ -2818,7 +2838,7 @@ export interface components {
                 };
                 target: number;
                 /** @enum {string} */
-                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "titanDamage";
+                type: "battleWin" | "stageClear" | "bossKill" | "useEnergy" | "summon" | "gearUpgrade" | "gearReforge" | "gearEquip" | "gearLevel" | "championLevelUp" | "championRankUp" | "championAscend" | "championAwaken" | "masteryLearn" | "shopPurchase" | "arenaBattle" | "arenaWin" | "arenaTier" | "chapterStars" | "dungeonClear" | "accountLevel" | "questClaim" | "claimAllDailies" | "championObtained" | "titanRun" | "expeditionClaim" | "trialsBeaten" | "worldBossStrike" | "worldBossDamage" | "deepRunFinished" | "deepRunDepth" | "spireFloor" | "spireHeight" | "titanDamage";
             };
             /** @default {} */
             grantsBefore: {

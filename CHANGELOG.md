@@ -5,6 +5,27 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — the API types know about the Mistspire
+
+The game repo's C11 adds a tower: a `dungeon` of kind `spire` carrying a `spire` block (keys
+a day, how often a keeper stands in the way, and the landings a climb pays at), thirty
+`spire`-mode stages, and the field that makes the mode work — **`stage.teamRestriction`**, the
+ward naming an element, a faction, a role or a rarity floor that a floor's team must meet.
+Two goal types come with it (`spireFloor`, `spireHeight`). `pnpm sync-api` picks all of it up
+from the regenerated OpenAPI artifact, so the generic entity browser edits a tower today with
+no purpose-built editor: the landings are an ordinary array of objects and the ward is three
+fields.
+
+**No spire editor is planned**, which is the same judgement the Titan and the world boss got.
+What would earn one is the tower's own shape — thirty floors reviewed as a column with their
+wards beside them — and that is A2's campaign-grid problem rather than a new one.
+
+**One publish rule worth knowing about as an operator**, because it will refuse work that
+looks correct: a ward is validated against the **whole champion roster**, and one that fewer
+than four non-food champions satisfy is rejected. Three of the game's eight factions hold two
+or three champions, so a floor warded to the Drowned Choir cannot be published — the game has
+no legal team for it and never will until the roster grows.
+
 ### Added — Expeditions and the Sunken Stair are authorable
 
 The game repo's C10 closed with two new content types, and the type sync had fallen behind
