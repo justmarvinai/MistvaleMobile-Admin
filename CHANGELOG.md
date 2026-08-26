@@ -5,6 +5,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Changed — a wave line's star rating now decides something, and defaults to ★6
+
+The game repo's C13 answers its Q8: an enemy's `stars` had been authored on every wave line of
+every stage since P2, shown in this editor, and read by nothing. The engine honours it now — it
+scales the unit's HP/ATK/DEF on the same rank ladder a champion climbs, so **★6 is full strength
+and ★1 is roughly 42% of it**. Speed, crit and resistance are flat at every rating by design.
+
+What changes for an operator is that the field is real: retuning a floor by dropping its guards
+from ★6 to ★4 does something now, where before it did nothing and the only working lever was
+`level`. **And the default moved from ★1 to ★6** — a wave line added without touching the rating
+used to mean nothing and would now mean "58% weaker than the archetype is authored", so an unset
+rating reads as "as authored" instead. `pnpm sync-api` carries both through; the generic entity
+browser needs no change, since `stars` was already an ordinary number field on the wave editor.
+
+Worth knowing when reviewing a diff: the game repo re-authored all 252 campaign stages in the
+same release (Normal/Hard/Brutal went from ★1/2/3 to ★4/5/6 — the same shape on the ladder the
+engine actually reads), so a publish diff against a live box will show every campaign stage's
+`waves` as changed. That is expected, and it is what `SEED.sh --replace stage` is for.
+
 ### Changed — the API types know about the Mistspire
 
 The game repo's C11 adds a tower: a `dungeon` of kind `spire` carrying a `spire` block (keys

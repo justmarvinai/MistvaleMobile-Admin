@@ -1314,7 +1314,7 @@ export interface components {
                     enemyKey: string;
                     level: number;
                     slot: number;
-                    /** @default 1 */
+                    /** @default 6 */
                     stars: number;
                 }[][];
                 /** @default 1 */
@@ -2755,7 +2755,7 @@ export interface components {
                 enemyKey: string;
                 level: number;
                 slot: number;
-                /** @default 1 */
+                /** @default 6 */
                 stars: number;
             }[][];
         };
