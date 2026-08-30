@@ -27,6 +27,7 @@ import { DepthsPage } from '@/features/depths/DepthsPage';
 import { MasteryBoardPage } from '@/features/masteries/MasteryBoardPage';
 import { ErrandsPage } from '@/features/goals/ErrandsPage';
 import { SchedulePage } from '@/features/goals/SchedulePage';
+import { PassPage } from '@/features/pass/PassPage';
 import { JobsPage } from '@/features/jobs/JobsPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
@@ -303,6 +304,20 @@ const scheduleRoute = createRoute({
   component: SchedulePage,
 });
 
+/**
+ * The Vale Pass.
+ *
+ * A season is one entity holding a thirty-tier, two-column ladder, so the generic browser
+ * shows it as a JSON blob three screens tall — the login track's problem exactly. What earns
+ * the page is the arithmetic beside it: a season's *length* is written nowhere, and lowering
+ * the ceiling or widening the spacing can leave a track nobody can finish inside a month.
+ */
+const valePassRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/vale-pass',
+  component: PassPage,
+});
+
 const tutorialScriptRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/tutorial',
@@ -353,6 +368,7 @@ const routeTree = rootRoute.addChildren([
     masteryBoardRoute,
     errandsRoute,
     scheduleRoute,
+    valePassRoute,
     tutorialScriptRoute,
     mailRoute,
     jobsRoute,

@@ -29,6 +29,7 @@ const DESTINATIONS: { link: string; heading: string | RegExp }[] = [
   { link: 'Mastery board', heading: 'Mastery board' },
   { link: 'Errands', heading: 'Errands' },
   { link: 'Calendar & news', heading: /calendar/i },
+  { link: 'Vale Pass', heading: /vale pass/i },
   { link: 'Balance sandbox', heading: /balance sandbox/i },
   { link: 'Jobs & health', heading: /jobs/i },
   { link: 'Audit log', heading: /audit log/i },

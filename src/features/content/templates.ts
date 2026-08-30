@@ -284,6 +284,30 @@ export function templateFor(contentType: ContentType, key: string): Record<strin
       active: true,
     },
 
+    // A season, started as a two-tier stub rather than thirty rows. Both columns are filled
+    // on the first tier and only the free one on the second, because those are the two
+    // shapes publish has rules about — a season whose free column pays nothing is refused,
+    // and so is a price for a premium column with nothing in it. `unlockCost` starts at
+    // zero, which opens the second column to everybody: a new season should not be behind a
+    // purchase until an operator has decided what the purchase buys.
+    valePass: {
+      key,
+      sortOrder: 0,
+      name: 'New season',
+      description: '',
+      bannerAsset: '',
+      schedule: { kind: 'monthly' },
+      pointRules: [{ type: 'battleWin', filters: {}, points: 30, label: 'Each battle won' }],
+      tiers: [
+        { points: 500, free: {}, premium: {} },
+        { points: 1000, free: {}, premium: {} },
+      ],
+      unlockCost: 0,
+      dailyPointCap: 600,
+      unlockLevel: 7,
+      active: true,
+    },
+
     // A post an operator fills in and schedules. Inactive and unwindowed: a draft
     // announcement that went live the moment it was saved would be the feature's worst
     // failure, and an empty window means "always up" rather than "never".

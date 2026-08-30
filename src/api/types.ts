@@ -345,6 +345,7 @@ export const CONTENT_TYPES = [
   'quest',
   'mission',
   'event',
+  'valePass',
   'loginTrack',
   'newsPost',
   'tutorialStep',

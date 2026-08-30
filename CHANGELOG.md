@@ -5,6 +5,38 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the Vale Pass, reviewed (game repo C38)
+
+The game repo's twenty-seventh content type, and the generic browser handles every field of
+it — a season is editable the moment the type is registered. What the browser cannot show is
+the same thing it could not show for the login calendar: **a season is one entity holding a
+thirty-tier, two-column ladder**, which reads as a JSON blob three screens tall.
+
+The reason this earns a page rather than a shrug is the figure beside it. **A season's length
+is written nowhere.** It is the top tier divided by the daily ceiling — two fields at opposite
+ends of a form — so an operator who lowers the ceiling, widens the spacing or adds five tiers
+has no way to see that the season now needs forty-one days of a thirty-one-day month. That
+does not fail validation, looks entirely reasonable in the editor, and is a track nobody can
+finish. It is the first thing on the page, measured against the **shortest** month, because a
+season that fits March and not February is broken every February.
+
+The problems it names are deliberately **wider than publish validation**, and the division is
+the point: publish refuses what is _broken_ — a ladder that does not climb, a tier paying
+nothing on either column, a free column empty everywhere, a price for an empty column — and
+this adds what is _judgement_, which an editor cannot refuse and an operator cannot see. A
+season nobody can finish. One a long weekend finishes. A free column that pays on six of
+thirty tiers, which publish allows and most players stop looking at. Rungs at uneven
+distances, which is not wrong and turns "how many more tiers" into arithmetic.
+
+It reviews and does not edit, like every A4 view: each field is still changed in the generic
+browser, because a second place to change one thing is worse than a click.
+
+### Changed
+
+- `pnpm sync-api` picked up the season's schemas, and the two runtime lists the compiler
+  cannot hold — `CONTENT_TYPES` and the new-entity templates — were both named by the build,
+  which is the type-sync contract working exactly as designed.
+
 ### Added — the smoke run (gap G8)
 
 `pnpm e2e`. Vitest covers what every editor _computes_, against stubbed responses; what none

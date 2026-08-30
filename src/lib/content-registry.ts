@@ -157,6 +157,14 @@ const REGISTRY: Readonly<Record<ContentType, ContentTypeInfo>> = Object.freeze({
     references: [],
     blurb: 'Timed events: when they run, what earns points, and the milestone ladder.',
   },
+  valePass: {
+    type: 'valePass',
+    label: 'Vale Pass',
+    path: 'vale-pass',
+    references: [],
+    blurb:
+      'The season: its window, what earns favour, the day’s ceiling, and the two-column tier ladder with the crystals that open the second column.',
+  },
   newsPost: {
     type: 'newsPost',
     label: 'News',

@@ -5,6 +5,7 @@ import {
   IconBinaryTree,
   IconBuildingStore,
   IconCalendarMonth,
+  IconTrophy,
   IconCards,
   IconDatabase,
   IconFlask,
@@ -193,6 +194,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/schedule')}
           label="Calendar & news"
           leftSection={<IconCalendarMonth size={16} />}
+        />
+        {/* Thirty tiers by two columns, and the figure the form cannot show: how many days
+            at the ceiling the season actually takes. */}
+        <NavLink
+          component={Link}
+          to="/vale-pass"
+          onClick={onNavigate}
+          active={pathname.startsWith('/vale-pass')}
+          label="Vale Pass"
+          leftSection={<IconTrophy size={16} />}
         />
         {/* Live ops rather than Content: it is about a stage, but it is a question rather
             than an edit, and nothing on it saves anything. */}
