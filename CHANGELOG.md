@@ -5,6 +5,37 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — what the summon odds actually mean (A3, ADMIN_SUITE_DESIGN §2.8)
+
+**Content → Summon pools.** Published gacha odds are the one number in the game a player is
+entitled to hold us to, and a form of raw rates cannot answer the three questions an operator
+has about them: are these a distribution at all, when does mercy start, and how many pulls
+does a rarity actually cost?
+
+All three, per rarity, per pool. Rates that do not sum to 100% get a red banner **before**
+publish refuses them — publish already does, but only once you get there, long after the
+number you mistyped has left the screen. Mercy is shown as the pull it first touches and
+what the rate has become by twice that. And the expected pull count is walked rather than
+solved, because mercy makes the closed form a piecewise mess: at each pull the rate is
+known, so the probability of first success at pull _n_ is exact. A rarity nobody can ever
+reach — 0% with no mercy — reads **unreachable** rather than a large number, because that is
+content to fix rather than a figure to compare.
+
+Champion weights are shown as the share each actually gets _within its band_, with the
+reason on the screen: the band is chosen from the rates first and a champion from the band
+second, which is what keeps an advertised rate honest however the roster grows. A band whose
+weights are all zero reads as zero rather than an even split, since it cannot be rolled from
+at all.
+
+Every field is still edited in the generic browser. This screen only says what the numbers
+mean — a second place to change them would be a second place for them to drift.
+
+**The off-by-one it caught is worth carrying.** The first pull mercy touches is `after + 2`,
+not `after + 1`: the server's counter is _pulls since that rarity last landed_, so going into
+pull `n` it holds `n - 1`, and the bonus needs `since - after > 0`. The obvious answer would
+have promised an operator mercy a pull earlier than the game grants it — and the test
+neighbouring the one that caught it had warned about exactly that.
+
 ### Added — the campaign as a grid (A2, ADMIN_SUITE_DESIGN §2.6)
 
 **Content → Campaign**: twelve chapters, seven stage numbers by three difficulties, laid out

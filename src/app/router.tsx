@@ -21,6 +21,7 @@ import { BalanceSandboxPage } from '@/features/balance/BalanceSandboxPage';
 import { AuditPage } from '@/features/audit/AuditPage';
 import { BattleInspectorPage } from '@/features/battles/BattleInspectorPage';
 import { CampaignPage } from '@/features/campaign/CampaignPage';
+import { SummonPoolsPage } from '@/features/summon/SummonPoolsPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -209,6 +210,19 @@ const campaignRoute = createRoute({
 });
 
 /**
+ * The summon pools, beside the browser rather than instead of it (A3, §2.8).
+ *
+ * Published odds are the one number a player is entitled to hold the game to, and a form
+ * of raw rates cannot say whether they are a distribution, when mercy starts, or what a
+ * rarity actually costs. This says all three; the fields are still edited in the browser.
+ */
+const summonPoolsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/summon-pools',
+  component: SummonPoolsPage,
+});
+
+/**
  * The script as a script, beside the generic browser rather than instead of it.
  *
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
@@ -245,6 +259,7 @@ const routeTree = rootRoute.addChildren([
     auditRoute,
     battleInspectorRoute,
     campaignRoute,
+    summonPoolsRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

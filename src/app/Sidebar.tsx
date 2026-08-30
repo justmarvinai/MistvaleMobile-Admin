@@ -128,6 +128,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           label="Campaign"
           leftSection={<IconMap size={16} />}
         />
+        {/* Published odds are player-trust critical, so what they *mean* gets a screen of
+            its own; the fields stay in the generic browser. */}
+        <NavLink
+          component={Link}
+          to="/summon-pools"
+          onClick={onNavigate}
+          active={pathname.startsWith('/summon-pools')}
+          label="Summon pools"
+          leftSection={<IconSparkles size={16} />}
+        />
         {/* Live ops rather than Content: it is about a stage, but it is a question rather
             than an edit, and nothing on it saves anything. */}
         <NavLink
