@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Badge, Box, Group, NavLink, Stack, Text } from '@mantine/core';
 import {
   IconAdjustments,
+  IconBuildingStore,
   IconCards,
   IconDatabase,
   IconFlask,
@@ -137,6 +138,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/summon-pools')}
           label="Summon pools"
           leftSection={<IconSparkles size={16} />}
+        />
+        {/* The same argument as the pools next door: a weight is relative and a level gate
+            changes what it is relative to, and no field-by-field view can say either. */}
+        <NavLink
+          component={Link}
+          to="/shops"
+          onClick={onNavigate}
+          active={pathname.startsWith('/shops')}
+          label="Shops"
+          leftSection={<IconBuildingStore size={16} />}
         />
         {/* Live ops rather than Content: it is about a stage, but it is a question rather
             than an edit, and nothing on it saves anything. */}

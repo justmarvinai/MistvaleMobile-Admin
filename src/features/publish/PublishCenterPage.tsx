@@ -5,6 +5,7 @@ import {
   IconCheck,
   IconChecklist,
   IconHistory,
+  IconPackageExport,
   IconRocket,
   IconTrash,
 } from '@tabler/icons-react';
@@ -22,6 +23,7 @@ import { ConfirmTyped } from '@/components/ConfirmTyped';
 import { EmptyState, ErrorState, LoadingState } from '@/components/QueryState';
 import { formatRelative, formatTimestamp } from '@/lib/format';
 import { notifyError, notifySuccess } from '@/lib/notify';
+import { SnapshotPanel } from '@/features/snapshot/SnapshotPanel';
 import { IssueList, PublishModal } from './PublishModal';
 
 /**
@@ -88,6 +90,9 @@ export function PublishCenterPage(): ReactNode {
           <Tabs.Tab value="history" leftSection={<IconHistory size={14} />}>
             Revision history
           </Tabs.Tab>
+          <Tabs.Tab value="snapshot" leftSection={<IconPackageExport size={14} />}>
+            Export &amp; import
+          </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="pending">
@@ -121,6 +126,10 @@ export function PublishCenterPage(): ReactNode {
 
         <Tabs.Panel value="history">
           <RevisionHistory />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="snapshot">
+          <SnapshotPanel />
         </Tabs.Panel>
       </Tabs>
 

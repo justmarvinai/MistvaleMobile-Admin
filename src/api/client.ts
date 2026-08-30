@@ -105,6 +105,16 @@ export const ADMIN_ROUTES = {
     list: '/battles',
     detail: (id: string) => `/battles/${encodeURIComponent(id)}`,
   },
+  /**
+   * Content snapshots — see the game repo's `ADMIN_ROUTES.content.export/import`.
+   *
+   * Import writes **drafts**, never live, so the way to review one is the publish center
+   * an operator already trusts rather than a second confirmation of its own.
+   */
+  snapshot: {
+    export: '/content/export',
+    import: '/content/import',
+  },
 } as const;
 
 /**

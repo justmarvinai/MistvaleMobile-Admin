@@ -18,6 +18,7 @@ import { useContentList, useSaveContent } from '@/api/hooks';
 import type { ContentListItem, GameConfigEntry, GameConfigValue } from '@/api/types';
 import { PageHeader } from '@/components/PageHeader';
 import { EmptyState, ErrorState, LoadingState } from '@/components/QueryState';
+import { CurveEditor, RawToggle, isCurve } from '@/components/CurveEditor';
 import { humanizeKey, deepEqual } from '@/lib/format';
 import { notifyError, notifySuccess } from '@/lib/notify';
 
@@ -122,7 +123,9 @@ export function GameConfigPage(): ReactNode {
               disabled={dirtyKeys.length === 0}
               loading={savingKeys.size > 0}
             >
-              Save {dirtyKeys.length > 0 ? `${dirtyKeys.length} ` : ''}drafts
+              {dirtyKeys.length === 1
+                ? 'Save 1 draft'
+                : `Save ${dirtyKeys.length > 0 ? `${dirtyKeys.length} ` : ''}drafts`}
             </Button>
           </Group>
         }
@@ -291,9 +294,36 @@ function ConfigField({
     );
   }
 
-  return (
+  return <StructuredValue common={common} entry={entry} value={value} onChange={onChange} />;
+}
+
+/**
+ * An array or an object: a curve where it is one, raw JSON otherwise.
+ *
+ * The curve is the default for a numeric list rather than an option behind a toggle,
+ * because it is the readable half of the pair — the tables A3 asked to have "surfaced" in
+ * the config editor (`economy.gearUpgradeCost` and `economy.gearUpgradeSuccess`) are 16
+ * numbers each, and their shape is the whole point of them. JSON stays one press away for
+ * the edits a curve cannot express: adding a rank to a ladder, or renaming a key.
+ */
+function StructuredValue({
+  common,
+  entry,
+  value,
+  onChange,
+}: {
+  common: { label: ReactNode; description: string | undefined; disabled: boolean };
+  entry: GameConfigEntry;
+  value: GameConfigValue;
+  onChange: (value: GameConfigValue) => void;
+}): ReactNode {
+  const curved = isCurve(value);
+  const [raw, setRaw] = useState(false);
+
+  const json = (
     <JsonInput
       {...common}
+      label={curved ? undefined : common.label}
       value={JSON.stringify(value, null, 2)}
       onChange={(text) => {
         try {
@@ -311,6 +341,34 @@ function ConfigField({
       maxRows={16}
       styles={{ input: { fontFamily: 'var(--mantine-font-family-monospace)', fontSize: 12 } }}
     />
+  );
+
+  if (!curved) return json;
+
+  return (
+    <Stack gap={6}>
+      <Group justify="space-between" align="flex-end" wrap="nowrap">
+        <div>
+          {common.label}
+          {common.description && (
+            <Text size="xs" c="dimmed">
+              {common.description}
+            </Text>
+          )}
+        </div>
+        <RawToggle raw={raw} onToggle={() => setRaw((current) => !current)} />
+      </Group>
+      {raw ? (
+        json
+      ) : (
+        <CurveEditor
+          value={value}
+          onChange={(next) => onChange(next as GameConfigValue)}
+          disabled={common.disabled}
+          label={entry.label}
+        />
+      )}
+    </Stack>
   );
 }
 

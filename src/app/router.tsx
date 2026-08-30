@@ -22,6 +22,7 @@ import { AuditPage } from '@/features/audit/AuditPage';
 import { BattleInspectorPage } from '@/features/battles/BattleInspectorPage';
 import { CampaignPage } from '@/features/campaign/CampaignPage';
 import { SummonPoolsPage } from '@/features/summon/SummonPoolsPage';
+import { ShopsPage } from '@/features/shop/ShopsPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -228,6 +229,19 @@ const summonPoolsRoute = createRoute({
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
  * one thing the browser cannot do without an operator getting two numbers right by hand.
  */
+/**
+ * The shops, for the same reason the pools have a screen (A3, §2.9).
+ *
+ * A weight is relative to the other offers and a `minAccountLevel` changes which offers
+ * those are, so the odds a level-29 player gets move when a level-30 offer is added —
+ * which is invisible in a form of fields and is the thing an operator most needs to see.
+ */
+const shopsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/shops',
+  component: ShopsPage,
+});
+
 const tutorialScriptRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/tutorial',
@@ -260,6 +274,7 @@ const routeTree = rootRoute.addChildren([
     battleInspectorRoute,
     campaignRoute,
     summonPoolsRoute,
+    shopsRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

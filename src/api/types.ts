@@ -144,6 +144,18 @@ export type SimulateResult = S['AdminSimulateResult'];
 export type AuditPage = S['AdminAuditPage'];
 export type AuditLogEntry = S['AdminAuditEntry'];
 
+/**
+ * Content snapshots (ADMIN_SUITE_DESIGN §2.16).
+ *
+ * `ContentSnapshot` is what the server exports and what an import takes back — one
+ * document rather than a file per entity, because the question a reader asks of a diff is
+ * "what changed in the campaign", not "what changed in stage c07_s3_hard".
+ */
+export type ContentSnapshot = S['AdminSnapshot'];
+export type ContentSnapshotFile = S['AdminSnapshotFile'];
+export type ContentImportRequest = S['AdminImportRequest'];
+export type ContentImportResult = S['AdminImportResult'];
+
 /** The battle inspector (ADMIN_SUITE_DESIGN §2.18). */
 export type BattleList = S['AdminBattleList'];
 export type BattleSummary = S['AdminBattleSummary'];

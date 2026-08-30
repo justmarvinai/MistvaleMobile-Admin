@@ -27,7 +27,10 @@ import type {
   AdminResetAccountResult,
   AdminResetPasswordResult,
   ContentDiff,
+  ContentImportRequest,
+  ContentImportResult,
   ContentItemResponse,
+  ContentSnapshot,
   ContentListResponse,
   ContentOverview,
   ContentValidationResult,
@@ -542,5 +545,40 @@ export function useSimulateStage(): UseMutationResult<SimulateResponse, ApiError
   return useMutation<SimulateResponse, ApiError, SimulateRequest>({
     mutationFn: (body) =>
       request<SimulateResponse>(ADMIN_ROUTES.simulate.stage, { method: 'POST', body }),
+  });
+}
+
+/**
+ * Content snapshots (ADMIN_SUITE_DESIGN §2.16).
+ *
+ * The export is a **mutation** even though it is a GET, and deliberately: an operator
+ * presses Download and gets the content as it stands at that moment. A query would cache
+ * a megabyte of the whole game for every operator who visited the page and hand back a
+ * fifteen-minute-old copy on the press after that — which for a document whose only job
+ * is to be a record of a particular revision is the one thing it must not do.
+ */
+export function useExportContent(): UseMutationResult<ContentSnapshot, ApiError, void> {
+  return useMutation<ContentSnapshot, ApiError, void>({
+    mutationFn: () => request<ContentSnapshot>(ADMIN_ROUTES.snapshot.export),
+  });
+}
+
+/**
+ * Loading a snapshot back in.
+ *
+ * Invalidates the content caches on success because the import has written drafts: the
+ * draft counts, the publish diff and the validation result have all moved, and an
+ * operator's next stop is the publish center reading exactly those.
+ */
+export function useImportContent(): UseMutationResult<
+  ContentImportResult,
+  ApiError,
+  ContentImportRequest
+> {
+  const client = useQueryClient();
+  return useMutation<ContentImportResult, ApiError, ContentImportRequest>({
+    mutationFn: (body) =>
+      request<ContentImportResult>(ADMIN_ROUTES.snapshot.import, { method: 'POST', body }),
+    onSuccess: () => invalidateContent(client),
   });
 }

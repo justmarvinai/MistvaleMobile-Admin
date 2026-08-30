@@ -5,6 +5,73 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — content export and import (A3, ADMIN_SUITE_DESIGN §2.17)
+
+**Publish center → Export & import**, and it sits inside the publish center rather than beside
+it because §2.17 asks that an import "shows dry-run diff first" — and an import writes
+**drafts**, so the dry run is the Pending changes tab one click away, with the same field-level
+diff, the same validation and the same publish button every other edit goes through. A second
+review path here would be a second thing to trust.
+
+Export downloads the live content as one JSON document named after its revision. Import takes
+one back, and accepts **both** shapes an operator plausibly has to hand: the whole-game
+document the API returns, and the game repo's own per-type files (`stage.json`,
+`champion.json`), which are bare arrays whose type is only in the filename. That second form
+is the commoner case — it is what `content-snapshot/` in the game repo holds — and a reader
+that refused it would refuse the one somebody restoring from git actually has. What it will
+not do is guess: a bare array whose name says nothing usable is refused by name rather than
+imported under a type nobody chose, which is why dropping `manifest.json` by mistake is
+reported rather than obeyed.
+
+Files are **staged** rather than sent: an import is a write, and one that happened the moment
+a file was picked would leave nothing to change your mind about. What is staged is listed by
+content type with its entity count and a tick, so restoring one type out of twenty-six is a
+checkbox rather than a hand-edited bundle.
+
+### Added — the gear tables read as curves (A3, ADMIN_SUITE_DESIGN §2.12)
+
+The config editor picks its control from the live value's type, and for an array or an
+object that meant a JSON textarea — correct, complete and unreadable for the values that
+are actually _shapes_. `economy.gearUpgradeSuccess` is sixteen numbers falling from 1 to
+0.2, and `0.02` typed where `0.2` was meant is invisible in a blob and obvious on a line.
+
+A numeric list is a line with a box under each point now, defaulting to the curve rather
+than hiding it behind a toggle, because the readable half of the pair should be the one an
+operator lands on. It covers the two tables A3 asked to have "surfaced" and five more
+besides, and both shapes those come in: an array indexed from 0, and a flat numeric map
+keyed by its own labels — **sorted as numbers when every key is one**, so `{"1", "2", "10"}`
+comes back in that order rather than 1, 10, 2, which would draw a cliff that is not in the
+data. The line is scaled against the curve's own range rather than against zero, since
+several of these are multipliers hovering near 1 and a zero-based axis draws every one of
+them as one flat line at the top. Raw JSON stays one press away for the edits a curve
+cannot express — adding a rank to a ladder, renaming a key.
+
+A list that is _not_ numbers stays JSON (`arena.botGivenNames` is words), because a line
+through it would be a picture of nothing and a number box could not write a name back.
+
+Also: the save button said "Save 1 drafts".
+
+### Added — what a shop's weights and gates actually do (A3, ADMIN_SUITE_DESIGN §2.9)
+
+**Content → Shops.** The same argument as the summon pools next door: every field of the
+Bazaar is already editable in the generic browser and none of them says what it _does_. A
+weight is relative to the other offers, and which offers those are depends on the player's
+level — so **adding one level-30 offer changes the odds a level-29 player gets on everything
+else in the shop**, and nothing in a field-by-field view shows that. The screen is one band
+per level at which the contents change, each with its own recomputed shares.
+
+Two things it deliberately refuses to compute, because both would be plausible and wrong. There
+is **no "chance of appearing in this window"**: the server stocks a window weighted _without
+replacement_, so no closed form exists and a `1 - (1 - p)^n` here would be a number that
+disagrees with the game — what is reported is the share of **one** slot, which is exactly what
+a weight is. And a weight of zero is only called dead **beside a positive one**, because a
+wholly weightless pool is picked from uniformly, which is what the server does.
+
+It also names the two faults that publish cleanly and look right in an editor: an offer no
+player can be shown (weight 0 among positives, or a level gate above the cap), and a band with
+fewer eligible offers than the window has slots — where the server lets the remaining slots
+repeat, which reads in-game as the same offer twice and is a bug report waiting to happen.
+
 ### Added — what the summon odds actually mean (A3, ADMIN_SUITE_DESIGN §2.8)
 
 **Content → Summon pools.** Published gacha odds are the one number in the game a player is

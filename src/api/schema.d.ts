@@ -290,6 +290,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/content/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The live content as one reviewable document
+         * @description The same document `pnpm content:export` writes to disk, so an operator without a shell on the box can still take an evening of retuning, commit it, and have a `git diff` of what they did. Changes nothing, so it is not audited.
+         */
+        get: operations["exportContent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/content/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Load a snapshot back in, as drafts
+         * @description Writes **drafts** and never live: the bundle becomes pending edits and then goes through the same validate -> diff -> publish flow as any other change, which is the dry-run the design asks for. An entity already identical to live writes no draft at all, and a content type this server does not know is named rather than silently dropped.
+         */
+        post: operations["importContent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/content/publish": {
         parameters: {
             query?: never;
@@ -782,6 +822,19 @@ export interface components {
             levelsGained: number;
             newLevel: number;
         };
+        AdminImportRequest: {
+            files: components["schemas"]["AdminSnapshotFile"][];
+            only?: string[];
+        };
+        AdminImportResult: {
+            drafted: {
+                count: number;
+                type: string;
+            }[];
+            total: number;
+            unchanged: number;
+            unknownTypes: string[];
+        };
         AdminLoginResponse: {
             account: components["schemas"]["AccountSummary"];
         };
@@ -955,6 +1008,26 @@ export interface components {
             winRate: number;
             wins: number;
             winsWithinStarLimit: number | null;
+        };
+        AdminSnapshot: {
+            files: components["schemas"]["AdminSnapshotFile"][];
+            summary: {
+                rev: number;
+                total: number;
+                types: {
+                    count: number;
+                    type: string;
+                }[];
+            };
+        };
+        AdminSnapshotFile: {
+            entities: {
+                data: {
+                    [key: string]: unknown;
+                };
+                key: string;
+            }[];
+            type: string;
         };
         ApiError: {
             /** @enum {string} */
@@ -2923,7 +2996,6 @@ export interface components {
                         min: number;
                     }[];
                 };
-                dropTableKey?: string;
                 playerXp: number;
                 silverMax: number;
                 silverMin: number;
@@ -4348,6 +4420,158 @@ export interface operations {
                         data: components["schemas"]["DiscardAllDraftsResponse"];
                         /** @constant */
                         ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    exportContent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminSnapshot"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    importContent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminImportResult"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
                         rev: number;
                     };
                 };
