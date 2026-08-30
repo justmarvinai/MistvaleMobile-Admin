@@ -24,6 +24,7 @@ import { useHealth, useStatsOverview } from '@/api/hooks';
 import { ErrorState, LoadingState } from '@/components/QueryState';
 import { PageHeader } from '@/components/PageHeader';
 import type { AuditEntry, HealthReport, StatsOverview } from '@/api/types';
+import { ActivityPanel } from './ActivityPanel';
 import { formatRelative, formatTimestamp } from '@/lib/format';
 
 /**
@@ -55,6 +56,7 @@ export function DashboardPage(): ReactNode {
       ) : (
         <Stack gap="lg">
           <KpiCards stats={stats.data} />
+          <ActivityPanel stats={stats.data} />
 
           <Grid gutter="lg">
             <Grid.Col span={{ base: 12, lg: 7 }}>

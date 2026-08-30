@@ -716,6 +716,32 @@ export interface components {
                 banned: number;
                 total: number;
             };
+            activity: {
+                battles: {
+                    byMode: {
+                        day: number;
+                        mode: string;
+                        week: number;
+                    }[];
+                    day: number;
+                    week: number;
+                    wonDay: number;
+                };
+                economy: {
+                    currency: string;
+                    faucet: number;
+                    sink: number;
+                }[];
+                summons: {
+                    byRarity: {
+                        rarity: string;
+                        week: number;
+                    }[];
+                    day: number;
+                    mercyWeek: number;
+                    week: number;
+                };
+            };
             content: {
                 champions: number;
                 enemies: number;

@@ -5,6 +5,26 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the dashboard says what the game has been doing (gap G3)
+
+It could tell you how many champions and stages were published, which describes the
+_content_; it could not tell you whether anybody was playing. `ADMIN_SUITE_DESIGN` §2.1 has
+wanted battle, summon and economy figures since A0, and when P6 shipped the note said the
+data now existed. This is the follow-through.
+
+Three cards under the KPI strip. **Battles** — today, this week, how many of today's were
+won, and a split by mode where which modes nobody plays is the more interesting half.
+**Summons** — today, this week, how many came from mercy rather than the base rate, and the
+rarity split _over the week_, because a Legendary is rare enough that a day's count is
+usually zero and a zero says nothing about the rates. **Economy** — earned against spent per
+currency over the day, both halves rather than the net, since a net of zero is produced by a
+healthy economy and by nothing happening at all.
+
+**Every figure is a day beside a week**, because one number alone cannot tell a quiet
+Tuesday from a broken endpoint — which is the failure a dashboard exists to catch. And when
+a week really is empty the panel says so in a sentence rather than printing three cards of
+zeroes: on a live server that is a fault, not a quiet week.
+
 ### Added — the audit log, searchable (gap G1)
 
 Every administrative mutation has recorded who, what and both sides of the change since the
