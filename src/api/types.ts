@@ -143,6 +143,11 @@ export type SimulateResult = S['AdminSimulateResult'];
  */
 export type AuditPage = S['AdminAuditPage'];
 export type AuditLogEntry = S['AdminAuditEntry'];
+
+/** The battle inspector (ADMIN_SUITE_DESIGN §2.18). */
+export type BattleList = S['AdminBattleList'];
+export type BattleSummary = S['AdminBattleSummary'];
+export type BattleDetail = S['AdminBattleDetail'];
 export type SimulateSource = NonNullable<SimulateRequest['source']>;
 export type BenchTier = NonNullable<SimulateRequest['tier']>;
 

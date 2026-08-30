@@ -95,6 +95,16 @@ export const ADMIN_ROUTES = {
   audit: {
     list: '/audit',
   },
+  /**
+   * The battle inspector — see the game repo's `ADMIN_ROUTES.battles`.
+   *
+   * Two reads and no writes, and there should never be a write: a battle row is the
+   * record of something that already happened.
+   */
+  battles: {
+    list: '/battles',
+    detail: (id: string) => `/battles/${encodeURIComponent(id)}`,
+  },
 } as const;
 
 /**

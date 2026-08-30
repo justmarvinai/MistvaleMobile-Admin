@@ -140,6 +140,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/battles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List battles, newest first
+         * @description Optionally narrowed to one player or one mode. The debugging entry point for "that fight felt wrong": find the fight, then open it.
+         */
+        get: operations["listBattles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/battles/%3Aid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One battle, with its event log
+         * @description Metadata, both sides as the log opened with them, and the engine event log verbatim — not summarised and not re-derived, because a paraphrase would be a second account of the fight that could differ from the one the player saw in exactly the case somebody is asking about. The seed is included: with it, the fight is reproducible exactly. Read-only, and not audited — looking at a fight changes nothing.
+         */
+        get: operations["getBattle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/content": {
         parameters: {
             query?: never;
@@ -676,6 +716,47 @@ export interface components {
         AdminBanRequest: {
             banned: boolean;
             reason?: string;
+        };
+        AdminBattleDetail: {
+            allies: components["schemas"]["AdminBattleUnit"][];
+            contentRev: number;
+            createdAt: string;
+            enemies: components["schemas"]["AdminBattleUnit"][];
+            energySpent: number;
+            events: unknown[];
+            finishedAt: string | null;
+            id: string;
+            mode: string;
+            outcome: string | null;
+            playerId: string;
+            profileName: string | null;
+            rewards: unknown;
+            seed: number;
+            stageKey: string;
+            status: string;
+            turns: number;
+        };
+        AdminBattleList: {
+            battles: components["schemas"]["AdminBattleSummary"][];
+            total: number;
+        };
+        AdminBattleSummary: {
+            createdAt: string;
+            finishedAt: string | null;
+            id: string;
+            mode: string;
+            outcome: string | null;
+            playerId: string;
+            profileName: string | null;
+            stageKey: string;
+            status: string;
+            turns: number;
+        };
+        AdminBattleUnit: {
+            defKey: string;
+            name: string;
+            side: string;
+            slot: number;
         };
         AdminEconomyEntry: {
             createdAt: string;
@@ -3471,6 +3552,173 @@ export interface operations {
             };
             /** @description The session is valid but the account lacks the admin rank. */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    listBattles: {
+        parameters: {
+            query?: {
+                limit?: number;
+                mode?: string;
+                offset?: number;
+                playerId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminBattleList"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    getBattle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminBattleDetail"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

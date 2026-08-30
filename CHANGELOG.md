@@ -5,6 +5,31 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the battle inspector (ADMIN_SUITE_DESIGN §2.18)
+
+The debugging tool for "that fight felt wrong", and the last thing A2 owed that a report
+could arrive about tomorrow. **Live ops → Battle inspector**: pick a fight from the recent
+list or paste an id, and read the engine's own event log grouped into its own turns, with
+both sides as the log opened with them.
+
+It works at all because **a battle is its event log** — the engine is deterministic given a
+seed, the server keeps the whole log on the row, and the game client only ever renders it.
+So what is on this screen is what the player saw, rather than a reconstruction that could
+differ in exactly the case somebody is asking about. The **seed is on the screen** for the
+same reason: with it, the fight is reproducible exactly, which is the difference between
+investigating a report and guessing at it.
+
+**The viewer adds nothing to the record.** It splits the log on the engine's own
+`turnStart` rather than inferring a boundary, and it filters by unit and event type; it
+never interprets an event, because two operators looking at one battle have to see the same
+fight. Events before the first turn are kept in a **Setup** row rather than dropped — "what
+did this fight start with" is one of the two questions anybody opens this for — and a turn
+that nothing survived the filter is dropped rather than left blank, since an operator
+filtering to one champion wants that champion's fight and not three hundred empty rows.
+
+The list deliberately does not carry the log: a hundred fights at three hundred turns each
+is a response nobody wants and a table nobody can render.
+
 ### Added — the dashboard says what the game has been doing (gap G3)
 
 It could tell you how many champions and stages were published, which describes the

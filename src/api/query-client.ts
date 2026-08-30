@@ -43,6 +43,8 @@ export const queryKeys = {
   revisions: ['content', 'revisions'] as const,
   playerSearch: (params: string) => ['players', 'search', params] as const,
   audit: (params: string) => ['audit', params] as const,
+  battles: (params: string) => ['battles', 'list', params] as const,
+  battle: (id: string) => ['battles', 'detail', id] as const,
   player: (id: string) => ['players', 'detail', id] as const,
   arenaBots: ['arena', 'bots'] as const,
   mailBatches: ['mail', 'batches'] as const,

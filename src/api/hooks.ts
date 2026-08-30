@@ -10,6 +10,8 @@ import { invalidateContent, queryKeys } from './query-client';
 import type {
   AccountRank,
   AuditPage,
+  BattleDetail,
+  BattleList,
   AdminAccountState,
   ArenaBotCensus,
   ArenaLadderResult,
@@ -448,6 +450,16 @@ export function useSendMail(): UseMutationResult<MailSendResult, ApiError, MailS
 }
 
 /**
+ * A filter object as a query string, shared by every filtered list in the suite.
+ *
+ * The one rule in it is easy to get wrong and impossible to see once it is: an empty box
+ * must be **absent** from the query rather than present and empty. `?actor=` is a filter
+ * matching every row and it looks exactly like a filter matching none. The check is
+ * explicit rather than a truthiness test, because `offset=0` is the most common request
+ * there is and `0` is falsy.
+ */
+
+/**
  * The audit log (gap G1).
  *
  * A plain query keyed on the whole filter string, so going back to a filter an operator
@@ -466,7 +478,7 @@ export interface AuditFilter {
   offset?: number;
 }
 
-export function auditParams(filter: AuditFilter): string {
+export function filterParams(filter: object): string {
   const params = new URLSearchParams();
   // Empty is *absent*, not an empty match: `?actor=` would otherwise be a filter that
   // matches everything and looks like a filter that matches nothing.
@@ -478,11 +490,43 @@ export function auditParams(filter: AuditFilter): string {
 }
 
 export function useAudit(filter: AuditFilter): UseQueryResult<AuditPage, ApiError> {
-  const params = auditParams(filter);
+  const params = filterParams(filter);
   return useQuery<AuditPage, ApiError>({
     queryKey: queryKeys.audit(params),
     queryFn: () => request<AuditPage>(`${ADMIN_ROUTES.audit.list}${params ? `?${params}` : ''}`),
     placeholderData: (previous) => previous,
+  });
+}
+
+/**
+ * The battle inspector (ADMIN_SUITE_DESIGN §2.18).
+ *
+ * A finished battle never changes, so the detail query is given a long stale time: an
+ * operator stepping through a log should not have it re-fetched under them because the
+ * window regained focus.
+ */
+export interface BattleFilter {
+  playerId?: string;
+  mode?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export function useBattles(filter: BattleFilter): UseQueryResult<BattleList, ApiError> {
+  const params = filterParams(filter);
+  return useQuery<BattleList, ApiError>({
+    queryKey: queryKeys.battles(params),
+    queryFn: () => request<BattleList>(`${ADMIN_ROUTES.battles.list}${params ? `?${params}` : ''}`),
+    placeholderData: (previous) => previous,
+  });
+}
+
+export function useBattle(id: string | null): UseQueryResult<BattleDetail, ApiError> {
+  return useQuery<BattleDetail, ApiError>({
+    queryKey: queryKeys.battle(id ?? ''),
+    queryFn: () => request<BattleDetail>(ADMIN_ROUTES.battles.detail(id as string)),
+    enabled: Boolean(id),
+    staleTime: Infinity,
   });
 }
 

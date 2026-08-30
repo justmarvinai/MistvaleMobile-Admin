@@ -19,6 +19,7 @@ import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
 import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { BalanceSandboxPage } from '@/features/balance/BalanceSandboxPage';
 import { AuditPage } from '@/features/audit/AuditPage';
+import { BattleInspectorPage } from '@/features/battles/BattleInspectorPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -181,6 +182,19 @@ const auditRoute = createRoute({
 });
 
 /**
+ * The battle inspector, under Live ops (ADMIN_SUITE_DESIGN §2.18).
+ *
+ * A question about a fight that already happened rather than an edit to anything, so it
+ * sits beside the balance sandbox: one asks what a stage *would* do, the other what it
+ * actually did.
+ */
+const battleInspectorRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/battles',
+  component: BattleInspectorPage,
+});
+
+/**
  * The script as a script, beside the generic browser rather than instead of it.
  *
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
@@ -215,6 +229,7 @@ const routeTree = rootRoute.addChildren([
     arenaBotsRoute,
     balanceRoute,
     auditRoute,
+    battleInspectorRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

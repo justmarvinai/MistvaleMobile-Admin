@@ -137,6 +137,15 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           label="Audit log"
           leftSection={<IconHistory size={16} />}
         />
+        {/* Beside the sandbox: one asks what a stage would do, the other what it did. */}
+        <NavLink
+          component={Link}
+          to="/battles"
+          onClick={onNavigate}
+          active={pathname.startsWith('/battles')}
+          label="Battle inspector"
+          leftSection={<IconSwords size={16} />}
+        />
       </Box>
 
       <SectionLabel icon={<IconRocket size={12} />}>System</SectionLabel>

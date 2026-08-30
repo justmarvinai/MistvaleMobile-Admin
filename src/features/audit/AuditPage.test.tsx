@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { auditParams } from '@/api/hooks';
+import { filterParams } from '@/api/hooks';
 
 /**
  * The audit filter's query string.
@@ -9,20 +9,22 @@ import { auditParams } from '@/api/hooks';
  * query rather than present and empty. `?actor=` is a filter matching every row, and it
  * looks exactly like a filter matching none.
  */
-describe('auditParams', () => {
+describe('filterParams', () => {
   it('leaves an untouched filter out of the query entirely', () => {
-    expect(auditParams({ limit: 50, offset: 0 })).toBe('limit=50&offset=0');
+    expect(filterParams({ limit: 50, offset: 0 })).toBe('limit=50&offset=0');
   });
 
   it('drops a box the operator emptied rather than sending it empty', () => {
-    expect(auditParams({ actor: '', action: undefined, entity: 'account' })).toBe('entity=account');
+    expect(filterParams({ actor: '', action: undefined, entity: 'account' })).toBe(
+      'entity=account',
+    );
   });
 
   it('carries every filter that is set, so they combine', () => {
     // The way an operator actually arrives: a name they are suspicious of *and* a thing
     // that went wrong.
     const params = new URLSearchParams(
-      auditParams({ actor: 'marvin', action: 'player.ban', entityId: 'acct-1' }),
+      filterParams({ actor: 'marvin', action: 'player.ban', entityId: 'acct-1' }),
     );
     expect(params.get('actor')).toBe('marvin');
     expect(params.get('action')).toBe('player.ban');
@@ -31,6 +33,6 @@ describe('auditParams', () => {
 
   it('sends a zero offset rather than treating it as unset', () => {
     // `0` is falsy and the first page is the most common request there is.
-    expect(auditParams({ offset: 0 })).toBe('offset=0');
+    expect(filterParams({ offset: 0 })).toBe('offset=0');
   });
 });
