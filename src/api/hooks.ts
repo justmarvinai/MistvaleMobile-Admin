@@ -20,8 +20,11 @@ import type {
   MailSendResult,
   SimulateRequest,
   SimulateResponse,
+  AdminGearPage,
   AdminGrantRequest,
   AdminGrantResult,
+  AdminRoster,
+  AdminSummonPage,
   AdminPlayerDetail,
   AdminPlayerSearch,
   AdminResetAccountResult,
@@ -31,6 +34,8 @@ import type {
   ContentImportResult,
   ContentItemResponse,
   ContentSnapshot,
+  JobList,
+  JobRunResult,
   ContentListResponse,
   ContentOverview,
   ContentValidationResult,
@@ -580,5 +585,89 @@ export function useImportContent(): UseMutationResult<
     mutationFn: (body) =>
       request<ContentImportResult>(ADMIN_ROUTES.snapshot.import, { method: 'POST', body }),
     onSuccess: () => invalidateContent(client),
+  });
+}
+
+/**
+ * Scheduled work, run on demand (ADMIN_SUITE_DESIGN §2.19).
+ *
+ * The list is a query and running one is a mutation, which is the honest split: the names
+ * are a closed list that only changes with a deploy, and a run is a side effect an operator
+ * chose. It invalidates the dashboard rather than the job list, because what a run changes
+ * is the *game* — a prune moves the counters, a ladder rebuild moves the bots — and the
+ * list of names is exactly what it does not touch.
+ */
+export function useJobs(): UseQueryResult<JobList, ApiError> {
+  return useQuery<JobList, ApiError>({
+    queryKey: queryKeys.jobs,
+    queryFn: () => request<JobList>(ADMIN_ROUTES.jobs.list),
+    staleTime: Infinity,
+  });
+}
+
+export function useRunJob(): UseMutationResult<JobRunResult, ApiError, { name: string }> {
+  const client = useQueryClient();
+  return useMutation<JobRunResult, ApiError, { name: string }>({
+    mutationFn: ({ name }) =>
+      request<JobRunResult>(ADMIN_ROUTES.jobs.run(name), { method: 'POST' }),
+    onSuccess: async () => {
+      await Promise.all([
+        client.invalidateQueries({ queryKey: queryKeys.stats }),
+        client.invalidateQueries({ queryKey: queryKeys.health }),
+        client.invalidateQueries({ queryKey: queryKeys.arenaBots }),
+      ]);
+    },
+  });
+}
+
+/**
+ * The holdings drill-ins (ADMIN_SUITE_DESIGN §2.14).
+ *
+ * All three are queries and none of them has a mutation beside it, deliberately: every
+ * change to what an account holds already exists as a *grant*, which lands in
+ * `economy_log`. An editor that reached in and changed a relic's substats would be the one
+ * mutation in the suite with no ledger behind it.
+ *
+ * `enabled` on each, because the drill-ins live behind tabs and a player page should not
+ * fetch a thousand relics to show the account summary.
+ */
+export function usePlayerRoster(
+  id: string,
+  enabled: boolean,
+): UseQueryResult<AdminRoster, ApiError> {
+  return useQuery<AdminRoster, ApiError>({
+    queryKey: queryKeys.playerRoster(id),
+    queryFn: () => request<AdminRoster>(ADMIN_ROUTES.players.champions(id)),
+    enabled: enabled && id !== '',
+  });
+}
+
+export function usePlayerGear(
+  id: string,
+  filter: { limit?: number; offset?: number; equipped?: string },
+  enabled: boolean,
+): UseQueryResult<AdminGearPage, ApiError> {
+  const params = filterParams(filter);
+  return useQuery<AdminGearPage, ApiError>({
+    queryKey: queryKeys.playerGear(id, params),
+    queryFn: () =>
+      request<AdminGearPage>(`${ADMIN_ROUTES.players.gear(id)}${params ? `?${params}` : ''}`),
+    enabled: enabled && id !== '',
+    placeholderData: (previous) => previous,
+  });
+}
+
+export function usePlayerSummons(
+  id: string,
+  filter: { limit?: number; offset?: number },
+  enabled: boolean,
+): UseQueryResult<AdminSummonPage, ApiError> {
+  const params = filterParams(filter);
+  return useQuery<AdminSummonPage, ApiError>({
+    queryKey: queryKeys.playerSummons(id, params),
+    queryFn: () =>
+      request<AdminSummonPage>(`${ADMIN_ROUTES.players.summons(id)}${params ? `?${params}` : ''}`),
+    enabled: enabled && id !== '',
+    placeholderData: (previous) => previous,
   });
 }

@@ -54,6 +54,14 @@ export const ADMIN_ROUTES = {
     sessions: (id: string) => `/players/${encodeURIComponent(id)}/sessions`,
     /** Back to the state registration leaves an account in. Irreversible. */
     reset: (id: string) => `/players/${encodeURIComponent(id)}/reset`,
+    /**
+     * The drill-ins (§2.14). Reads only, and there should never be a write here: every
+     * change to what an account holds already exists as a grant through `RewardService`,
+     * which lands in `economy_log`.
+     */
+    champions: (id: string) => `/players/${encodeURIComponent(id)}/champions`,
+    gear: (id: string) => `/players/${encodeURIComponent(id)}/gear`,
+    summons: (id: string) => `/players/${encodeURIComponent(id)}/summons`,
   },
   /**
    * The Arena's bot ladder — see the game repo's `ADMIN_ROUTES.bots`.
@@ -114,6 +122,16 @@ export const ADMIN_ROUTES = {
   snapshot: {
     export: '/content/export',
     import: '/content/import',
+  },
+  /**
+   * Scheduled work, run on demand — see the game repo's `ADMIN_ROUTES.jobs`.
+   *
+   * A closed list of names rather than a name that reaches anything callable: a generic
+   * "run this" would be a remote-execution surface with an admin cookie in front of it.
+   */
+  jobs: {
+    list: '/jobs',
+    run: (name: string) => `/jobs/run/${encodeURIComponent(name)}`,
   },
 } as const;
 

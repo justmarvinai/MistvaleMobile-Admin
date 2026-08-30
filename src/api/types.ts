@@ -156,6 +156,24 @@ export type ContentSnapshotFile = S['AdminSnapshotFile'];
 export type ContentImportRequest = S['AdminImportRequest'];
 export type ContentImportResult = S['AdminImportResult'];
 
+/**
+ * The holdings drill-ins (ADMIN_SUITE_DESIGN §2.14).
+ *
+ * The roster arrives whole because it is bounded by `rosterCapacity`; gear and summons are
+ * paged because neither is bounded by anything.
+ */
+export type AdminRoster = S['AdminRoster'];
+export type AdminRosterChampion = S['AdminRosterChampion'];
+export type AdminGearPage = S['AdminGearPage'];
+export type AdminGearItem = S['AdminGearItem'];
+export type AdminSummonPage = S['AdminSummonPage'];
+export type AdminSummon = S['AdminSummon'];
+
+/** Scheduled work an operator may run by hand (ADMIN_SUITE_DESIGN §2.19). */
+export type JobList = S['ListJobsResponse'];
+export type JobSummary = JobList['jobs'][number];
+export type JobRunResult = S['RunJobResponse'];
+
 /** The battle inspector (ADMIN_SUITE_DESIGN §2.18). */
 export type BattleList = S['AdminBattleList'];
 export type BattleSummary = S['AdminBattleSummary'];

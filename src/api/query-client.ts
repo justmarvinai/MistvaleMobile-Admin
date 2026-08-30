@@ -46,8 +46,12 @@ export const queryKeys = {
   battles: (params: string) => ['battles', 'list', params] as const,
   battle: (id: string) => ['battles', 'detail', id] as const,
   player: (id: string) => ['players', 'detail', id] as const,
+  playerRoster: (id: string) => ['players', 'roster', id] as const,
+  playerGear: (id: string, params: string) => ['players', 'gear', id, params] as const,
+  playerSummons: (id: string, params: string) => ['players', 'summons', id, params] as const,
   arenaBots: ['arena', 'bots'] as const,
   mailBatches: ['mail', 'batches'] as const,
+  jobs: ['jobs', 'list'] as const,
 };
 
 /**

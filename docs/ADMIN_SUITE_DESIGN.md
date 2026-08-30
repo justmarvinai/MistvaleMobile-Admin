@@ -79,9 +79,13 @@ Sets (name, 2/4-piece bonus from engine-known bonus types, lore, drop sources); 
   - **Simulate** button: runs balance-sim with reference teams (weak/expected/strong presets) → win% and avg turns, inline. Tuning without guesswork.
 - Bulk tools: "propagate stats +15% to next difficulty", "copy chapter as template".
 
-### 2.7 The Depths editor
+### 2.7 The Depths editor — **shipped**
 
-Dungeon list (4 gear dungeons, Proving Grounds, 5 Springs): identity, boss, open-days (springs rotation calendar widget), floor table 1–15 with the same stage editor + bulk scaling tools, featured drops.
+**Content → The Depths.** A keep as its own descent, plus the rotation as a week. A floor is an ordinary `stage` with `parentKey` and `number` — right, since a floor is a fight on the same engine as everything else, and also why the generic browser shows a keep as fifteen rows in a list of four hundred with nothing saying how it scales. Here: enemy level as a **band** (waves climb inside one floor, so a single figure would be a lie), the step from the floor above, waves, energy, the three-star turn limit and the relic chance, every row linking into the editor.
+
+Four faults it names, all of which publish cleanly: more floors declared than published, a gap in the numbering (which is what "floor N is open" is computed from), two floors sharing a number, and a descent that gets **easier** — the one balance fact that is certainly a mistake rather than a choice. The week inverts `openDays`, where an **empty list means every day**; read literally that looks like a keep that never opens, and the four gear dungeons are all authored that way, so they are listed as daily rather than drawn on the grid.
+
+- _Not built:_ bulk scaling tools. Floors are generated from ten plan entries in the game repo's seed, so a retune is a change to the plan and a re-seed, and a second way to rewrite fifteen floors would be a second source of truth for the curve.
 
 ### 2.8 Summon pool editor
 
@@ -91,21 +95,26 @@ Per sigil type: rarity rate sliders (must sum 100% — live pie), champion weigh
 
 Reusable tables: weighted entries (gear query: set/slot/rank/rarity-weights/level, item + qty range, silver range, champion ref), rolls count, nested-table support; **100-roll preview** button; used-by list.
 
-### 2.10 Quests, Missions, Events
+### 2.10 Quests, Missions, Events — **shipped**
 
-- Quests: daily/weekly/monthly tabs; goal-DSL builder (dropdown goal type + typed params), rewards, sort; daily-chest meter config.
-- Missions: ordered chain board with drag re-order, chapter grouping, progress-goal builder, reward editor; final-reward slot.
-- Events: calendar view of scheduled events; event editor: banner asset, window (start/end, timezone-aware), point rules builder (action → points), milestone ladder with reward editor; preset templates (Champion Training / Dungeon Delve / Summon Surge); clone-forward ("run again next month").
+**Content → Errands.** One screen for the three, because they are one goal DSL wearing three names and the question is the same: what is a player being asked to do, and what does it pay. Quests by period with the day's-chest count; the Path as an ordered chain grouped by arc; every event with its schedule, its point rules and its ladder.
+
+Every goal is a **sentence**, and the sentence says **Reach** for a threshold and a plain count for a tally. That difference is the accumulation rule itself, and getting it wrong is the classic quest bug — "reach +12 on a relic" must not be satisfied by twelve relics at +1 — so it is stated rather than left to be remembered.
+
+Three faults it names: a gap or a duplicate in the Path's `step` numbering (the chain is walked by position exactly as the tutorial script is, so a gap is a wall), a milestone ladder whose rungs do not climb or pay nothing, and a schedule that can never fire — including the distinction a raw object hides, between a `window` that runs once and a `weekly` that comes back forever.
+
+- _Not built, and the reason is the tutorial editor's:_ a goal-DSL **builder** and drag re-ordering. Field editing stays in the generic browser, which is schema-driven and complete; a second place to change one thing is worse than a click. Re-ordering would earn its place the way the tutorial's did — if publish started refusing a gap — and today it reports one instead.
+- _Not built:_ clone-forward. An event's `weekly` schedule already recurs forever, so the case it existed for is the `window` kind, which is one edit.
 
 ### 2.11 Shops, Login calendar, News
 
 - Bazaar: slot grid (stock ref, price, refresh group), crystal-shop offers, refresh timer config; price sanity warnings (vs configured economy baselines).
-- Login calendar: 30-day grid + 7-day welcome strip, drag rewards onto days, month preview as players see it.
-- News: markdown editor with live game-style preview, schedule window, pin.
+- **Login calendar and News — shipped** (**Content → Calendar & news**). A track carries thirty days in an array, so the browser shows it as a JSON blob three screens tall and "what does day 21 pay" means counting array elements; it is a grid here, which is what it is in the game, with a day that is missing from the list and a day that pays nothing both named. A post shows its **window in words**: an empty bound means _unbounded_, and reading it literally as a missing date makes a live post look broken — so the screen says which of _showing now_, _not yet_ and _finished_ it is, and names a window that ends before it starts. Rewards are still dropped onto a day in the generic browser.
 
 ### 2.12 Masteries, Hall of Valor, Tutorial, Sounds, Game config
 
-- Masteries: 3-tree node canvas, per-node effect (engine-known) + emblem costs; connectivity validation (tier gating).
+- **Masteries — shipped** (**Content → Mastery board**). Two things are invisible in a list of forty-eight nodes and both decide whether the content works. **What a node does**: the effect is a discriminated union nested inside an array, so a form shows `{"type":"stat","stat":"atk","flat":40}` where the operator is thinking "+40 attack" — all twenty-one kinds have a sentence, and so does every condition. And **whether the board can be spent**: fifteen picks, a hard allowance per tier and at most two trees, so a board can hold a node at every tier of every tree and still strand every build in the game. Publish refuses both faults (the game repo's C36) and the board says so while they can still be fixed.
+  - _Built as a reviewing view rather than the node canvas sketched above, and the reason is in the data:_ Mistvale's board has **no prerequisite edges at all**. The gating is arithmetic over tiers and picks, so a canvas would draw lines that are not there. Emblem costs are `game_config`, where the curve editor now draws them.
 - Hall of Valor: element × stat grid, 10-level cost/bonus curves with total-cost summary.
 - **Tutorial — shipped** (`/tutorial`, beside the generic browser rather than instead of it): the whole script in walking order — what each step says, the screen and `data-mv-highlight` key it points at, the goal it waits for, and how much it hands over. **Reordering is the reason it exists**: the script is walked by position and publish refuses a gap or a duplicate, so a move is rendered as a swap of two numbers — two writes rather than a renumber of everything below — applied in sequence so a half-applied swap cannot leave two steps sharing a number. The same numbering rules the server enforces are reported here while the operator is still editing; the server is still the thing that refuses. Field editing stays in the generic browser, deliberately: a second place to change one thing is worse than a click.
   - _Not built, and not missed:_ a highlight-target picker (the keys are a client convention that content deliberately is not validated against, so a picker would be a list that lies the moment the client ships one more) and the storyboard dry-run (the overlay itself, on a test account, is the honest version of that and now exists).
@@ -149,7 +158,7 @@ What it deliberately is **not** yet: a champion balance tab, an arbitrary hand-p
 or a comparison of two content revisions side by side. Each is a real want; none of them is
 needed to answer "did my retune do what I meant".
 
-### 2.14 Player management — **search, inspect and the six actions shipped** (pulled forward from A5)
+### 2.14 Player management — **shipped**, including the holdings drill-ins
 
 - Search by account/profile name; player page: profile & resources, roster (with gear detail drill-in), items, progress (campaign stars, dungeon floors, arena state, quests), summon history with pity counters, economy log tail, battle history (open in Battle inspector), sessions.
 - Actions (all audited, all confirm-guarded): **Grant** (champion / gear roll / items / currency — via RewardService with a mail-attachment option "send as gift mail"), **Reset password** (generates temp password + force-change flag — the EA-0.1 support path), **Set rank** (Player / GameMaster / Admin — typed confirmation, self-demotion blocked), **Ban/unban** (reason required), **Rename profile** (the no-profanity-filter support path), session revoke.
@@ -157,7 +166,9 @@ needed to answer "did my retune do what I meant".
 - **Shipped now:** search by either name (bots hidden by default), the account page (wallet, live energy, holdings as counts, progress and deepest floors, live sessions, economy tail), and **Reset password · Set rank · Ban/unban · Rename profile · Grant · Sign out everywhere** — every one audited with before/after, the two irreversible ones behind a typed confirmation of the account name. Two guards refuse the caller's own account: an admin cannot change their own rank or ban themselves.
 - **Why this jumped the queue:** there is no e-mail address anywhere in Mistvale, so an operator is the _only_ password reset that exists. Without this the support path was hand-writing an argon2id hash into the database — a hard-rule violation, not a missing convenience.
 - **Fresh start** (the danger zone, in red, apart from the rest): returns an account to exactly the state registration leaves it in — champions, relics, items, campaign and Depths progress, the Chronicle, shop stock, summon history, battles, arena standing and Hall of Valor all destroyed; level 1 with the starter chooser waiting. The account keeps its name, password and rank: this is a reset, not a deletion. Confirmed by typing the account name, and the dialog _counts_ what is about to go, because "reset" and "reset, and that was 143 relics" are different sentences and only one of them stops somebody with the wrong account open. Three things deliberately survive: **settings** (audio, speed, motion and colourblind glyphs are accessibility choices, not progress), the **economy ledger** (emptied through RewardService so the sum of a player's deltas still equals their balance — the reset is a line in the history, not a hole in it), and the **audit trail**, which records the whole before-state since nothing else will remember it. Refuses arena bots and points at the bot manager.
-- **Still A5:** roster and gear drill-in (holdings are counts today), summon history with pity, battle history into the inspector, grants of champions/gear rolls, the gift-mail attachment option, and bulk actions.
+- **The drill-ins are in** (three tabs on the account page): the **roster** whole and strongest-first, with how many of nine relics each copy is wearing; the **vault** paged and narrowable to _loose_ or _worn_, since loose is what the cap counts and so is usually the question being asked; and the **pull history** newest first with **mercy** marked, which is the field "I pulled forty times and got nothing" actually turns on. A relic's stat line is rendered server-side, because whether a value is a percentage decides what the number means — `DEF 40` and `DEF 40%` are two very different relics.
+  - **There is no button on the card that changes anything**, and that is the design rather than an omission: every change to what an account holds already exists as a grant, which lands in `economy_log`. A control here would be the one mutation in the suite with no ledger behind it. The reads are not audited either, for the balance sandbox's reason.
+- **Still A5:** battle history linked into the inspector, grants of champions and gear rolls, the gift-mail attachment option, and bulk actions.
 
 ### 2.15 Bot manager — **shipped**
 
@@ -185,9 +196,11 @@ Target: one player / all / filter result; title, body (markdown-lite), attachmen
 
 Paste battle id / open from player page: metadata (mode, stage, seed, content rev), team & enemy panels, and an **event-log timeline viewer** (step through turns, filter by unit/effect) — the debugging tool for "that fight felt wrong" reports.
 
-### 2.19 Jobs & health
+### 2.19 Jobs & health — **shipped**
 
-Job list (daily reset, shop refresh, event rotation, bot refresh, backup trigger status) with last-run/next-run/result and a guarded "Run now". Health page = dashboard strip expanded + log-error tail.
+**Live ops → Jobs & health.** Both endpoints have existed since P8i with nothing in front of them, so the only way to run a job early was to ssh to the box. The list is a **closed list of names** rather than a name that reaches anything callable — a generic "run this" would be a remote-execution surface with an admin cookie in front of it — and running one goes through the typed confirmation with the **job's own name** as the phrase, so confirming the nightly pass cannot be confirming the weekly one. Not because it is dangerous (both are written to be safe run late or twice) but because it works across the whole database. The health half is the dashboard's strip with room to read it: the numbers are the ARCHITECTURE §9 budgets, and a degraded box is diagnosed by _which_ one moved.
+
+- _Not built:_ last-run / next-run times and the log-error tail. Neither is recorded anywhere — the scheduler derives its next fire from the clock rather than storing it, and there is no log sink to tail. Both would be a server change first, and inventing a "last run" from an audit row would be a figure that is wrong the moment a job runs on schedule.
 
 ## 3. Access model (EA — owner decision)
 

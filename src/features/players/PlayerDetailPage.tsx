@@ -22,6 +22,7 @@ import { formatRelative, formatTimestamp } from '@/lib/format';
 import type { AdminPlayerDetail } from '@/api/types';
 import { RankBadge, StatusBadge } from './badges';
 import { PlayerActions } from './PlayerActions';
+import { HoldingsCard } from './HoldingsCard';
 
 /**
  * One account, everything an operator needs about it (ADMIN_SUITE_DESIGN §2.14).
@@ -89,6 +90,7 @@ export function PlayerDetailPage({ playerId }: { playerId: string }): ReactNode 
             <Stack gap="lg">
               <Wallet detail={player.data} />
               <ProgressCard detail={player.data} />
+              <HoldingsCard playerId={playerId} />
               <SessionsCard detail={player.data} />
               <LedgerCard detail={player.data} />
             </Stack>

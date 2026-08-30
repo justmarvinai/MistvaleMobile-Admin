@@ -23,6 +23,11 @@ import { BattleInspectorPage } from '@/features/battles/BattleInspectorPage';
 import { CampaignPage } from '@/features/campaign/CampaignPage';
 import { SummonPoolsPage } from '@/features/summon/SummonPoolsPage';
 import { ShopsPage } from '@/features/shop/ShopsPage';
+import { DepthsPage } from '@/features/depths/DepthsPage';
+import { MasteryBoardPage } from '@/features/masteries/MasteryBoardPage';
+import { ErrandsPage } from '@/features/goals/ErrandsPage';
+import { SchedulePage } from '@/features/goals/SchedulePage';
+import { JobsPage } from '@/features/jobs/JobsPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -242,6 +247,62 @@ const shopsRoute = createRoute({
   component: ShopsPage,
 });
 
+/**
+ * The Depths as descents rather than as a hundred and twenty stage rows (A4, §2.7).
+ *
+ * A floor is an ordinary `stage` with a `parentKey`, which is right and which also means
+ * the browser cannot show a keep as a ladder. The rotation beside it inverts `openDays`,
+ * where an *empty* list means every day — read literally it looks like a keep that never
+ * opens, which is the one thing about the Springs that is easy to get wrong.
+ */
+const depthsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/depths',
+  component: DepthsPage,
+});
+
+/**
+ * The mastery board (A4, §2.12).
+ *
+ * A reviewing view rather than the node canvas §2.12 sketched, and the reason is in the
+ * data: Mistvale's board has no prerequisite edges at all — the gating is arithmetic over
+ * tiers and picks — so a canvas would draw lines that do not exist. What it says instead is
+ * what each node *does*, in words, and whether the board can be spent to the last pick.
+ */
+const masteryBoardRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/masteries',
+  component: MasteryBoardPage,
+});
+
+/**
+ * Quests, missions and events (A4, §2.10) — one screen, because the question is one.
+ *
+ * All three are built on the same goal DSL, and in a form every one of them reads as a
+ * nested object where the operator is thinking a sentence. It also reports the three faults
+ * that publish cleanly: a gap in the Path's numbering, a milestone ladder whose rungs do
+ * not climb, and a schedule that can never fire.
+ */
+const errandsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/errands',
+  component: ErrandsPage,
+});
+
+/**
+ * The login tracks and the news board (A4, §2.11).
+ *
+ * A track carries thirty days in an array, so the browser shows it as a JSON blob three
+ * screens tall; it is a grid here, which is what it is in the game. A post's window is the
+ * other half — an empty bound means *unbounded*, and read literally that looks like a post
+ * that never shows.
+ */
+const scheduleRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/schedule',
+  component: SchedulePage,
+});
+
 const tutorialScriptRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/tutorial',
@@ -252,6 +313,19 @@ const mailRoute = createRoute({
   getParentRoute: () => authedRoute,
   path: '/mail',
   component: MailComposerPage,
+});
+
+/**
+ * Jobs and health (§2.19).
+ *
+ * Both endpoints have existed since P8i and neither had a screen: an operator who had just
+ * shortened a retention window or published content the bot ladder should pick up had to
+ * wait for the next scheduled run or ssh to the box.
+ */
+const jobsRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/jobs',
+  component: JobsPage,
 });
 
 const publishRoute = createRoute({
@@ -275,8 +349,13 @@ const routeTree = rootRoute.addChildren([
     campaignRoute,
     summonPoolsRoute,
     shopsRoute,
+    depthsRoute,
+    masteryBoardRoute,
+    errandsRoute,
+    scheduleRoute,
     tutorialScriptRoute,
     mailRoute,
+    jobsRoute,
     publishRoute,
   ]),
 ]);

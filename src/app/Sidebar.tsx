@@ -2,16 +2,21 @@ import type { ReactNode } from 'react';
 import { Badge, Box, Group, NavLink, Stack, Text } from '@mantine/core';
 import {
   IconAdjustments,
+  IconBinaryTree,
   IconBuildingStore,
+  IconCalendarMonth,
   IconCards,
   IconDatabase,
   IconFlask,
   IconGauge,
+  IconHeartbeat,
   IconHistory,
+  IconListCheck,
   IconMap,
   IconRocket,
   IconRoute,
   IconSparkles,
+  IconStairsDown,
   IconMail,
   IconSwords,
   IconUsers,
@@ -149,6 +154,46 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           label="Shops"
           leftSection={<IconBuildingStore size={16} />}
         />
+        {/* A keep's floors are ordinary stages, so the browser can show them and cannot
+            show the descent they add up to. */}
+        <NavLink
+          component={Link}
+          to="/depths"
+          onClick={onNavigate}
+          active={pathname.startsWith('/depths')}
+          label="The Depths"
+          leftSection={<IconStairsDown size={16} />}
+        />
+        {/* Forty-eight nodes whose effects are a nested union: the browser shows the shape,
+            this says the meaning — and whether the board can be spent to the last pick. */}
+        <NavLink
+          component={Link}
+          to="/masteries"
+          onClick={onNavigate}
+          active={pathname.startsWith('/masteries')}
+          label="Mastery board"
+          leftSection={<IconBinaryTree size={16} />}
+        />
+        {/* Quests, the Path and events are one goal DSL wearing three names, so they are
+            one screen: what is a player asked to do, and what does it pay. */}
+        <NavLink
+          component={Link}
+          to="/errands"
+          onClick={onNavigate}
+          active={pathname.startsWith('/errands')}
+          label="Errands"
+          leftSection={<IconListCheck size={16} />}
+        />
+        {/* Thirty days in an array is a JSON blob three screens tall; in the game it is a
+            grid, and so is it here. */}
+        <NavLink
+          component={Link}
+          to="/schedule"
+          onClick={onNavigate}
+          active={pathname.startsWith('/schedule')}
+          label="Calendar & news"
+          leftSection={<IconCalendarMonth size={16} />}
+        />
         {/* Live ops rather than Content: it is about a stage, but it is a question rather
             than an edit, and nothing on it saves anything. */}
         <NavLink
@@ -158,6 +203,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/balance')}
           label="Balance sandbox"
           leftSection={<IconFlask size={16} />}
+        />
+        {/* Both endpoints have existed since P8i with nothing in front of them: the only
+            way to run a job early was to ssh to the box. */}
+        <NavLink
+          component={Link}
+          to="/jobs"
+          onClick={onNavigate}
+          active={pathname.startsWith('/jobs')}
+          label="Jobs & health"
+          leftSection={<IconHeartbeat size={16} />}
         />
         {/* Live ops rather than System: the revision history in the publish centre is
             about content revisions, and this is about people. */}

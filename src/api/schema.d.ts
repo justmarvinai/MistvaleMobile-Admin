@@ -544,6 +544,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/players/{id}/champions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One account's roster
+         * @description Unpaginated: the roster is bounded by `rosterCapacity`, and an operator hunting for one champion wants the list whole so the browser's own search reaches all of it. A read, and not audited — the log is the record of what an operator *changed*.
+         */
+        get: operations["listPlayerChampions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/gear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One account's relics
+         * @description Paginated, because nothing bounds it — a built account holds a thousand. `equipped` narrows to what is worn or to the loose vault, which is what the vault cap counts.
+         */
+        get: operations["listPlayerGear"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/players/{id}/grant": {
         parameters: {
             query?: never;
@@ -656,6 +696,26 @@ export interface paths {
         post?: never;
         /** Sign an account out everywhere */
         delete: operations["revokePlayerSessions"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/api/players/{id}/summons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One account's pull history
+         * @description Newest first. `fromMercy` is on every row and it is the field the support question turns on: "I pulled forty times and got nothing" is answered by whether mercy was doing anything, which no count of pulls can say.
+         */
+        get: operations["listPlayerSummons"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -804,6 +864,23 @@ export interface components {
                 [key: string]: number;
             };
             source: string;
+        };
+        AdminGearItem: {
+            createdAt: string;
+            equippedChampionId: string | null;
+            id: string;
+            level: number;
+            locked: boolean;
+            mainStat: string;
+            rank: number;
+            rarity: string;
+            setKey: string;
+            slot: string;
+            substats: string[];
+        };
+        AdminGearPage: {
+            relics: components["schemas"]["AdminGearItem"][];
+            total: number;
         };
         AdminGrantRequest: {
             crystals?: number;
@@ -959,6 +1036,24 @@ export interface components {
             sessionsRevoked: number;
             temporaryPassword: string;
         };
+        AdminRoster: {
+            champions: components["schemas"]["AdminRosterChampion"][];
+            total: number;
+        };
+        AdminRosterChampion: {
+            ascension: number;
+            awakening: number;
+            championKey: string;
+            createdAt: string;
+            favourite: boolean;
+            id: string;
+            level: number;
+            locked: boolean;
+            masteries: number;
+            rank: number;
+            relicsWorn: number;
+            xp: number;
+        };
         AdminSession: {
             createdAt: string;
             expiresAt: string;
@@ -1028,6 +1123,19 @@ export interface components {
                 key: string;
             }[];
             type: string;
+        };
+        AdminSummon: {
+            championKey: string;
+            contentRev: number;
+            createdAt: string;
+            fromMercy: boolean;
+            id: string;
+            poolKey: string;
+            rarity: string;
+        };
+        AdminSummonPage: {
+            pulls: components["schemas"]["AdminSummon"][];
+            total: number;
         };
         ApiError: {
             /** @enum {string} */
@@ -5505,6 +5613,176 @@ export interface operations {
             };
         };
     };
+    listPlayerChampions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminRoster"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    listPlayerGear: {
+        parameters: {
+            query?: {
+                equipped?: "true" | "false";
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminGearPage"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
     grantToPlayer: {
         parameters: {
             query?: never;
@@ -6021,6 +6299,93 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["RevokePlayerSessionsResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    listPlayerSummons: {
+        parameters: {
+            query?: {
+                equipped?: "true" | "false";
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminSummonPage"];
                         /** @constant */
                         ok: true;
                         rev: number;

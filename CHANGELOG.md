@@ -5,6 +5,87 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — jobs, health, and what an account actually holds (A5, §2.14 and §2.19)
+
+**Live ops → Jobs & health.** Both endpoints have existed since P8i and neither had a screen,
+so an operator who had just shortened a retention window or published content the bot ladder
+should pick up had to wait for the next scheduled run or ssh to the box. The list is a
+**closed list of names** rather than a name that reaches anything callable — a generic "run
+this" would be a remote-execution surface with an admin cookie in front of it — and running
+one goes through the typed confirmation with the **job's own name** as the phrase, so
+confirming the nightly pass cannot be confirming the weekly one. Not because it is dangerous:
+both jobs are written to be safe run late or twice. Because it works across the whole
+database, and that is worth meaning to. The health half is the dashboard's strip with room to
+read it, because a degraded box is diagnosed by _which_ number moved.
+
+**The player page has drill-ins.** It has reported holdings as three counts since the A5
+slice, and the two questions an operator is actually asked — "my champion is gone" and "I
+never got the relic" — are answered by **looking**. Three tabs: the roster (whole, strongest
+first, with how many of nine relics each copy is wearing), the vault (paged, narrowable to
+**loose** or **worn**, since loose is what the cap counts and so is usually the question), and
+the pull history (newest first, with **mercy** marked — the field "I pulled forty times and
+got nothing" actually turns on).
+
+There is **no button on the card that changes anything**, and that is the design rather than
+an omission: every change to what an account holds already exists as a grant, which lands in
+`economy_log`. A control here would be the one mutation in the suite with no ledger behind
+it. The tabs fetch lazily, because a page opened to answer "is this account banned" should
+not pull a thousand relics on the way.
+
+### Added — the Depths, the mastery board, the errands and the calendar (A4)
+
+Four reviewing views, all of them over content that is already fully editable in the generic
+browser and none of which the browser can show, because in every case the thing that matters
+is the **shape a set of entities adds up to** rather than any one entity's fields.
+
+**Content → The Depths** (§2.7). A keep's floors are ordinary `stage` entities carrying
+`parentKey` and `number` — which is right, a floor is a fight and rides the same engine as
+everything else, and it also means a keep appears in the browser as fifteen rows in a list of
+four hundred, in key order, with nothing saying how the descent scales. Here it is a ladder:
+enemy level as a **band** (waves climb inside one floor, so a single figure would be a lie),
+the step from the floor above, waves, energy, the three-star turn limit and the relic chance.
+It names four faults that publish cleanly — a keep declaring more floors than exist, a gap in
+the numbering (which is what "floor N is open" is computed from), two floors sharing a number,
+and a descent that gets **easier**, which is the one balance fact that is certainly a mistake
+rather than a choice. The rotation beside it inverts `openDays`, where an **empty list means
+every day** — read literally that looks like a keep that never opens, and the four gear
+dungeons are all authored that way.
+
+**Content → Mastery board** (§2.12). Two things are invisible in a list of forty-eight nodes.
+**What a node does**: the effect is a discriminated union nested inside an array, so a form
+shows `{"type":"stat","stat":"atk","flat":40}` where the operator is thinking "+40 attack" —
+all twenty-one kinds have a sentence now, and so does every condition. And **whether the board
+can be spent**: fifteen picks, a hard allowance per tier, at most two trees, so a board can
+hold a node at every tier of every tree and still strand every build in the game.
+
+It is a reviewing view rather than the node canvas §2.12 sketched, and the reason is in the
+data: **Mistvale's board has no prerequisite edges at all**. The gating is arithmetic over
+tiers and picks, so a canvas would draw lines that are not there.
+
+The sentence table's own defect is worth recording. The first cut was a `switch` with a
+fallback that appended the effect's figures — so deleting a case still produced a plausible
+sentence and no test could tell it apart from a written one. It is a lookup table now,
+because a table can be _asked_: `hasSentence` is walked over every kind, and a missing case
+fails immediately.
+
+**Content → Errands** (§2.10). Quests, the Path and events are one goal DSL wearing three
+names, so they are one screen. Every goal is a sentence, and the sentence says **Reach** for a
+threshold and a plain count for a tally — that difference _is_ the accumulation rule, and
+getting it wrong is the classic quest bug ("reach +12 on a relic" must not be satisfied by
+twelve relics at +1). It reports three faults that publish cleanly: a gap or a duplicate in
+the Path's `step` numbering (the chain is walked by position exactly as the tutorial script
+is), a milestone ladder whose rungs do not climb or pay nothing, and an event schedule that
+can never fire — including the distinction a raw object hides, between a `window` that runs
+once and a `weekly` that comes back forever.
+
+**Content → Calendar & news** (§2.11). A login track carries thirty days in an array, so the
+browser shows it as a JSON blob three screens tall and "what does day 21 pay" means counting
+array elements. It is a grid, which is what it is in the game, with the missing days and the
+days that pay nothing named. A news post's window is the other half: an empty bound means
+**unbounded**, and reading it literally as a missing date makes a live post look broken — so
+the screen says which of _showing now_, _not yet_ and _finished_ it is, and names a window
+that ends before it starts.
+
 ### Added — content export and import (A3, ADMIN_SUITE_DESIGN §2.17)
 
 **Publish center → Export & import**, and it sits inside the publish center rather than beside
