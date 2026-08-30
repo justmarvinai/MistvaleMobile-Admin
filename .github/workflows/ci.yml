@@ -85,3 +85,131 @@ jobs:
       - name: Build
         working-directory: MistvaleMobile-Admin
         run: pnpm build
+
+  e2e:
+    name: End-to-end smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: verify
+
+    # The suite drives the real SPA against the real game server and database, so the game
+    # repo is checked out and run here too. That is not duplication: what the smoke run
+    # exists to catch is precisely the chain between the two, which neither repo's unit
+    # tests can hold on its own.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: mistvale
+          POSTGRES_PASSWORD: mistvale_ci
+          POSTGRES_DB: mistvale
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U mistvale"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: postgresql://mistvale:mistvale_ci@127.0.0.1:5432/mistvale
+      SESSION_PEPPER: ci-pepper-value-at-least-16-characters
+      PUBLIC_ORIGIN: http://127.0.0.1:5174
+      PORT: '3001'
+      LOG_LEVEL: warn
+      # Every request comes from one address here, which would trip the per-IP
+      # registration limit. The limiter has its own unit test in the game repo.
+      RATE_LIMIT_ENABLED: 'false'
+      E2E_ADMIN_ACCOUNT: e2edesk
+      E2E_ADMIN_PASSWORD: a-good-long-ci-password
+      E2E_ADMIN_URL: http://127.0.0.1:5174
+
+    steps:
+      - name: Check out the Admin Suite
+        uses: actions/checkout@v4
+        with:
+          path: MistvaleMobile-Admin
+
+      - name: Check out the game repo
+        uses: actions/checkout@v4
+        with:
+          repository: justmarvinai/MistvaleMobile
+          ref: ${{ github.ref_name }}
+          path: MistvaleMobile
+          fetch-depth: 1
+        continue-on-error: true
+
+      - name: Fall back to the game repo's default branch
+        run: |
+          if [ ! -f MistvaleMobile/package.json ]; then
+            rm -rf MistvaleMobile
+            git clone --depth 1 \
+              "https://github.com/justmarvinai/MistvaleMobile.git" MistvaleMobile
+          fi
+          test -f MistvaleMobile/package.json
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install and start the game server
+        working-directory: MistvaleMobile
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm db:migrate
+          pnpm seed
+          # The server only: the smoke run drives the Admin Suite, never the game client.
+          pnpm --filter @mistvale/server build
+          node apps/server/dist/index.js &
+          for i in $(seq 1 45); do
+            if curl -sf http://127.0.0.1:3001/api/health-lite > /dev/null; then
+              echo "server up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::Game server did not become healthy"; exit 1
+
+      # The one thing the suite cannot do for itself. There is no self-serve promotion and
+      # there must not be, so the first admin on any box is made from the game repo — the
+      # same path a real deployment takes, which is why the Admin repo needs no database
+      # access of its own (its hardest rule).
+      - name: Mint the operator account
+        working-directory: MistvaleMobile
+        run: |
+          curl -sf -X POST http://127.0.0.1:3001/api/auth/register \
+            -H 'content-type: application/json' \
+            -d "{\"accountName\":\"$E2E_ADMIN_ACCOUNT\",\"profileName\":\"CI Desk\",\"password\":\"$E2E_ADMIN_PASSWORD\"}" \
+            > /dev/null
+          PGPASSWORD=mistvale_ci psql -h 127.0.0.1 -U mistvale -d mistvale \
+            -c "update accounts set rank='admin' where account_name='$E2E_ADMIN_ACCOUNT';"
+
+      - name: Install the Admin Suite and start it
+        working-directory: MistvaleMobile-Admin
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps chromium
+          pnpm dev --port 5174 --strictPort &
+          for i in $(seq 1 45); do
+            if curl -sf http://127.0.0.1:5174/admin/ > /dev/null; then
+              echo "suite up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::Admin Suite did not start"; exit 1
+
+      - name: Run the smoke suite
+        working-directory: MistvaleMobile-Admin
+        run: pnpm e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            MistvaleMobile-Admin/playwright-report/
+            MistvaleMobile-Admin/test-results/
+          retention-days: 7

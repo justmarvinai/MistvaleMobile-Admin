@@ -5,6 +5,45 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the smoke run (gap G8)
+
+`pnpm e2e`. Vitest covers what every editor _computes_, against stubbed responses; what none
+of it can cover is the one path the whole suite exists to serve — **sign in, change
+something, see it in the diff, publish it, and watch the live game move.** That path crosses
+the SPA, the Admin API, the content cache and the database, each of which can be right on
+its own while the way through them is broken.
+
+Three specs. The **publish flow** edits a faction's lore (a plain string on an entity nothing
+references, so a half-finished run cannot leave the game unplayable), asserts the field-level
+diff names `lore` rather than reporting that the faction changed, drives the publish dialog's
+own validate gate, and then reads the change back **through `/api/content`** — the bundle the
+game itself serves, not the editor, because the editor would happily show a draft and what is
+being asserted is that a player would see it. Then it publishes the original text again, so
+the box is left where it was found. The **navigation** specs walk every screen and every one
+of the twenty-six content types by _clicking the sidebar_, collecting thrown renders
+separately: an error boundary catches those and still shows something, so an assertion alone
+would pass over exactly the failure worth catching.
+
+**It cannot mint its own admin, and that is the design.** There is no self-serve promotion and
+there must not be, so the first admin on any box is made with the game repo's `SET_RANK.sh`;
+the credentials come in as `E2E_ADMIN_ACCOUNT` / `E2E_ADMIN_PASSWORD`. That keeps this repo's
+hardest rule intact — **no direct database access, ever** — and mirrors how a real deployment
+gets its first operator. Unconfigured, the run _fails by name_ rather than skipping: a smoke
+suite that passes green because nobody set it up is the worst of both worlds.
+
+Three things the first runs taught, all of them about locators rather than about the suite:
+a sidebar label is **not unique** (`Summon pools` and `Shops` are each a content type _and_ a
+purpose-built screen) and carries its own count badge, so `Publish center` becomes
+`Publish center1` the moment a draft exists — every workflow step navigates by route and only
+the navigation spec clicks; **Validate and Publish are on the top bar too**, so an unscoped
+locator is ambiguous the moment there is anything to publish; and the sign-in redirect
+settles a beat after the dashboard heading appears, which destroyed the execution context of
+anything that read the sidebar too early.
+
+Every spec was mutation-checked: a screen that throws fails the navigation walk, a Save
+button that does nothing fails the publish flow, and a publish that never calls the API fails
+it too.
+
 ### Added — jobs, health, and what an account actually holds (A5, §2.14 and §2.19)
 
 **Live ops → Jobs & health.** Both endpoints have existed since P8i and neither had a screen,
