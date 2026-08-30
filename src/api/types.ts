@@ -133,6 +133,16 @@ export type ArenaLadderReport = ArenaLadderResult['report'];
 export type SimulateRequest = S['AdminSimulateRequest'];
 export type SimulateResponse = S['SimulateStageResponse'];
 export type SimulateResult = S['AdminSimulateResult'];
+
+/**
+ * The audit log (gap G1).
+ *
+ * `AuditLogEntry` rather than `AuditEntry`, which the dashboard already has: the strip on
+ * the dashboard is a summary of the ten most recent, and this is the full row with an id
+ * and both sides of the change on it. Two shapes for two questions, so two names.
+ */
+export type AuditPage = S['AdminAuditPage'];
+export type AuditLogEntry = S['AdminAuditEntry'];
 export type SimulateSource = NonNullable<SimulateRequest['source']>;
 export type BenchTier = NonNullable<SimulateRequest['tier']>;
 

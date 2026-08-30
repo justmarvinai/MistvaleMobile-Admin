@@ -5,6 +5,30 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the audit log, searchable (gap G1)
+
+Every administrative mutation has recorded who, what and both sides of the change since the
+game repo's P1, and the suite could see **ten of them**, on the dashboard. Ten is enough to
+notice that something happened; it is no use at all for the question the log exists to
+answer, which only ever comes up on a bad day: what happened to this thing, and who did it.
+
+**Live ops → Audit log.** Filter by actor (a substring, since the recorded label carries an
+`admin:` prefix and an operator types the name), action, entity, entity id and date — all
+optional, and all **combining**, because an operator arrives from one of two directions and
+usually both by the second attempt. Paging carries the count of _matches_ rather than of the
+page: the difference between "3 changes to this stage" and "3 of 400" is the whole question.
+
+A row is its sentence, with before and after behind a chevron — a log where every row is a
+JSON dump is one nobody scrolls. The subject is a **button**: "what else happened to this
+thing" is the second question every time, and making it a click is the difference between a
+log and a search box somebody has to retype into.
+
+Two details that are easy to get wrong and invisible when they are: the filter's own option
+lists are built from the **whole** log rather than from the current results, since a filter
+whose options narrow as it is used can only be used once; and an emptied box is _absent_
+from the query rather than present and empty, because `?actor=` matches every row and looks
+exactly like a filter matching none.
+
 ### Added — the balance sandbox
 
 **Live ops → Balance sandbox.** Pick a stage, pick a bench team, press Simulate. It reports

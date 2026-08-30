@@ -6,6 +6,7 @@ import {
   IconDatabase,
   IconFlask,
   IconGauge,
+  IconHistory,
   IconRocket,
   IconRoute,
   IconSparkles,
@@ -125,6 +126,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/balance')}
           label="Balance sandbox"
           leftSection={<IconFlask size={16} />}
+        />
+        {/* Live ops rather than System: the revision history in the publish centre is
+            about content revisions, and this is about people. */}
+        <NavLink
+          component={Link}
+          to="/audit"
+          onClick={onNavigate}
+          active={pathname.startsWith('/audit')}
+          label="Audit log"
+          leftSection={<IconHistory size={16} />}
         />
       </Box>
 

@@ -18,6 +18,7 @@ import { PlayerSearchPage } from '@/features/players/PlayerSearchPage';
 import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
 import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { BalanceSandboxPage } from '@/features/balance/BalanceSandboxPage';
+import { AuditPage } from '@/features/audit/AuditPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -166,6 +167,20 @@ const balanceRoute = createRoute({
 });
 
 /**
+ * The audit log, under Live ops rather than System (gap G1).
+ *
+ * It is a record of what *operators* did, which is a live-ops question — "who changed
+ * this" — rather than a deployment one. The publish centre's revision history is the
+ * System-side view of the same events, and the two stay separate because one is about
+ * content revisions and this is about people.
+ */
+const auditRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/audit',
+  component: AuditPage,
+});
+
+/**
  * The script as a script, beside the generic browser rather than instead of it.
  *
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
@@ -199,6 +214,7 @@ const routeTree = rootRoute.addChildren([
     playerDetailRoute,
     arenaBotsRoute,
     balanceRoute,
+    auditRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

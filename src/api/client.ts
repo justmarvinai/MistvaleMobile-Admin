@@ -86,6 +86,15 @@ export const ADMIN_ROUTES = {
   simulate: {
     stage: '/simulate/stage',
   },
+  /**
+   * The audit log — see the game repo's `ADMIN_ROUTES.audit`.
+   *
+   * A read and nothing else. Reading it is deliberately not itself audited, or the log
+   * would fill with entries about people looking at it.
+   */
+  audit: {
+    list: '/audit',
+  },
 } as const;
 
 /**

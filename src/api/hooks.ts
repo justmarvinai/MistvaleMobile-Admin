@@ -9,6 +9,7 @@ import { ADMIN_ROUTES, type ApiError, PLAYER_API_PREFIX, request } from './clien
 import { invalidateContent, queryKeys } from './query-client';
 import type {
   AccountRank,
+  AuditPage,
   AdminAccountState,
   ArenaBotCensus,
   ArenaLadderResult,
@@ -443,6 +444,45 @@ export function useSendMail(): UseMutationResult<MailSendResult, ApiError, MailS
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: queryKeys.mailBatches });
     },
+  });
+}
+
+/**
+ * The audit log (gap G1).
+ *
+ * A plain query keyed on the whole filter string, so going back to a filter an operator
+ * had a moment ago is instant and going forward is one request. `placeholderData` keeps
+ * the previous page on screen while the next one loads, which is what stops a table from
+ * blinking to empty every time somebody types another letter into the actor box.
+ */
+export interface AuditFilter {
+  actor?: string;
+  action?: string;
+  entity?: string;
+  entityId?: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export function auditParams(filter: AuditFilter): string {
+  const params = new URLSearchParams();
+  // Empty is *absent*, not an empty match: `?actor=` would otherwise be a filter that
+  // matches everything and looks like a filter that matches nothing.
+  for (const [key, value] of Object.entries(filter)) {
+    if (value === undefined || value === '' || value === null) continue;
+    params.set(key, String(value));
+  }
+  return params.toString();
+}
+
+export function useAudit(filter: AuditFilter): UseQueryResult<AuditPage, ApiError> {
+  const params = auditParams(filter);
+  return useQuery<AuditPage, ApiError>({
+    queryKey: queryKeys.audit(params),
+    queryFn: () => request<AuditPage>(`${ADMIN_ROUTES.audit.list}${params ? `?${params}` : ''}`),
+    placeholderData: (previous) => previous,
   });
 }
 

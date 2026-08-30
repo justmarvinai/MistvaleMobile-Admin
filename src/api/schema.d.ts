@@ -66,6 +66,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search the audit log
+         * @description Every administrative mutation has recorded who, what and both sides of the change since P1; until now the suite could only see the ten most recent, on the dashboard. Filtered by actor, action, entity, entity id and date, all optional and all combinable. Returns the matching page, the total number of matches — the difference between "3 changes to this stage" and "3 of 400" is the whole question — and the distinct actions and entities present, so the filter can offer them. Reading is deliberately not itself audited.
+         */
+        get: operations["listAudit"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/auth/login": {
         parameters: {
             query?: never;
@@ -636,6 +656,22 @@ export interface components {
             rank: "player" | "gamemaster" | "admin";
             /** @enum {string} */
             status: "active" | "banned";
+        };
+        AdminAuditEntry: {
+            action: string;
+            actor: string;
+            after: unknown;
+            before: unknown;
+            createdAt: string;
+            entity: string;
+            entityId: string | null;
+            id: string;
+        };
+        AdminAuditPage: {
+            actions: string[];
+            entities: string[];
+            entries: components["schemas"]["AdminAuditEntry"][];
+            total: number;
         };
         AdminBanRequest: {
             banned: boolean;
@@ -3094,6 +3130,96 @@ export interface operations {
                         data: components["schemas"]["SeedArenaBotsResponse"];
                         /** @constant */
                         ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    listAudit: {
+        parameters: {
+            query?: {
+                action?: string;
+                actor?: string;
+                entity?: string;
+                entityId?: string;
+                from?: string;
+                limit?: number;
+                offset?: number;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["AdminAuditPage"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
                         rev: number;
                     };
                 };
