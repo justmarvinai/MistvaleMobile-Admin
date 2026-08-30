@@ -5,6 +5,31 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the campaign as a grid (A2, ADMIN_SUITE_DESIGN §2.6)
+
+**Content → Campaign**: twelve chapters, seven stage numbers by three difficulties, laid out
+the way a retune is actually compared. "Is 4-6 Brutal out of line with 4-5" is one glance
+across a row here, and a search through a flat list of 252 anywhere else.
+
+**A reviewing view rather than an authoring one**, which follows from how the content got
+here: the game repo's seed generates all 252 campaign stages from twelve chapter plans, so
+nobody is ever going to create one by hand. Every cell carries the three figures a retune is
+compared on — energy, waves, enemy units — and **links into the generic entity editor** for
+the fields. A second place to change a stage is a second place for it to drift, and the
+browser's editor is already schema-driven, validated and wired to the publish flow. What the
+grid adds is the shape, which is the only thing the browser cannot give.
+
+**A missing cell is drawn as a hole rather than closed up.** A chapter with six Brutal stages
+and seven of everything else is a content fault — a difficulty a player can reach and not
+play is a dead end — and a grid that quietly tidied the gap would hide the one thing this
+view exists to make obvious. The chapter says so in a banner naming the cells.
+
+One decision inside it is worth recording, because the obvious version works and is wrong:
+the grid reads `parentKey`, `number` and `difficulty` off each stage's **body**, not by
+parsing its key. The key encodes the same three facts today (`c04_s6_brutal`), and a stage
+authored with any other key would silently vanish from the grid — which is exactly the kind
+of gap this view is for.
+
 ### Added — the battle inspector (ADMIN_SUITE_DESIGN §2.18)
 
 The debugging tool for "that fight felt wrong", and the last thing A2 owed that a report

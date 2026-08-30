@@ -20,6 +20,7 @@ import { BotLadderPage } from '@/features/arena/BotLadderPage';
 import { BalanceSandboxPage } from '@/features/balance/BalanceSandboxPage';
 import { AuditPage } from '@/features/audit/AuditPage';
 import { BattleInspectorPage } from '@/features/battles/BattleInspectorPage';
+import { CampaignPage } from '@/features/campaign/CampaignPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -195,6 +196,19 @@ const battleInspectorRoute = createRoute({
 });
 
 /**
+ * The campaign, beside the content browser rather than instead of it (A2, §2.6).
+ *
+ * It adds the *shape* — seven stages by three difficulties, which is how a retune is
+ * actually compared — and links every cell into the generic editor for the fields. A
+ * second place to change a stage is a second place for it to drift.
+ */
+const campaignRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/campaign',
+  component: CampaignPage,
+});
+
+/**
  * The script as a script, beside the generic browser rather than instead of it.
  *
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
@@ -230,6 +244,7 @@ const routeTree = rootRoute.addChildren([
     balanceRoute,
     auditRoute,
     battleInspectorRoute,
+    campaignRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

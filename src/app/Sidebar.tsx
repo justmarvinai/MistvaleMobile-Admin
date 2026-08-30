@@ -7,6 +7,7 @@ import {
   IconFlask,
   IconGauge,
   IconHistory,
+  IconMap,
   IconRocket,
   IconRoute,
   IconSparkles,
@@ -116,6 +117,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/mail')}
           label="Mail"
           leftSection={<IconMail size={16} />}
+        />
+        {/* The campaign as a grid: a reviewing view over generated content, which is
+            what the seed makes it. Every cell links into the generic editor. */}
+        <NavLink
+          component={Link}
+          to="/campaign"
+          onClick={onNavigate}
+          active={pathname.startsWith('/campaign')}
+          label="Campaign"
+          leftSection={<IconMap size={16} />}
         />
         {/* Live ops rather than Content: it is about a stage, but it is a question rather
             than an edit, and nothing on it saves anything. */}
