@@ -17,6 +17,7 @@ import { PublishCenterPage } from '@/features/publish/PublishCenterPage';
 import { PlayerSearchPage } from '@/features/players/PlayerSearchPage';
 import { PlayerDetailPage } from '@/features/players/PlayerDetailPage';
 import { BotLadderPage } from '@/features/arena/BotLadderPage';
+import { BalanceSandboxPage } from '@/features/balance/BalanceSandboxPage';
 import { MailComposerPage } from '@/features/mail/MailComposerPage';
 import { TutorialScriptPage } from '@/features/tutorial/TutorialScriptPage';
 import { NotFoundPage } from '@/features/shell/NotFoundPage';
@@ -152,6 +153,19 @@ const arenaBotsRoute = createRoute({
 });
 
 /**
+ * The balance sandbox, beside the content browser rather than inside it.
+ *
+ * It is about a *stage* but it is not an edit: it reads live or draft content and answers a
+ * tuning question. Putting it under `/content` would make it look like another editor and
+ * invite somebody to expect a Save button.
+ */
+const balanceRoute = createRoute({
+  getParentRoute: () => authedRoute,
+  path: '/balance',
+  component: BalanceSandboxPage,
+});
+
+/**
  * The script as a script, beside the generic browser rather than instead of it.
  *
  * `/content/tutorial` still edits a step's fields; this edits the *order*, which is the
@@ -184,6 +198,7 @@ const routeTree = rootRoute.addChildren([
     playersRoute,
     playerDetailRoute,
     arenaBotsRoute,
+    balanceRoute,
     tutorialScriptRoute,
     mailRoute,
     publishRoute,

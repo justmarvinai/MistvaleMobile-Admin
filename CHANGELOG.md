@@ -5,6 +5,40 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added — the balance sandbox
+
+**Live ops → Balance sandbox.** Pick a stage, pick a bench team, press Simulate. It reports
+the win rate, the average and median turns across winning runs, the stage's own three-star
+turn limit and the share of runs that came in under it — usually the figure actually being
+asked about, because a stage can be perfectly clearable and still be mis-tuned if nobody can
+three-star it. The first real use of it said exactly that about chapter 1 Brutal: a fresh
+team wins every time and three-stars it never.
+
+It closes the last item on the game repo's own debts list (ROADMAP 13, gap G4). Retuning a
+stage was already an edit; _checking_ the retune was a deploy, because the only way to find
+out what a change did was to publish it and go and play the stage.
+
+- **It is the same simulation CI runs.** The game repo's new `packages/sim` holds one
+  `simulateStage` and one definition of each bench team, and both `pnpm sim` and this call it,
+  so a number here is directly comparable to a gate's.
+- **Draft means draft.** The pending edits are layered over live exactly as a publish would,
+  which is the case it exists for. Running it publishes nothing — the publish centre is still
+  the only thing that does.
+- **It writes nothing.** No player, no roster, no progress, no content, and no audit row.
+
+The three teams are **fresh** (four Rares at 20 / ★3, no relics), **modest** (50 / ★5 / asc 2
+with relics) and **built** (60 / ★6 / asc 6, relics and a collection), picked by key rather
+than by strength so a benchmark's baseline does not drift when a champion is retuned. The
+stage picker is grouped by chapter and keep and names a stage the way the game does —
+"Veilwood Fringe 1-7 · brutal" — beside its key, because an operator arrives here from the
+entity browser with a key or from a bug report with a number.
+
+Two things worth carrying from building it. Mantine 7's `Select` reads `{ group, items }`
+and **silently ignores a flat option carrying a `group` field** — the first cut did exactly
+that and the component threw inside `items.map`. And its `Select` renders a visible combobox
+_and_ a hidden native input, both carrying the field's label, so `getByLabelText` finds two;
+the role is the unambiguous handle.
+
 ### Changed — a wave line's star rating now decides something, and defaults to ★6
 
 The game repo's C13 answers its Q8: an enemy's `stars` had been authored on every wave line of

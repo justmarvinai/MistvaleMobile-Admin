@@ -561,6 +561,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/api/simulate/stage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fight a stage many times and report how a bench team fared
+         * @description The same simulation the CI balance gates run, against live content or against the drafts an operator is still editing — so a retune can be checked before it is published rather than by publishing it and going to play the stage. Reads content and writes nothing: no player, no roster, no progress, and no audit row, because the audit log is the record of what an operator changed.
+         */
+        post: operations["simulateStage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/api/stats/overview": {
         parameters: {
             query?: never;
@@ -754,6 +774,44 @@ export interface components {
         AdminSetRankRequest: {
             /** @enum {string} */
             rank: "player" | "gamemaster" | "admin";
+        };
+        AdminSimulateRequest: {
+            /** @default 60 */
+            runs: number;
+            /**
+             * @default live
+             * @enum {string}
+             */
+            source: "live" | "draft";
+            stageKey: string;
+            /**
+             * @default modest
+             * @enum {string}
+             */
+            tier: "fresh" | "modest" | "built";
+        };
+        AdminSimulateResult: {
+            averageTurns: number | null;
+            medianTurns: number | null;
+            msPerRun: number;
+            runs: number;
+            /** @enum {string} */
+            source: "live" | "draft";
+            stageKey: string;
+            stageLabel: string;
+            starTurnLimit: number | null;
+            team: {
+                ascension: number;
+                championKey: string;
+                level: number;
+                name: string;
+                rank: number;
+            }[];
+            /** @enum {string} */
+            tier: "fresh" | "modest" | "built";
+            winRate: number;
+            wins: number;
+            winsWithinStarLimit: number | null;
         };
         ApiError: {
             /** @enum {string} */
@@ -2264,6 +2322,10 @@ export interface components {
             restockMinutes: number;
             /** @default 0 */
             sortOrder: number;
+        };
+        SimulateStageResponse: {
+            result: components["schemas"]["AdminSimulateResult"];
+            tiers: ("fresh" | "modest" | "built")[];
         };
         SkillDef: {
             /** @default {} */
@@ -5335,6 +5397,105 @@ export interface operations {
                         data: components["schemas"]["RevokePlayerSessionsResponse"];
                         /** @constant */
                         ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No session, or the credentials were wrong. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The session is valid but the account lacks the admin rank. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description No such content type, entity or revision. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description Unexpected server error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
+                        rev: number;
+                    };
+                };
+            };
+        };
+    };
+    simulateStage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminSimulateRequest"];
+            };
+        };
+        responses: {
+            /** @description Success. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SimulateStageResponse"];
+                        /** @constant */
+                        ok: true;
+                        rev: number;
+                    };
+                };
+            };
+            /** @description The request body failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: components["schemas"]["ApiError"];
+                        /** @constant */
+                        ok: false;
                         rev: number;
                     };
                 };

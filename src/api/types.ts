@@ -128,6 +128,37 @@ export type MailTarget = MailSendRequest['target'];
 
 export type ArenaLadderResult = S['SeedArenaBotsResponse'];
 export type ArenaLadderReport = ArenaLadderResult['report'];
+
+// ── The balance sandbox ─────────────────────────────────────────────────────
+export type SimulateRequest = S['AdminSimulateRequest'];
+export type SimulateResponse = S['SimulateStageResponse'];
+export type SimulateResult = S['AdminSimulateResult'];
+export type SimulateSource = NonNullable<SimulateRequest['source']>;
+export type BenchTier = NonNullable<SimulateRequest['tier']>;
+
+/**
+ * The three rungs, at runtime.
+ *
+ * A picker needs an array and a type cannot make one, so this is written by hand and
+ * `satisfies` the generated union — renaming or dropping a tier in the server contract
+ * fails this file's typecheck rather than shipping a button that 400s.
+ */
+export const BENCH_TIERS = ['fresh', 'modest', 'built'] as const satisfies readonly BenchTier[];
+
+/** What each rung means, in the words on the control. */
+export const BENCH_TIER_LABELS: Readonly<Record<BenchTier, string>> = {
+  fresh: 'Fresh',
+  modest: 'Modest',
+  built: 'Built',
+};
+
+export const BENCH_TIER_HINTS: Readonly<Record<BenchTier, string>> = {
+  fresh: 'Four Rares at level 20, ★3, no relics — what a player has when a chapter first opens.',
+  modest: 'Level 50, ★5, ascension 2, with a representative relic set.',
+  built: 'Level 60, ★6, ascension 6, relics and a full collection — the ceiling.',
+};
+
+export const SIMULATE_SOURCES = ['live', 'draft'] as const satisfies readonly SimulateSource[];
 export type AccountStatus = AdminAccountState['status'];
 
 // ── Content entities ────────────────────────────────────────────────────────

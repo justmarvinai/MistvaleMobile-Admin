@@ -117,6 +117,38 @@ Reusable tables: weighted entries (gear query: set/slot/rank/rarity-weights/leve
 
 Upload frame strips/PNGs (drag-drop) → server packs & registers; preview player (play tracks at set fps); assign to champions/enemies/vfx slots; usage list; orphan finder. Enforces ASSET_GUIDE conventions (size check, naming).
 
+### 2.13a Balance sandbox — **shipped**
+
+Pick a stage, pick a bench team, press Simulate. It reports the win rate, the average and
+median turns across winning runs, the stage's own three-star turn limit and the share of
+runs that came in under it — usually the figure actually being asked about, because a stage
+can be perfectly clearable and still be mis-tuned if nobody can three-star it.
+
+It exists because retuning a stage was already an edit and _checking_ the retune was a
+deploy: the only way to find out what a change did was to publish it and go and play the
+stage. Three properties are what make it worth trusting, and all three are stated on the
+screen rather than left in this document:
+
+- **It is the same simulation CI runs.** The game repo's `packages/sim` holds one
+  `simulateStage` and one definition of each bench team; both `pnpm sim` and this call it, so
+  a number here is directly comparable to a gate's.
+- **Draft means draft.** `source: 'draft'` layers the pending edits over live exactly as a
+  publish would, so what is measured is the _change_. Running it publishes nothing — the
+  publish centre (§2.9) is still the only thing that does.
+- **It writes nothing.** No player, no roster, no progress, no content — and deliberately no
+  audit row, because the audit log is the record of what an operator _changed_.
+
+The three teams are **fresh** (four Rares at 20 / ★3, no relics), **modest** (50 / ★5 /
+asc 2 with relics) and **built** (60 / ★6 / asc 6, relics and a collection). They are picked
+by key rather than by strength, deliberately: a benchmark whose baseline drifts when a
+champion is retuned cannot be compared to yesterday's answer. Runs are capped at 200 a
+press, because it is a loop whose length the operator chooses on a box that has a game to
+serve.
+
+What it deliberately is **not** yet: a champion balance tab, an arbitrary hand-picked team,
+or a comparison of two content revisions side by side. Each is a real want; none of them is
+needed to answer "did my retune do what I meant".
+
 ### 2.14 Player management — **search, inspect and the six actions shipped** (pulled forward from A5)
 
 - Search by account/profile name; player page: profile & resources, roster (with gear detail drill-in), items, progress (campaign stars, dungeon floors, arena state, quests), summon history with pity counters, economy log tail, battle history (open in Battle inspector), sessions.

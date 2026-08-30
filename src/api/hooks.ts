@@ -15,6 +15,8 @@ import type {
   MailBatchLog,
   MailSendRequest,
   MailSendResult,
+  SimulateRequest,
+  SimulateResponse,
   AdminGrantRequest,
   AdminGrantResult,
   AdminPlayerDetail,
@@ -441,5 +443,20 @@ export function useSendMail(): UseMutationResult<MailSendResult, ApiError, MailS
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: queryKeys.mailBatches });
     },
+  });
+}
+
+/**
+ * The balance sandbox.
+ *
+ * A **mutation** rather than a query, and that is the honest shape: it is a POST an
+ * operator triggers, its cost is a tenth of a second of the game server's CPU, and it must
+ * not be re-run because a component remounted or a window regained focus. It caches
+ * nothing and invalidates nothing, because it changes nothing.
+ */
+export function useSimulateStage(): UseMutationResult<SimulateResponse, ApiError, SimulateRequest> {
+  return useMutation<SimulateResponse, ApiError, SimulateRequest>({
+    mutationFn: (body) =>
+      request<SimulateResponse>(ADMIN_ROUTES.simulate.stage, { method: 'POST', body }),
   });
 }

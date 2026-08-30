@@ -77,6 +77,15 @@ export const ADMIN_ROUTES = {
     send: '/mail',
     log: '/mail/batches',
   },
+  /**
+   * The balance sandbox — see the game repo's `ADMIN_ROUTES.simulate`.
+   *
+   * Reads content and writes nothing, which is why it is a POST with no undo and no
+   * confirmation: there is nothing to undo.
+   */
+  simulate: {
+    stage: '/simulate/stage',
+  },
 } as const;
 
 /**

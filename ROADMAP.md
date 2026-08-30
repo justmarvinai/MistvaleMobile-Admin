@@ -20,7 +20,9 @@
 
 ### Where the suite stands
 
-**A0–A1 complete, plus the player-management and bot-manager slices of A5. The game repo has finished P7**, so A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+**A0–A1 complete, plus the player-management and bot-manager slices of A5, and A2's balance sandbox. The game repo has finished P7**, so the rest of A2 (world authoring) is the next phase here and A4's Depths and Masteries editors now have live content waiting for them.
+
+**The balance sandbox shipped first, out of A2's order** (game repo C27), because it was the one item on that repo's debts list that named a hard rule: retuning a stage was an edit, but _checking_ the retune was a deploy. It is at **Live ops → Balance sandbox** rather than inside the stage editor A2 has yet to build — a question rather than an edit, and it should not look like one. Wiring it into that editor when it exists is a link, not a rebuild. What is still A2's: the campaign editor, the drop-table editor with its 100-roll preview, the battle inspector, and the champion half of the sandbox.
 
 **The bot manager shipped with the game repo's P7** (§2.15): a ladder view by band, and the two actions a config edit cannot perform by itself — fill to strength, and rebuild now. Everything tunable about a band stays in the Game config editor rather than being mirrored here, and an individual bot is managed through Players like any other account, because a bot _is_ an ordinary player row. Only the "bot density vs real players" health check is deferred, since it needs a real population to mean anything.
 

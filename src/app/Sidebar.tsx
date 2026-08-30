@@ -4,6 +4,7 @@ import {
   IconAdjustments,
   IconCards,
   IconDatabase,
+  IconFlask,
   IconGauge,
   IconRocket,
   IconRoute,
@@ -114,6 +115,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }): ReactNode 
           active={pathname.startsWith('/mail')}
           label="Mail"
           leftSection={<IconMail size={16} />}
+        />
+        {/* Live ops rather than Content: it is about a stage, but it is a question rather
+            than an edit, and nothing on it saves anything. */}
+        <NavLink
+          component={Link}
+          to="/balance"
+          onClick={onNavigate}
+          active={pathname.startsWith('/balance')}
+          label="Balance sandbox"
+          leftSection={<IconFlask size={16} />}
         />
       </Box>
 
